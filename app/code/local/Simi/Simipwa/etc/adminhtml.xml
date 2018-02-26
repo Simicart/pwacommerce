@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+~ Simi
+~
+~ NOTICE OF LICENSE
+~
+~ This source file is subject to the Simicart.com license that is
+~ available through the world-wide-web at this URL:
+~ http://www.Simicart.com/license-agreement.html
+~
+~ DISCLAIMER
+~
+~ Do not edit or add to this file if you wish to upgrade this extension to newer
+~ version in the future.
+~
+~ @category    Simi
+~ @package     Simi_Simigiftvoucher
+~ @module     Giftvoucher
+~ @author      Simi Developer
+~
+~ @copyright   Copyright (c) 2016 Simi (http://www.Simicart.com/)
+~ @license     http://www.Simicart.com/license-agreement.html
+~
+-->
+
+<config>
+    <menu>
+        <simipwa module="simipwa">
+            <title>Simi PWA</title>
+            <sort_order>71</sort_order>
+            <children>
+                <simipwa_agent module="simipwa">
+                    <title>Manage PWA Device</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/simipwa_pwa/</action>
+                </simipwa_agent>
+                <simipwa_notification module="simipwa">
+                    <title>Manage PWA Notification</title>
+                    <sort_order>1</sort_order>
+                    <action>adminhtml/simipwa_notification</action>
+                </simipwa_notification>
+                <settings module="simipwa">
+                    <title>Settings</title>
+                    <sort_order>100</sort_order>
+                    <action>adminhtml/system_config/edit/section/simipwa</action>
+                </settings>
+            </children>
+        </simipwa>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <simipwa translate="title">
+                                        <title>PWA</title>
+                                        <sort_order>50</sort_order>
+                                    </simipwa>
+                                    <settings module="simipwa">
+                                        <title>Settings</title>
+                                        <sort_order>100</sort_order>
+                                    </settings>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                    <simipwa module="simipwa">
+                        <title>Simi PWA</title>
+                        <sort_order>100</sort_order>
+                        <children>
+                            <simipwa_agent module="simipwa">
+                                <title>Manage PWA Agent</title>
+                                <sort_order>1</sort_order>
+                            </simipwa_agent>
+                            <simipwa_notification module="simipwa">
+                                <title>Manage PWA Notification</title>
+                                <sort_order>1</sort_order>
+                            </simipwa_notification>
+                            <settings module="simipwa">
+                                <title>Settings</title>
+                                <sort_order>100</sort_order>
+                            </settings>
+                        </children>
+                    </simipwa>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

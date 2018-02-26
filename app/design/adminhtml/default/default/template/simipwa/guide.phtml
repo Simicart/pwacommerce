@@ -1,0 +1,23 @@
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <h4 class="icon-head head-edit-form fieldset-legend"><?php echo Mage::helper('siminotification')->__('Instructions to create Google Map API Key') ?></h4>        
+    </div>
+    <div class="fieldset ">
+        <div class="hor-scroll">
+            <?php echo '1. Visit the APIs Console at'?> <a href="https://code.google.com/apis/console" target="_blank"><?php echo 'https://code.google.com/apis/console' ?></a><?php echo ' and log in with your Google Account.' ?>
+            <br />
+            <?php echo '2. Click on the <strong>APIs</strong> link in the left menu.' ?>
+            <br />
+            <?php echo '3. Activate the <strong>Google Maps JavaScript API v3</strong>, <strong>Distance Matrix API</strong>, <strong>Geocoding API</strong> services.' ?>
+            <br />
+            <br />
+            <img width="80%" src="<?php echo Mage::getBaseUrl('media').'simi/simicart/notification/guide/google-api-active.png' ?>" title="<?php echo $this->__('Google API Active') ?>" />
+            <br />
+            <br />
+            <?php echo '4. Click on the <strong>Credentials</strong> link in the left menu,  the "CREATE NEW KEY" in the "Public API access" section to create Google Map API Key for browser apps.' ?>
+            <br />
+            <br />
+            <img width="80%" src="<?php echo Mage::getBaseUrl('media').'simi/simicart/notification/guide/create-key.png' ?>" title="<?php echo $this->__('Google API Active') ?>" />
+        </div>
+    </div>
+</div>

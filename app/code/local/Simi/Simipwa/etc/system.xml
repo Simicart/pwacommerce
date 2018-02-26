@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<config>
+    <tabs>
+        <Simi translate="label" >
+            <label>Simi Extension</label>
+            <sort_order>400</sort_order>
+        </Simi>
+    </tabs>
+
+    <sections>
+        <simipwa translate="label" module="simipwa">
+            <class>separator-top</class>
+            <label>Simicart Progessive Web App</label>
+            <tab>Simi</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>299</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <pwa_enable translate="label">
+                            <label>Enable PWA</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Contact support@simicart.com for PWA building</comment>
+                        </pwa_enable>
+                        <pwa_url translate="label">
+                            <label>PWA Page URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </pwa_url>
+                        <pwa_excluded_paths translate="label">
+                            <label>PWA Excluded Paths</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>Separated by comma, urls that contain any of the keys above would be excluded from Web App. Eg: checkout/onepage</comment>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </pwa_excluded_paths>
+                        <sync_site_url translate="label">
+                            <label>Sync Sitemap Url</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>simipwa/adminhtml_system_config_form_syncbutton</frontend_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </sync_site_url>
+                    </fields>
+                </general>
+                <notification>
+                    <label>Notification Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>10</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable Chrome Notification for Website</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>40</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                    </fields>
+                </notification>
+            </groups>
+        </simipwa>
+    </sections>
+</config>

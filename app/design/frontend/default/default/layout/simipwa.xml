@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <default>
+        <reference name="head">
+            <action method="addJs">
+                <script>simi/simipwa/notification.js</script>
+            </action>
+            <reference name="content">
+                <block type="simipwa/notification" name="notif" template="simipwa/simipwa.phtml" />
+            </reference>
+        </reference>
+
+    </default>
+</layout>
