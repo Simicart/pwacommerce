@@ -129,6 +129,15 @@
                     </simiconnector_get_storeview_info_after_simipwa>
                 </observers>
             </simiconnector_get_storeview_info_after>
+            <admin_system_config_changed_section_simipwa>
+                <observers>
+                    <simiconnector_get_storeview_info_after_simipwa>
+                        <type>singleton</type>
+                        <class>simipwa/simiobserver</class>
+                        <method>changeFileManifest</method>
+                    </simiconnector_get_storeview_info_after_simipwa>
+                </observers>
+            </admin_system_config_changed_section_simipwa>
         </events>
     </global>
     <default>
@@ -136,6 +145,13 @@
             <general>
                 <pwa_enable>0</pwa_enable>
             </general>
+            <notification>
+                <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
+            </notification>
+            <manifest>
+                <caption>SimiCart PWA</caption>
+                <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
+            </manifest>
         </simipwa>
     </default>
 </config>

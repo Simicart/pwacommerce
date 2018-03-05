@@ -25,11 +25,11 @@ self.addEventListener('push', function(event) {
                         //console.log(data);
                         var options = {};
                         var title = '';
+                        var icon = data.notification.logo_icon;
                         if (data.notification.notice_title){
 
                             title = data.notification.notice_title;
                             var message = data.notification.notice_content;
-                            var icon = 'https://www.simicart.com/skin/frontend/default/simicart2.0/images/simicart/logo2.png';
                             var url = '/';
                             if (data.notification.notice_url) {
                                 url = data.notification.notice_url;
@@ -48,8 +48,7 @@ self.addEventListener('push', function(event) {
                         } else {
                             title = 'New Notification';
                             options = {
-                                icon: './skin/frontend/default/pwa/icon.png',
-                                badge: './skin/frontend/default/pwa/badge.png',
+                                icon : icon,
                                 data: {
                                     url: "/"
                                 }
@@ -61,8 +60,7 @@ self.addEventListener('push', function(event) {
                     .catch(function(err) {
                         console.log(err);
                         return self.registration.showNotification('New Notification', {
-                            icon: './skin/frontend/default/pwa/icon.png',
-                            badge: './skin/frontend/default/pwa/badge.png',
+                            icon: icon,
                             data: {
                                 url: "/"
                             }

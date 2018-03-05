@@ -56,7 +56,7 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Form extends Mage_Adminhtml_Bloc
         'bold' => true,
     ));
 
-    $fieldset->addField('endpoint_key', 'editor', array(
+    $fieldset->addField('endpoint_key', 'label', array(
         'label'  => Mage::helper('simipwa')->__('PWA Endpoint Key'),
         'name'   => 'endpoint_key',
         'readonly' => true,

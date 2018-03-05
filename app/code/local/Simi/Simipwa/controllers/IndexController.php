@@ -25,6 +25,7 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
             $img = Mage::getUrl('',array('_secure' => true)) . 'media/'.$message_info['image_url'];
             $message_info['image_url'] = $img;
         }
+        $message_info['logo_icon'] = Mage::getStoreConfig('simipwa/notification/logo');
         $result = array(
             "notification" => $message_info
         );

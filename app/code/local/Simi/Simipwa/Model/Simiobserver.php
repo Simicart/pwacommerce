@@ -114,4 +114,50 @@ class Simi_Simipwa_Model_Simiobserver
             die();
         }
     }
+
+    public function changeFileManifest(Varien_Event_Observer $observer){
+        $title = Mage::getStoreConfig('simipwa/manifest/caption') ? Mage::getStoreConfig('simipwa/manifest/caption') : 'PWA';
+        $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : 'https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png';
+        $content = "{
+              \"short_name\": \"$title\",
+              \"name\": \"$title\",
+              \"icons\": [
+                {
+                  \"src\": \"$icon\",
+                  \"sizes\": \"192x192\",
+                  \"type\": \"image/png\"
+                },
+                {
+                  \"src\": \"$icon\",
+                  \"sizes\": \"256x256\",
+                  \"type\": \"image/png\"
+                },
+                {
+                  \"src\": \"$icon\",
+                  \"sizes\": \"384x384\",
+                  \"type\": \"image/png\"
+                },
+                {
+                  \"src\": \"$icon\",
+                  \"sizes\": \"512x512\",
+                  \"type\": \"image/png\"
+                }
+              ],
+              \"start_url\": \"/\",
+              \"display\": \"standalone\",
+              \"theme_color\": \"#3399cc\",
+              \"background_color\": \"#ffffff\",
+              \"gcm_sender_id\" : \"832571969235\"
+            }";
+        $filePath = Mage::getBaseDir() . '/manifest.json';
+        //zend_debug::dump($icon);die;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $file = @fopen($filePath, 'w+');
+        if ($file) {
+            file_put_contents($filePath, $content);
+        }
+    }
 }

@@ -1,4 +1,3 @@
-var $jq = jQuery.noConflict();
 var applicationServerPublicKey = 'BFn4qEo_D1R50vPl58oOPfkQgbTgaqmstMhIzWyVgfgbMQPtFk94X-ThjG0hfOTSAQUBcCBXpPHeRMN7cqDDPaE';
 
 var isSubscribed = false;
