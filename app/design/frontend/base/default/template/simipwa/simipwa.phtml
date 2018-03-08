@@ -9,6 +9,21 @@
 
                 swRegistration = swReg;
                 initializeUI();
+                if (navigator.onLine) {
+                    swRegistration.update();
+                }
+                swRegistration.onupdatefound = function () {
+                    const installingWorker = swRegistration.installing;
+                    installingWorker.onstatechange = function (){
+                        if (installingWorker.state === 'installed') {
+                            if (navigator.serviceWorker.controller) {
+                                swRegistration.update();
+                            } else {
+                                console.log('Content is cached for offline use.');
+                            }
+                        }
+                    };
+                };
 
             })
             .catch(function(error) {
