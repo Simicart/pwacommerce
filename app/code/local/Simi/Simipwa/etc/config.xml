@@ -149,7 +149,8 @@
                 <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
             </notification>
             <manifest>
-                <caption>SimiCart PWA</caption>
+                <name>SimiCart PWA</name>
+                <short_name>SimiCart PWA | Progressive Web App</short_name>
                 <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
             </manifest>
         </simipwa>

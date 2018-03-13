@@ -26,6 +26,9 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
             $message_info['image_url'] = $img;
         }
         $message_info['logo_icon'] = Mage::getStoreConfig('simipwa/notification/logo');
+        if (Mage::getStoreConfig('simipwa/general/pwa_enable') && Mage::getStoreConfig('simipwa/general/pwa_url')){
+            $message_info['pwa_url'] = Mage::getStoreConfig('simipwa/general/pwa_url');
+        }
         $result = array(
             "notification" => $message_info
         );
@@ -96,5 +99,15 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
         $this->getResponse()->setBody(json_encode(array(
             "message" => $result
         )));
+    }
+
+    public function configAction(){
+        $result = array(
+            'pwa' => array(
+                'enable' => (int) Mage::getStoreConfig('simipwa/general/pwa_enable')
+            )
+        );
+        $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
+        $this->getResponse()->setBody(json_encode($result));
     }
 }

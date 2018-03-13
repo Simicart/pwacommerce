@@ -1,14 +1,13 @@
 <script type="text/javascript">
     //<![CDATA[
-    function check() {
-        new Ajax.Request('<?php echo $this->getAjaxCheckUrl() ?>', {
+    function sync_sw() {
+        new Ajax.Request('<?php echo Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/syncSw') ?>', {
             method: 'GET',
             onSuccess: function (transport) {
 
                 if (transport.responseText) {
                     var data = JSON.parse(transport.responseText);
                     alert(data.message);
-                    console.log('<?php echo $this->getAjaxCheckUrl() ?>');
                 }
             }
         });

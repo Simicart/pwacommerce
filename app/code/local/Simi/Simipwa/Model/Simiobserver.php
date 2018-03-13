@@ -37,7 +37,6 @@ class Simi_Simipwa_Model_Simiobserver
     }
     
     public function controllerActionPredispatch($observer) {
-
         /*
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
@@ -45,7 +44,6 @@ class Simi_Simipwa_Model_Simiobserver
         if (!Mage::getStoreConfig('simipwa/general/pwa_enable') || !Mage::getStoreConfig('simipwa/general/pwa_url') 
         ||(Mage::getStoreConfig('simipwa/general/pwa_url') == ''))
             return;
-        
         $tablet_browser = 0;
         $mobile_browser = 0;
 
@@ -86,6 +84,8 @@ class Simi_Simipwa_Model_Simiobserver
             }
         }
 
+
+
         $uri = $_SERVER['REQUEST_URI'];
         $baseUrl = Mage::getStoreConfig(Mage_Core_Model_Url::XML_PATH_SECURE_URL);
         $currentUrl = Mage::helper('core/url')->getCurrentUrl();
@@ -108,6 +108,10 @@ class Simi_Simipwa_Model_Simiobserver
                 $isExcludedCase = true;
             }
         }
+        if((($tablet_browser > 0)||($mobile_browser > 0)) && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && !$isExcludedCase){
+            require 'pwa/index.html';
+            exit();
+        }
         if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
             $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
             header("Location: ".$url);
@@ -116,11 +120,12 @@ class Simi_Simipwa_Model_Simiobserver
     }
 
     public function changeFileManifest(Varien_Event_Observer $observer){
-        $title = Mage::getStoreConfig('simipwa/manifest/caption') ? Mage::getStoreConfig('simipwa/manifest/caption') : 'PWA';
+        $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'PWA';
+        $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'Progressive Web App';
         $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : 'https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png';
         $content = "{
-              \"short_name\": \"$title\",
-              \"name\": \"$title\",
+              \"short_name\": \"$short_name\",
+              \"name\": \"$name\",
               \"icons\": [
                 {
                   \"src\": \"$icon\",

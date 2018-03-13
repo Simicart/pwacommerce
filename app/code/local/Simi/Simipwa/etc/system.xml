@@ -36,6 +36,18 @@
                             <show_in_store>1</show_in_store>
                             <comment>Contact support@simicart.com for PWA building</comment>
                         </pwa_enable>
+                        <pwa_main_url_site translate="label">
+                            <label>Use Domain Website For PWA</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </pwa_main_url_site>
                         <pwa_url translate="label">
                             <label>PWA Page URL</label>
                             <frontend_type>text</frontend_type>
@@ -46,6 +58,7 @@
                             <comment></comment>
                             <depends>
                                 <pwa_enable>1</pwa_enable>
+                                <pwa_main_url_site>0</pwa_main_url_site>
                             </depends>
                         </pwa_url>
                         <pwa_excluded_paths translate="label">
@@ -60,11 +73,24 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </pwa_excluded_paths>
+                        <sync_sw translate="label">
+                            <label>Sync Service Worker</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>
+                            <sort_order>200</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </sync_sw>
                         <sync_site_url translate="label">
                             <label>Sync Sitemap Url</label>
                             <frontend_type>button</frontend_type>
                             <frontend_model>simipwa/adminhtml_system_config_form_syncbutton</frontend_model>
-                            <sort_order>30</sort_order>
+                            <sort_order>100</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -109,25 +135,34 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <enable translate="label">
-                            <label>Enable</label>
-                            <frontend_type>select</frontend_type>
-                            <sort_order>40</sort_order>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                        </enable>
-                        <caption translate="label">
-                            <label>Caption</label>
+                        <!--<enable translate="label">-->
+                            <!--<label>Enable</label>-->
+                            <!--<frontend_type>select</frontend_type>-->
+                            <!--<sort_order>40</sort_order>-->
+                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<comment></comment>-->
+                        <!--</enable>-->
+                        <name translate="label">
+                            <label>App Name</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
-                        </caption>
+                        </name>
+                        <short_name translate="label">
+                            <label>App Short Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </short_name>
                         <logo translate="label">
                             <label>Icon URL (png)</label>
                             <frontend_type>text</frontend_type>

@@ -308,4 +308,24 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         }
         $this->_redirect('*/*/index');
     }
+
+    public function syncSwAction(){
+        $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
+        if (file_exists($sw_path)) {
+            $sw = Mage::getBaseDir() . '/service-worker.js';
+            if(copy($sw_path,$sw)){
+                $data['status'] = "1";
+                $data['message'] = "Sync Successfully!";
+            }else{
+                $data['status'] = "1";
+                $data['message'] = "Sync Failed!";
+            }
+        }else{
+            $data['status'] = "1";
+            $data['message'] = "service-worker.js file does not exits!";
+        }
+        return $this->getResponse()
+            ->setHeader('Content-Type', 'application/json')
+            ->setBody(json_encode($data));
+    }
 }
