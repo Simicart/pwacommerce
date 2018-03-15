@@ -37,13 +37,14 @@
                             <comment>Contact support@simicart.com for PWA building</comment>
                         </pwa_enable>
                         <pwa_main_url_site translate="label">
-                            <label>Use Domain Website For PWA</label>
+                            <label>Enable Redirection</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>1</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <comment>Redirect All mobile devices to PWA Homepage URL</comment>
                             <depends>
                                 <pwa_enable>1</pwa_enable>
                             </depends>
@@ -73,21 +74,33 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </pwa_excluded_paths>
-                        <sync_sw translate="label">
-                            <label>Sync Service Worker</label>
-                            <frontend_type>button</frontend_type>
-                            <frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>
-                            <sort_order>200</sort_order>
+                        <logo_homepage translate="label">
+                            <label>PWA Logo Url (png)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment></comment>
+                            <comment>PWA Logo Homepage</comment>
                             <depends>
-                                <pwa_enable>1</pwa_enable>
+                                <enable>1</enable>
                             </depends>
-                        </sync_sw>
+                        </logo_homepage>
+                        <!--<sync_sw translate="label">-->
+                            <!--<label>Sync Service Worker</label>-->
+                            <!--<frontend_type>button</frontend_type>-->
+                            <!--<frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>-->
+                            <!--<sort_order>200</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<comment></comment>-->
+                            <!--<depends>-->
+                                <!--<pwa_enable>1</pwa_enable>-->
+                            <!--</depends>-->
+                        <!--</sync_sw>-->
                         <sync_site_url translate="label">
-                            <label>Sync Sitemap Url</label>
+                            <label>Action</label>
                             <frontend_type>button</frontend_type>
                             <frontend_model>simipwa/adminhtml_system_config_form_syncbutton</frontend_model>
                             <sort_order>100</sort_order>
@@ -124,6 +137,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </logo>
                     </fields>
                 </notification>

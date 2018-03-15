@@ -328,4 +328,145 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             ->setHeader('Content-Type', 'application/json')
             ->setBody(json_encode($data));
     }
+
+    public function buildAction(){
+        try{
+            $token =  Mage::getStoreConfig('simiconnector/general/token_key');
+            $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
+            $logoUrlSetting = Mage::getStoreConfig('simipwa/general/logo_homepage');
+            $app_image_logo = ($logoUrlSetting && $logoUrlSetting!='')?
+                $logoUrlSetting : Mage::getStoreConfig('design/header/logo_src');
+            if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
+                throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
+
+            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token);
+            if (!$config || (!$config = json_decode($config, 1)))
+                throw new Exception(Mage::helper('simipwa')->__('We cannot connect To SimiCart, please check your filled token, or check if 
+                your server allows connections to SimiCart website'), 4);
+            $buildFile = 'https://dashboard.simicart.com/pwa/package.zip';
+            $fileToSave = Mage::getBaseDir() .'/pwa/simi_pwa_package.zip';
+            $directoryToSave = Mage::getBaseDir().'/pwa/';
+            $url = $config['app-configs'][0]['url'];
+            // create directory pwa
+            if(!is_dir($directoryToSave)){
+                mkdir($directoryToSave, 0777, true);
+            }
+            //download file
+            file_get_contents($buildFile);
+            if (!isset($http_response_header[0]) || !is_string($http_response_header[0]) ||
+                (strpos($http_response_header[0],'200') === false)) {
+                throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot get PWA package from SimiCart.'), 4);
+            }
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $buildFile);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $data = curl_exec ($ch);
+            curl_close ($ch);
+            $file = fopen($fileToSave, "w+");
+            fputs($file, $data);
+            fclose($file);
+
+            //unzip file
+
+            $zip = new ZipArchive();
+            $res = $zip->open($fileToSave);
+            //zend_debug::dump($res);die;
+            if ($res === TRUE) {
+                $zip->extractTo($directoryToSave);
+                $zip->close();
+            } else {
+                throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
+            }
+
+            // move service worker
+            $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
+            if (file_exists($sw_path)) {
+                $sw = Mage::getBaseDir() . '/service-worker.js';
+                if(!copy($sw_path,$sw)){
+                    $data['status'] = "1";
+                    $data['message'] = "Sorry, service-worker.js file does not exits!";
+                }
+            }else{
+                $data['status'] = "1";
+                $data['message'] = "Sorry, service-worker.js file does not exits!";
+            }
+
+            //update index.html file
+            $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
+            $file_contents = file_get_contents($path_to_file);
+            $file_contents = str_replace('PAGE_TITLE_HERE',$config['app-configs'][0]['app_name'],$file_contents);
+            $file_contents = str_replace('IOS_SPLASH_TEXT',$config['app-configs'][0]['app_name'],$file_contents);
+            file_put_contents($path_to_file,$file_contents);
+
+            //update config.js file
+
+            $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
+            $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
+            $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
+            $msConfigs = '
+            var SMCONFIGS = {
+                merchant_url: "'.$url.'",
+                api_path: "simiconnector/rest/v2/",
+                merchant_authorization: "'.$secret_key.'",
+                simicart_url: "https://www.simicart.com/appdashboard/rest/app_configs/",
+                simicart_authorization: "'.$token.'",
+                notification_api: "simipwa/index/",
+                zopim_key: "'.$zopimKey.'",
+                zopim_language: "en",
+                base_name: "/",
+                show_social_login: {
+                    facebook: 1,
+                    google: 1,
+                    twitter: 1
+                },
+        
+                mixpanel: {
+                    token_key: "'.$mixPanelToken.'"
+                },
+                logo_url: "'.$app_image_logo.'"
+            };
+            ';
+
+            foreach ($config['app-configs'] as $index=>$appconfig) {
+                if ($appconfig['theme']) {
+                    $theme = $appconfig['theme'];
+                    $msConfigs.= "
+                var DEFAULT_COLORS = {
+                    key_color: '".$theme['key_color']."',
+                    top_menu_icon_color: '".$theme['top_menu_icon_color']."',
+                    button_background: '".$theme['button_background']."',
+                    button_text_color: '".$theme['button_text_color']."',
+                    menu_background: '".$theme['menu_background']."',
+                    menu_text_color: '".$theme['menu_text_color']."',
+                    menu_line_color: '".$theme['menu_line_color']."',
+                    menu_icon_color: '".$theme['menu_icon_color']."',
+                    search_box_background: '".$theme['search_box_background']."',
+                    search_text_color: '".$theme['search_text_color']."',
+                    app_background: '".$theme['app_background']."',
+                    content_color: '".$theme['content_color']."',
+                    image_border_color: '".$theme['image_border_color']."',
+                    line_color: '".$theme['line_color']."',
+                    price_color: '".$theme['price_color']."',
+                    special_price_color: '".$theme['special_price_color']."',
+                    icon_color: '".$theme['icon_color']."',
+                    section_color: '".$theme['section_color']."',
+                    status_bar_background: '".$theme['status_bar_background']."',
+                    status_bar_text: '".$theme['status_bar_text']."',
+                    loading_color: '".$theme['loading_color']."',
+                };
+                        ";
+                    break;
+                }
+            }
+
+            $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
+            file_put_contents($path_to_file, $msConfigs);
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$url.'pwa/'));
+        }catch (Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        return $this->_redirect('*/system_config/edit/section/simipwa');
+    }
 }

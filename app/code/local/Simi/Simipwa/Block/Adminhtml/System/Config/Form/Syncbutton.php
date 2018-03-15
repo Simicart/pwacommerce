@@ -50,6 +50,21 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
                 'onclick' => 'javascript:check(); return false;'
             ));
 
-        return $button->toHtml();
+        $actionHtml =  $button->toHtml();
+
+        if (class_exists('Simi_Simiconnector_Controller_Action')) {
+            $buildButton = $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(
+                [
+                    'id' => 'build_pwa',
+                    'label' => __('Build PWA'),
+                    'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build') . '\')',
+                ]
+            );
+            $actionHtml .= $buildButton->toHtml();
+        } else
+            $actionHtml.= '<p>Visit https://www.simicart.com/pwa.html '.
+                'to get details and build Advanced Progressive Web App</p>';
+        return $actionHtml;
     }
 }

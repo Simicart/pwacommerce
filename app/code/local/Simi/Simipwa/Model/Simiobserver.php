@@ -120,8 +120,8 @@ class Simi_Simipwa_Model_Simiobserver
     }
 
     public function changeFileManifest(Varien_Event_Observer $observer){
-        $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'PWA';
-        $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'Progressive Web App';
+        $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'Progressive Web App';
+        $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'PWA';
         $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : 'https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png';
         $content = "{
               \"short_name\": \"$short_name\",

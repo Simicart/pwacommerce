@@ -34,4 +34,14 @@
         console.log('Push Not Supported');
     }
 </script>
-<?php endif ?>
+<?php else: ?>
+    <script type="text/javascript">
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+                console.log('Service Worker has been deleted');
+            registration.unregister();
+            window.location.reload();
+        });
+        }
+    </script>
+<?php endif; ?>
