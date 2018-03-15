@@ -423,7 +423,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 },
         
                 mixpanel: {
-                    token_key: "'.$mixPanelToken.'"
+                    token_key: "'.trim($mixPanelToken).'"
                 },
                 logo_url: "'.$app_image_logo.'"
             };
