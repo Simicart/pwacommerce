@@ -59,6 +59,7 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
                     'id' => 'build_pwa',
                     'label' => __('Build PWA'),
                     'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build') . '\')',
+                    'style' => 'margin-left : 10px'
                 ]
             );
             $actionHtml .= $buildButton->toHtml();

@@ -188,6 +188,24 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </logo>
+                        <theme_color>
+                            <label>Theme Color</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>color</validate> <!-- This is important -->
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </theme_color>
+                        <background_color>
+                            <label>Background Color</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>color</validate> <!-- This is important -->
+                            <sort_order>70</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </background_color>
                     </fields>
                 </manifest>
             </groups>
