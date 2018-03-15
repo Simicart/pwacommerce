@@ -49,19 +49,19 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </pwa_main_url_site>
-                        <pwa_url translate="label">
-                            <label>PWA Page URL</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment></comment>
-                            <depends>
-                                <pwa_enable>1</pwa_enable>
-                                <pwa_main_url_site>0</pwa_main_url_site>
-                            </depends>
-                        </pwa_url>
+                        <!--<pwa_url translate="label">-->
+                            <!--<label>PWA Page URL</label>-->
+                            <!--<frontend_type>text</frontend_type>-->
+                            <!--<sort_order>20</sort_order>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<comment></comment>-->
+                            <!--<depends>-->
+                                <!--<pwa_enable>1</pwa_enable>-->
+                                <!--<pwa_main_url_site>0</pwa_main_url_site>-->
+                            <!--</depends>-->
+                        <!--</pwa_url>-->
                         <pwa_excluded_paths translate="label">
                             <label>PWA Excluded Paths</label>
                             <frontend_type>text</frontend_type>
@@ -83,7 +83,7 @@
                             <show_in_store>1</show_in_store>
                             <comment>PWA Logo Homepage</comment>
                             <depends>
-                                <enable>1</enable>
+                                <pwa_enable>1</pwa_enable>
                             </depends>
                         </logo_homepage>
                         <!--<sync_sw translate="label">-->

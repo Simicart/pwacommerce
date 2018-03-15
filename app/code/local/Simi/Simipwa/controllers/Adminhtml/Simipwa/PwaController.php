@@ -404,6 +404,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
             $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
             $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
+            $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : 'pwa';
             $msConfigs = '
             var SMCONFIGS = {
                 merchant_url: "'.$url.'",
@@ -414,7 +415,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 notification_api: "simipwa/index/",
                 zopim_key: "'.$zopimKey.'",
                 zopim_language: "en",
-                base_name: "/",
+                base_name: "'.$base_name.'",
                 show_social_login: {
                     facebook: 1,
                     google: 1,
