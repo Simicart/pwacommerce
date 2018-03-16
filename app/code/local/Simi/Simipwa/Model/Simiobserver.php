@@ -115,7 +115,6 @@ class Simi_Simipwa_Model_Simiobserver
         if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
             $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
             header("Location: ".$url);
-            die();
         }
     }
 

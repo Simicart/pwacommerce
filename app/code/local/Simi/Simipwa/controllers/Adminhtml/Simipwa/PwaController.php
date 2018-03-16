@@ -384,19 +384,29 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             if (file_exists($sw_path)) {
                 $sw = Mage::getBaseDir() . '/service-worker.js';
                 if(!copy($sw_path,$sw)){
-                    $data['status'] = "1";
-                    $data['message'] = "Sorry, service-worker.js file does not exits!";
+                    throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
                 }
             }else{
-                $data['status'] = "1";
-                $data['message'] = "Sorry, service-worker.js file does not exits!";
+                throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
             }
+
+            //move favicon into pwa
+            try {
+                $path_to_file = './favicon.ico';
+                if ($favicon_content = file_get_contents($path_to_file))
+                    file_put_contents('./pwa/favicon.ico',$favicon_content);
+            } catch (Exception $faviconException) {
+                throw new Exception($faviconException->getMessage());
+            }
+
 
             //update index.html file
             $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
+            $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
             $file_contents = file_get_contents($path_to_file);
             $file_contents = str_replace('PAGE_TITLE_HERE',$config['app-configs'][0]['app_name'],$file_contents);
             $file_contents = str_replace('IOS_SPLASH_TEXT',$config['app-configs'][0]['app_name'],$file_contents);
+            $file_contents = str_replace('"PWA_EXCLUDED_PATHS"','"'.$excludedPaths.'"',$file_contents);
             file_put_contents($path_to_file,$file_contents);
 
             //update config.js file
