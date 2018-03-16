@@ -86,6 +86,17 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </logo_homepage>
+                        <favicon translate="label">
+                            <label>PWA Favicon Url </label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </favicon>
                         <!--<sync_sw translate="label">-->
                             <!--<label>Sync Service Worker</label>-->
                             <!--<frontend_type>button</frontend_type>-->

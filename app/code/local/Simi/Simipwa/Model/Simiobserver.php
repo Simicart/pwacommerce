@@ -114,10 +114,10 @@ class Simi_Simipwa_Model_Simiobserver
                 exit();
             }
         }
-        if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
-            $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
-            header("Location: ".$url);
-        }
+//        if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
+//            $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
+//            header("Location: ".$url);
+//        }
     }
 
     public function changeFileManifest(Varien_Event_Observer $observer){
