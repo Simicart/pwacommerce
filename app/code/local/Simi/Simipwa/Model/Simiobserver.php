@@ -109,8 +109,10 @@ class Simi_Simipwa_Model_Simiobserver
             }
         }
         if((($tablet_browser > 0)||($mobile_browser > 0)) && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && !$isExcludedCase){
-            require 'pwa/index.html';
-            exit();
+            if(file_exists('./pwa/index.html')){
+                require 'pwa/index.html';
+                exit();
+            }
         }
         if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
             $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
