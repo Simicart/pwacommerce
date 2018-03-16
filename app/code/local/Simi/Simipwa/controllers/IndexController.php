@@ -27,8 +27,8 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
         }
         $message_info['logo_icon'] = Mage::getStoreConfig('simipwa/notification/logo');
         if (Mage::getStoreConfig('simipwa/general/pwa_enable')){
-            if(!Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && Mage::getStoreConfig('simipwa/general/pwa_url')){
-                $message_info['pwa_url'] = Mage::getStoreConfig('simipwa/general/pwa_url');
+            if(!Mage::getStoreConfig('simipwa/general/pwa_main_url_site')){
+                $message_info['pwa_url'] = Mage::getUrl('pwa', array('_secure'=>true));
             }
         }
         $result = array(

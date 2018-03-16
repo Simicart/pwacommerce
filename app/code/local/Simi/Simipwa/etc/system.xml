@@ -39,7 +39,7 @@
                         <pwa_main_url_site translate="label">
                             <label>Enable Redirection</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>1</sort_order>
+                            <sort_order>5</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -186,7 +186,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment></comment>
+                            <comment>Image Size : 512x512 | 384x384 | 256x256</comment>
                         </logo>
                         <theme_color>
                             <label>Theme Color</label>
