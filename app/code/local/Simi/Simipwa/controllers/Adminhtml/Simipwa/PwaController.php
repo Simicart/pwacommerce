@@ -399,12 +399,11 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $file_contents = str_replace('IOS_SPLASH_TEXT',$config['app-configs'][0]['app_name'],$file_contents);
             $file_contents = str_replace('"PWA_EXCLUDED_PATHS"','"'.$excludedPaths.'"',$file_contents);
             //move favicon into pwa
-            $path_to_file = Mage::getStoreConfig('simipwa/general/favicon');
-            if ($path_to_file && $path_to_file != ''){
-                $file_contents = str_replace('/pwa/favicon.ico',$path_to_file,$file_contents);
+            $favicon = Mage::getStoreConfig('simipwa/general/favicon');
+            if ($favicon && $favicon != ''){
+                $file_contents = str_replace('/pwa/favicon.ico',$favicon,$file_contents);
             }
             file_put_contents($path_to_file,$file_contents);
-
             //update config.js file
 
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
