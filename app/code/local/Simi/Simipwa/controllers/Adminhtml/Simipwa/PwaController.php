@@ -244,7 +244,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
     public function chooseDevicesAction() {
         $request = $this->getRequest();
-        echo '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simipwa')->__('Device(s) Selected').'</span></p>';
+        $additionalInfo = '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simipwa')->__('Device(s) Selected').'</span></p>';
 //        $block = $this->getLayout()->createBlock(
 //            'simipwa/adminhtml_notification_edit_tab_devices','aaaaa'
 //        );
@@ -254,7 +254,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         ));
 
         if ($block) {
-            $this->getResponse()->setBody($block->toHtml());
+            $this->getResponse()->setBody($additionalInfo . $block->toHtml());
         }
     }
 

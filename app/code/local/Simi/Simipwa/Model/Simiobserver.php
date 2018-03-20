@@ -55,7 +55,7 @@ class Simi_Simipwa_Model_Simiobserver
             $mobile_browser++;
         }
 
-        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
             $mobile_browser++;
         }
 
@@ -75,7 +75,7 @@ class Simi_Simipwa_Model_Simiobserver
             $mobile_browser++;
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera mini') > 0) {
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera mini') !== false) {
             $mobile_browser++;
             //Check for tablets on opera mini alternative headers
             $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?$_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:(isset($_SERVER['HTTP_DEVICE_STOCK_UA'])?$_SERVER['HTTP_DEVICE_STOCK_UA']:''));
