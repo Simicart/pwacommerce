@@ -348,9 +348,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $directoryToSave = Mage::getBaseDir().'/pwa/';
             $url = $config['app-configs'][0]['url'];
             // create directory pwa
-            if(!is_dir($directoryToSave)){
-                mkdir($directoryToSave, 0777, true);
-            }
+            Mage::helper('simipwa')->_removeFolder($directoryToSave);
+            mkdir($directoryToSave, 0777, true);
             //download file
             file_get_contents($buildFile);
             if (!isset($http_response_header[0]) || !is_string($http_response_header[0]) ||
