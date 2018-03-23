@@ -107,4 +107,22 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
     public function IsEnableForWebsite(){
         return Mage::getStoreConfig('simipwa/notification/enable');
     }
+
+    public function _removeFolder($folder){
+        if (is_dir($folder))
+            $dir_handle = opendir($folder);
+        if (!$dir_handle)
+            return false;
+        while($file = readdir($dir_handle)) {
+            if ($file != "." && $file != "..") {
+                if (!is_dir($folder."/".$file))
+                    unlink($folder."/".$file);
+                else
+                    $this->_removeFolder($folder.'/'.$file);
+            }
+        }
+        closedir($dir_handle);
+        rmdir($folder);
+        return true;
+    }
 }
