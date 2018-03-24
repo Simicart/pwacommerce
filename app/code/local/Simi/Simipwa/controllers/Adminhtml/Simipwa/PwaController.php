@@ -448,6 +448,10 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     use_pwa = false;
                 }
                 if (!use_pwa) {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                     for(let registration of registrations) {
+                      registration.unregister()
+                    } });
                     caches.keys().then(function(names) {
                         for (let name of names)
                             caches.delete(name);
