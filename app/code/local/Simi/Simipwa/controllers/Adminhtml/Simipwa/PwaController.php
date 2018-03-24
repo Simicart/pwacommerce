@@ -412,12 +412,6 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
             }
 
-            //update manifest.jon
-            if(Mage::getStoreConfig('simipwa/manifest/enable')){
-                Mage::helper('simipwa')->updateManifest();
-            }
-
-
             //update index.html file
             $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
@@ -437,6 +431,13 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             }
             if(isset($androidId) && $androidId && $androidId!==''){
                 $file_contents = str_replace('GOOGLE_APP_ID',$androidId,$file_contents);
+            }
+            //update manifest.jon
+            if(Mage::getStoreConfig('simipwa/manifest/enable')){
+                Mage::helper('simipwa')->updateManifest();
+                if($icon =  Mage::getStoreConfig('simipwa/manifest/logo')){
+                    $file_contents = str_replace('/pwa/images/default_icon_512_512.png',$icon,$file_contents);
+                }
             }
             file_put_contents($path_to_file,$file_contents);
             //update version.js file
