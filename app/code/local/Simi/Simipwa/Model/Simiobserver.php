@@ -121,51 +121,7 @@ class Simi_Simipwa_Model_Simiobserver
     }
 
     public function changeFileManifest(Varien_Event_Observer $observer){
-        $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'Progressive Web App';
-        $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'PWA';
-        $default_icon = Mage::getBaseDir().'/pwa/images/default_icon_512_512.png';
-        $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : $default_icon;
-        $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa/';
-        $content = "{
-              \"short_name\": \"$short_name\",
-              \"name\": \"$name\",
-              \"icons\": [
-                {
-                  \"src\": \"$icon\",
-                  \"sizes\": \"192x192\",
-                  \"type\": \"image/png\"
-                },
-                {
-                  \"src\": \"$icon\",
-                  \"sizes\": \"256x256\",
-                  \"type\": \"image/png\"
-                },
-                {
-                  \"src\": \"$icon\",
-                  \"sizes\": \"384x384\",
-                  \"type\": \"image/png\"
-                },
-                {
-                  \"src\": \"$icon\",
-                  \"sizes\": \"512x512\",
-                  \"type\": \"image/png\"
-                }
-              ],
-              \"start_url\": \"$start_url\",
-              \"display\": \"standalone\",
-              \"theme_color\": \"#3399cc\",
-              \"background_color\": \"#ffffff\",
-              \"gcm_sender_id\" : \"832571969235\"
-            }";
-        $filePath = Mage::getBaseDir() . '/manifest.json';
-        //zend_debug::dump($icon);die;
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-
-        $file = @fopen($filePath, 'w+');
-        if ($file) {
-            file_put_contents($filePath, $content);
-        }
+        if(!Mage::getStoreConfig('simipwa/manifest/enable')) return;
+        Mage::helper('simipwa')->updateManifest();
     }
 }
