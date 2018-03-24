@@ -162,16 +162,16 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <!--<enable translate="label">-->
-                            <!--<label>Enable</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>40</sort_order>-->
-                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<comment></comment>-->
-                        <!--</enable>-->
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
                         <name translate="label">
                             <label>App Name</label>
                             <frontend_type>text</frontend_type>
@@ -180,6 +180,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </name>
                         <short_name translate="label">
                             <label>App Short Name</label>
@@ -189,6 +192,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </short_name>
                         <logo translate="label">
                             <label>Icon URL (png)</label>
@@ -198,6 +204,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>Image Size : 512x512 | 384x384 | 256x256</comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </logo>
                         <theme_color>
                             <label>Theme Color</label>
@@ -207,6 +216,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </theme_color>
                         <background_color>
                             <label>Background Color</label>
@@ -216,6 +228,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
                         </background_color>
                     </fields>
                 </manifest>
