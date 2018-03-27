@@ -347,7 +347,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $fileToSave = Mage::getBaseDir() .'/pwa/simi_pwa_package.zip';
             $directoryToSave = Mage::getBaseDir().'/pwa/';
             $url = $config['app-configs'][0]['url'];
-            $buildTime = date("Y-m-d h:i:sa");
+            $buildTime = time();
             if ($config['app-configs'][0]['ios_link']) {
                 try {
                     $iosId = explode('id', $config['app-configs'][0]['ios_link']);
@@ -442,12 +442,28 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             file_put_contents($path_to_file,$file_contents);
             //update version.js file
             $versionContent = '
-                var PWA_BUILD_TIME = "'.$buildTime.'";
-                if ((typeof(PWA_INDEX_BUILD_TIME) !== "undefined") && 
-                    PWA_INDEX_BUILD_TIME!=="PWA_BUILD_TIME_VALUE" && 
-                    PWA_BUILD_TIME !== PWA_INDEX_BUILD_TIME) {
-                    use_pwa = false;
+                var PWA_BUILD_TIME = '.$buildTime.';
+                var PWA_LOCAL_BUILD_TIME = localStorage.getItem("pwa_build_time");
+                if(!PWA_LOCAL_BUILD_TIME || PWA_LOCAL_BUILD_TIME === null){
+                    localStorage.setItem(\'pwa_build_time\',PWA_BUILD_TIME);
+                    PWA_LOCAL_BUILD_TIME = PWA_BUILD_TIME;
+                }else{
+                    PWA_LOCAL_BUILD_TIME = parseInt(PWA_LOCAL_BUILD_TIME,10);
+                    if(PWA_BUILD_TIME > PWA_LOCAL_BUILD_TIME){
+                        localStorage.setItem(\'pwa_build_time\',PWA_BUILD_TIME);
+                        PWA_LOCAL_BUILD_TIME = PWA_BUILD_TIME;
+                    }
                 }
+                var INDEX_LOCAL_BUILD_TIME = parseInt(localStorage.getItem("index_build_time"),10);
+                if(PWA_LOCAL_BUILD_TIME !== INDEX_LOCAL_BUILD_TIME){
+                    use_pwa = false;
+                    if(PWA_LOCAL_BUILD_TIME > INDEX_LOCAL_BUILD_TIME){
+                        localStorage.setItem("index_build_time",PWA_LOCAL_BUILD_TIME);
+                    }else{
+                        localStorage.setItem("pwa_build_time",INDEX_LOCAL_BUILD_TIME);
+                    }
+                }
+                console.log(use_pwa);
                 if (!use_pwa) {
                     navigator.serviceWorker.getRegistrations().then(function(registrations) {
                      for(let registration of registrations) {
