@@ -470,7 +470,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
             $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
             $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
-            $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : 'pwa';
+            $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
             $msConfigs = '
             var PWA_BUILD_TIME = "'.$buildTime.'";
             var SMCONFIGS = {
@@ -557,8 +557,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
             $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
             file_put_contents($path_to_file, $msConfigs);
+            $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
             Mage::getSingleton('adminhtml/session')->addSuccess(
-                Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$url.'pwa/'));
+                Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url));
         }catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }

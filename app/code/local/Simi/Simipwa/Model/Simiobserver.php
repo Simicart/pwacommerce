@@ -41,8 +41,7 @@ class Simi_Simipwa_Model_Simiobserver
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
         */
-        if (!Mage::getStoreConfig('simipwa/general/pwa_enable') || !Mage::getStoreConfig('simipwa/general/pwa_url') 
-        ||(Mage::getStoreConfig('simipwa/general/pwa_url') == ''))
+        if (!Mage::getStoreConfig('simipwa/general/pwa_enable'))
             return;
         $tablet_browser = 0;
         $mobile_browser = 0;
