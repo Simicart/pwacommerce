@@ -105,7 +105,7 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 
     public function configAction(){
         $filePath = Mage::getBaseDir().'/pwa/';
-        $enable = (!Mage::getStoreConfig('simipwa/general/pwa_enable') && !is_dir($filePath))?0:1;
+        $enable = (!Mage::getStoreConfig('simipwa/general/pwa_enable') || !Mage::getStoreConfig('simipwa/general/pwa_main_url_site'))?0:1;
         $result = array(
             'pwa' => array(
                 //notification and offline

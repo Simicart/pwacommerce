@@ -43,16 +43,18 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
      */
     public function getButtonHtml()
     {
-        $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
-                'id' => 'pwa_button',
-                'label' => $this->helper('adminhtml')->__('Sync Sitemaps'),
-                'onclick' => 'javascript:check(); return false;'
-            ));
-
-        $actionHtml =  $button->toHtml();
+        $actionHtml = "";
 
         if (class_exists('Simi_Simiconnector_Controller_Action')) {
+            $button = $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'id' => 'pwa_button',
+                    'label' => $this->helper('adminhtml')->__('Sync Sitemaps'),
+                    'onclick' => 'javascript:check(); return false;'
+                ));
+
+            $actionHtml .=  $button->toHtml();
+
             $buildButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
                 array(
@@ -64,8 +66,9 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
             );
             $actionHtml .= $buildButton->toHtml();
         } else
-            $actionHtml.= '<p>Visit https://www.simicart.com/pwa.html '.
-                'to get details and build Advanced Progressive Web App</p>';
+            $actionHtml.= '<script type="text/javascript">
+                document.getElementById("simipwa_general-head").parentElement.parentElement.style.display = "none";
+            </script>';
         return $actionHtml;
     }
 }

@@ -500,9 +500,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 zopim_language: "en",
                 base_name: "'.$base_name.'",
                 show_social_login: {
-                    facebook: 1,
-                    google: 1,
-                    twitter: 1
+                    facebook: 0,
+                    google: 0,
+                    twitter: 0
                 },
         
                 mixpanel: {
