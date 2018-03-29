@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config>
     <tabs>
-        <Simi translate="label" >
+        <Simi translate="label">
             <label>Simi Extension</label>
             <sort_order>400</sort_order>
         </Simi>
@@ -50,17 +50,17 @@
                             </depends>
                         </pwa_main_url_site>
                         <!--<pwa_url translate="label">-->
-                            <!--<label>PWA Page URL</label>-->
-                            <!--<frontend_type>text</frontend_type>-->
-                            <!--<sort_order>20</sort_order>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<comment></comment>-->
-                            <!--<depends>-->
-                                <!--<pwa_enable>1</pwa_enable>-->
-                                <!--<pwa_main_url_site>0</pwa_main_url_site>-->
-                            <!--</depends>-->
+                        <!--<label>PWA Page URL</label>-->
+                        <!--<frontend_type>text</frontend_type>-->
+                        <!--<sort_order>20</sort_order>-->
+                        <!--<show_in_default>1</show_in_default>-->
+                        <!--<show_in_website>1</show_in_website>-->
+                        <!--<show_in_store>1</show_in_store>-->
+                        <!--<comment></comment>-->
+                        <!--<depends>-->
+                        <!--<pwa_enable>1</pwa_enable>-->
+                        <!--<pwa_main_url_site>0</pwa_main_url_site>-->
+                        <!--</depends>-->
                         <!--</pwa_url>-->
                         <pwa_excluded_paths translate="label">
                             <label>PWA Excluded Paths</label>
@@ -69,7 +69,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Separated by comma, urls that contain any of the keys above would be excluded from Web App. Eg: checkout/onepage</comment>
+                            <comment>Separated by comma, urls that contain any of the keys above would be excluded from
+                                Web App. Eg: checkout/onepage
+                            </comment>
                             <depends>
                                 <pwa_enable>1</pwa_enable>
                             </depends>
@@ -87,7 +89,7 @@
                             </depends>
                         </logo_homepage>
                         <favicon translate="label">
-                            <label>PWA Favicon Url </label>
+                            <label>PWA Favicon Url</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>60</sort_order>
                             <show_in_default>1</show_in_default>
@@ -98,17 +100,17 @@
                             </depends>
                         </favicon>
                         <!--<sync_sw translate="label">-->
-                            <!--<label>Sync Service Worker</label>-->
-                            <!--<frontend_type>button</frontend_type>-->
-                            <!--<frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>-->
-                            <!--<sort_order>200</sort_order>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<comment></comment>-->
-                            <!--<depends>-->
-                                <!--<pwa_enable>1</pwa_enable>-->
-                            <!--</depends>-->
+                        <!--<label>Sync Service Worker</label>-->
+                        <!--<frontend_type>button</frontend_type>-->
+                        <!--<frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>-->
+                        <!--<sort_order>200</sort_order>-->
+                        <!--<show_in_default>1</show_in_default>-->
+                        <!--<show_in_website>1</show_in_website>-->
+                        <!--<show_in_store>1</show_in_store>-->
+                        <!--<comment></comment>-->
+                        <!--<depends>-->
+                        <!--<pwa_enable>1</pwa_enable>-->
+                        <!--</depends>-->
                         <!--</sync_sw>-->
                         <sync_site_url translate="label">
                             <label>Action</label>
@@ -234,6 +236,25 @@
                         </background_color>
                     </fields>
                 </manifest>
+                <analytics>
+                    <label>Analytics Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>99</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <ga_token_key translate="label">
+                            <label>Google Analytics Token Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ga_token_key>
+                    </fields>
+                </analytics>
+
             </groups>
         </simipwa>
     </sections>

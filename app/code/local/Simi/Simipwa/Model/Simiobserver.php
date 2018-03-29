@@ -32,6 +32,10 @@ class Simi_Simipwa_Model_Simiobserver
                 'pwa_url'=> Mage::getStoreConfig('simipwa/general/pwa_url'),
                 'pwa_excluded_paths'=> Mage::getStoreConfig('simipwa/general/pwa_excluded_paths'),
             );
+            $GATokenKey = Mage::getStoreConfig('simipwa/analytics/ga_token_key');
+            if($GATokenKey){
+                $info['ga_token_key'] =$GATokenKey;
+            }
     		$obj->storeviewInfo = $info;    		
     	}    	
     }
