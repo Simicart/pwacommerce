@@ -24,11 +24,14 @@ class Simi_Simipwa_Model_Catemap extends Mage_Sitemap_Model_Resource_Catalog_Cat
         if (!$categoryRow) {
             return false;
         }
+        $categoryEVTable = Mage::getSingleton('core/resource')->getTableName('catalog_category_entity_varchar');
+        $eavAttrTable = Mage::getSingleton('core/resource')->getTableName('eav_attribute');
+        $eavEntityTypeTable = Mage::getSingleton('core/resource')->getTableName('eav_entity_type');
         $this->_select = $this->_getWriteAdapter()->select()
             ->from(array('main_table' => $this->getMainTable()), array($this->getIdFieldName(), 'children_count'))
-            ->join(array('cv' => 'catalog_category_entity_varchar'), 'main_table.entity_id = cv.entity_id', 'value as category_name')
-            ->join(array('att' => 'eav_attribute'), 'att.attribute_id = cv.attribute_id', '')
-            ->join(array('aty' => 'eav_entity_type'), 'aty.entity_type_id = att.entity_type_id', '')
+            ->join(array('cv' => $categoryEVTable ), 'main_table.entity_id = cv.entity_id', 'value as category_name')
+            ->join(array('att' => $eavAttrTable), 'att.attribute_id = cv.attribute_id', '')
+            ->join(array('aty' => $eavEntityTypeTable), 'aty.entity_type_id = att.entity_type_id', '')
             ->where("aty.`entity_model` = 'catalog/category' and att.`attribute_code` = 'name'")
             ->where('main_table.path LIKE ?', $categoryRow['path'] . '/%');
 
