@@ -174,4 +174,9 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             file_put_contents($filePath, $content);
         }
     }
+
+    public function IsEnableAddToHomescreen(){
+        return Mage::getStoreConfig('simipwa/manifest/enable');
+    }
+
 }
