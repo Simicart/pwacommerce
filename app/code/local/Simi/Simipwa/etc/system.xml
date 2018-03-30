@@ -19,9 +19,9 @@
             <show_in_store>1</show_in_store>
             <groups>
                 <general translate="label">
-                    <label>General Configuration</label>
+                    <label>Advanced PWA Configuration</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>1</sort_order>
+                    <sort_order>100</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
@@ -44,7 +44,9 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment>Redirect All mobile devices to PWA Homepage URL</comment>
+                            <comment>
+                                Redirect mobile users to your PWA. (Please click Build PWA after Save)
+                            </comment>
                             <depends>
                                 <pwa_enable>1</pwa_enable>
                             </depends>
@@ -118,14 +120,16 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment></comment>
+                            <comment>
+                                If change config , Please click Build PWA after Save
+                            </comment>
                         </sync_site_url>
                     </fields>
                 </general>
                 <notification>
-                    <label>Notification Configuration</label>
+                    <label>Push Notification and Offline Mode</label>
                     <frontend_type>text</frontend_type>
-                    <sort_order>20</sort_order>
+                    <sort_order>1</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
