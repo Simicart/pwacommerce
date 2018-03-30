@@ -68,6 +68,7 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
         } else
             $actionHtml.= '<script type="text/javascript">
                 document.getElementById("simipwa_general-head").parentElement.parentElement.style.display = "none";
+                document.getElementById("simipwa_analytics-head").parentElement.parentElement.style.display = "none";
             </script>';
         return $actionHtml;
     }
