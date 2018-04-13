@@ -401,6 +401,12 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
             }
 
+            // rename htaccess
+            $htaccess = '/pwa/htaccess';
+            if(file_exists($htaccess)){
+                rename($htaccess,'/pwa/.htaccess');
+            }
+
             // move service worker
             $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
             if (file_exists($sw_path)) {
