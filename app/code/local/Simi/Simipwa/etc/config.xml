@@ -155,6 +155,11 @@
                 <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
                 <theme_color>FDA343</theme_color>
             </manifest>
+            <cache_api>
+                <enable>1</enable>
+                <home_api>1</home_api>
+                <storeview_api>1</storeview_api>
+            </cache_api>
         </simipwa>
     </default>
 </config>

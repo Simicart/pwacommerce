@@ -179,4 +179,25 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         return Mage::getStoreConfig('simipwa/manifest/enable');
     }
 
+    public function getApi($url){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec ($ch);
+        curl_close ($ch);
+        return $data;
+    }
+
+    public function SyncApi($config,$url,$replaceStr){
+        if($config){
+            $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
+            if(file_exists($path_to_file)){
+                $file_contents = file_get_contents($path_to_file);
+                $api = $this->getApi($url);
+                //update index.html file
+                $file_contents = str_replace($replaceStr,$api,$file_contents);
+                file_put_contents($path_to_file,$file_contents);
+            }
+        }
+    }
 }

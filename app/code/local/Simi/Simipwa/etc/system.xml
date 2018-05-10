@@ -258,7 +258,64 @@
                         </ga_token_key>
                     </fields>
                 </analytics>
-
+                <cache_api>
+                    <label>Api Cache Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>200</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <!--<home_api>-->
+                            <!--<label>Homepage Cache Api</label>-->
+                            <!--<frontend_type>select</frontend_type>-->
+                            <!--<sort_order>5</sort_order>-->
+                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<depends>-->
+                                <!--<enable>1</enable>-->
+                            <!--</depends>-->
+                            <!--<comment></comment>-->
+                        <!--</home_api>-->
+                        <storeview_api>
+                            <label>Storeview Cache Api</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>10</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                            <comment></comment>
+                        </storeview_api>
+                        <action>
+                            <label>Action</label>
+                            <frontend_type>button</frontend_type>
+                            <frontend_model>simipwa/adminhtml_system_config_form_syncApi</frontend_model>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                If change config , Please click Cache Api after Save
+                            </comment>
+                        </action>
+                    </fields>
+                </cache_api>
             </groups>
         </simipwa>
     </sections>

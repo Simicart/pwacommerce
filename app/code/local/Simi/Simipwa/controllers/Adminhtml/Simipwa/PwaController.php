@@ -446,6 +446,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 }
             }
             file_put_contents($path_to_file,$file_contents);
+            copy($path_to_file,Mage::getBaseDir() .'/pwa/index_sample.html');
             //update version.js file
             $versionContent = '
                 var PWA_BUILD_TIME = '.$buildTime.';
@@ -580,11 +581,34 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
             file_put_contents($path_to_file, $msConfigs);
             $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
+
+            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
+                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'),$api_storeview,"'sync_api_storeview'");
+            }
             Mage::getSingleton('adminhtml/session')->addSuccess(
                 Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url));
         }catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
+        return $this->_redirect('*/system_config/edit/section/simipwa');
+    }
+
+    public function RefreshCacheAction(){
+        try{
+            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
+                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'),$api_storeview,"'sync_api_storeview'");
+                Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('adminhtml')->__('Refresh Cache Api Successfully.'));
+            }else {
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please enable cache api'));
+            }
+        }
+        catch (Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
         return $this->_redirect('*/system_config/edit/section/simipwa');
     }
 }
