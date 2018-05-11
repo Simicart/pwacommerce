@@ -113,8 +113,18 @@ class Simi_Simipwa_Model_Simiobserver
         }
         if((($tablet_browser > 0)||($mobile_browser > 0)) && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && !$isExcludedCase){
             if(file_exists('./pwa/index.html')){
-                require 'pwa/index.html';
-                exit();
+                //require 'pwa/index.html';
+                $content = file_get_contents('./pwa/index.html');
+                $controller = $observer->getControllerAction();
+                $controller->getRequest()->setDispatched(true);
+                $controller->setFlag(
+                    '',
+                    Mage_Core_Controller_Front_Action::FLAG_NO_DISPATCH,
+                    true
+                );
+                $response = $controller->getResponse();
+                $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
+                $response->setBody($content);
             }
         }
 //        if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
