@@ -448,6 +448,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             file_put_contents($path_to_file,$file_contents);
             copy($path_to_file,Mage::getBaseDir() .'/pwa/index_sample.html');
             //update version.js file
+
             $versionContent = '
                 var PWA_BUILD_TIME = '.$buildTime.';
                 var PWA_LOCAL_BUILD_TIME = localStorage.getItem("pwa_build_time");
@@ -584,7 +585,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
             if(Mage::getStoreConfig('simipwa/cache_api/enable')){
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'),$api_storeview,"'sync_api_storeview'");
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'),$api_simicart,"'sync_api_simicart'");
             }
             Mage::getSingleton('adminhtml/session')->addSuccess(
                 Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url));
@@ -597,8 +600,54 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
     public function RefreshCacheAction(){
         try{
             if(Mage::getStoreConfig('simipwa/cache_api/enable')){
+                $path_file = Mage::getBaseDir() .'/pwa/index_sample.html';
+                if(file_exists($path_file)){
+                    copy($path_file,Mage::getBaseDir() .'/pwa/index.html');
+                    $buildTime = time();
+                    $versionContent = '
+                        var PWA_BUILD_TIME = '.$buildTime.';
+                        var PWA_LOCAL_BUILD_TIME = localStorage.getItem("pwa_build_time");
+                        if(!PWA_LOCAL_BUILD_TIME || PWA_LOCAL_BUILD_TIME === null){
+                            localStorage.setItem(\'pwa_build_time\',PWA_BUILD_TIME);
+                            PWA_LOCAL_BUILD_TIME = PWA_BUILD_TIME;
+                        }else{
+                            PWA_LOCAL_BUILD_TIME = parseInt(PWA_LOCAL_BUILD_TIME,10);
+                            if(PWA_BUILD_TIME > PWA_LOCAL_BUILD_TIME){
+                                localStorage.setItem(\'pwa_build_time\',PWA_BUILD_TIME);
+                                PWA_LOCAL_BUILD_TIME = PWA_BUILD_TIME;
+                            }
+                        }
+                        var INDEX_LOCAL_BUILD_TIME = parseInt(localStorage.getItem("index_build_time"),10);
+                        if(PWA_LOCAL_BUILD_TIME !== INDEX_LOCAL_BUILD_TIME){
+                            use_pwa = false;
+                            if(PWA_LOCAL_BUILD_TIME > INDEX_LOCAL_BUILD_TIME){
+                                localStorage.setItem("index_build_time",PWA_LOCAL_BUILD_TIME);
+                            }else{
+                                localStorage.setItem("pwa_build_time",INDEX_LOCAL_BUILD_TIME);
+                            }
+                        }
+                        console.log(use_pwa);
+                        if (!use_pwa) {
+                            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                             for(let registration of registrations) {
+                              registration.unregister()
+                            } });
+                            caches.keys().then(function(names) {
+                                for (let name of names)
+                                    caches.delete(name);
+                            });
+                            window.location.reload();
+                        }
+                    ';
+
+                    $path_to_file = './pwa/js/config/version.js';
+                    file_put_contents($path_to_file, $versionContent);
+                }
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+                $token =  Mage::getStoreConfig('simiconnector/general/token_key');
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'),$api_storeview,"'sync_api_storeview'");
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'),$api_simicart,"'sync_api_simicart'");
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('adminhtml')->__('Refresh Cache Api Successfully.'));
             }else {

@@ -179,6 +179,10 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         return Mage::getStoreConfig('simipwa/manifest/enable');
     }
 
+    public function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) ? true : false;
+    }
+
     public function getApi($url){
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -194,9 +198,11 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             if(file_exists($path_to_file)){
                 $file_contents = file_get_contents($path_to_file);
                 $api = $this->getApi($url);
-                //update index.html file
-                $file_contents = str_replace($replaceStr,$api,$file_contents);
-                file_put_contents($path_to_file,$file_contents);
+                if($this->isJSON($api)){
+                    //update index.html file
+                    $file_contents = str_replace($replaceStr,$api,$file_contents);
+                    file_put_contents($path_to_file,$file_contents);
+                }
             }
         }
     }

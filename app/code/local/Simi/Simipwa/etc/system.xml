@@ -276,21 +276,8 @@
                             <show_in_store>1</show_in_store>
                             <comment></comment>
                         </enable>
-                        <!--<home_api>-->
-                            <!--<label>Homepage Cache Api</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>5</sort_order>-->
-                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<depends>-->
-                                <!--<enable>1</enable>-->
-                            <!--</depends>-->
-                            <!--<comment></comment>-->
-                        <!--</home_api>-->
                         <storeview_api>
-                            <label>Storeview Cache Api</label>
+                            <label>Merchant Api</label>
                             <frontend_type>select</frontend_type>
                             <sort_order>10</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -302,6 +289,32 @@
                             </depends>
                             <comment></comment>
                         </storeview_api>
+                        <simicart_api>
+                            <label>Simicart Config Api</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>20</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                            <comment></comment>
+                        </simicart_api>
+                        <!--<home_api>-->
+                            <!--<label>Homepage Api</label>-->
+                            <!--<frontend_type>select</frontend_type>-->
+                            <!--<sort_order>5</sort_order>-->
+                            <!--<source_model>simipwa/system_homepage</source_model>-->
+                            <!--<show_in_default>1</show_in_default>-->
+                            <!--<show_in_website>1</show_in_website>-->
+                            <!--<show_in_store>1</show_in_store>-->
+                            <!--<depends>-->
+                                <!--<enable>1</enable>-->
+                            <!--</depends>-->
+                            <!--<comment></comment>-->
+                        <!--</home_api>-->
                         <action>
                             <label>Action</label>
                             <frontend_type>button</frontend_type>
@@ -311,7 +324,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>
-                                If change config , Please click Cache Api after Save
+                                If change config , Please click Refresh Cache Api after Save
                             </comment>
                         </action>
                     </fields>
