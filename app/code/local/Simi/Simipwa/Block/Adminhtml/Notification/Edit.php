@@ -7,7 +7,8 @@
  */
 class Simi_Simipwa_Block_Adminhtml_Notification_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
-    public function __construct(){
+    public function __construct()
+    {
         parent::__construct();
 
         $this->_objectId = 'id';
@@ -16,11 +17,13 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit extends Mage_Adminhtml_Bloc
         $this->removeButton('save');
         $this->_updateButton('delete', 'label', Mage::helper('simipwa')->__('Delete Notification'));
 
-        $this->_addButton('send', array(
-            'label'		=> Mage::helper('adminhtml')->__('Save and Send Notification'),
-            'onclick'	=> 'send_message()',
-            'class'		=> 'save',
-        ), -100);
+        $this->_addButton(
+            'send', array(
+            'label'        => Mage::helper('adminhtml')->__('Save and Send Notification'),
+            'onclick'    => 'send_message()',
+            'class'        => 'save',
+            ), -100
+        );
 
         $url = Mage::getUrl('adminhtml/simipwa_notification/sendMessage');
 
@@ -79,7 +82,8 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit extends Mage_Adminhtml_Bloc
 		";
     }
 
-    public function getHeaderText(){
+    public function getHeaderText()
+    {
         return Mage::helper('simipwa')->__('PWA Notification');
     }
 }

@@ -5,7 +5,8 @@ var swRegistration = null;
 var pushButton = null;
 
 
-function urlB64ToUint8Array(base64String) {
+function urlB64ToUint8Array(base64String) 
+{
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
         .replace(/\-/g, '+')
@@ -17,15 +18,18 @@ function urlB64ToUint8Array(base64String) {
     for (var i = 0; i < rawData.length; ++i) {
         outputArray[i] = rawData.charCodeAt(i);
     }
+
     return outputArray;
 }
 
 
-function initializeUI() {
+function initializeUI() 
+{
     subscribeUser();
     // Set the initial subscription value
     swRegistration.pushManager.getSubscription()
-        .then(function(subscription) {
+        .then(
+            function (subscription) {
             isSubscribed = !(subscription === null);
             //console.log(subscription);
             if (isSubscribed) {
@@ -35,17 +39,22 @@ function initializeUI() {
             }
 
             //updateBtn();
-        });
+            }
+        );
 }
-function subscribeUser() {
+function subscribeUser() 
+{
 
     const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
     //console.log(applicationServerKey);
-    swRegistration.pushManager.subscribe({
+    swRegistration.pushManager.subscribe(
+        {
         userVisibleOnly: true,
         applicationServerKey: applicationServerKey
-    })
-        .then(function(subscription) {
+        }
+    )
+        .then(
+            function (subscription) {
             console.log('User is subscribed.');
 
             updateSubscriptionOnServer(subscription);
@@ -53,44 +62,56 @@ function subscribeUser() {
             isSubscribed = true;
 
             //updateBtn();
-        })
-        .catch(function(err) {
+            }
+        )
+        .catch(
+            function (err) {
             console.log('Failed to subscribe the user: ', err);
             //updateBtn();
-        });
+            }
+        );
 }
 
-function updateSubscriptionOnServer(subscription,type = 1) {
-    // TODO: Send subscription to application server
+function updateSubscriptionOnServer(subscription,type = 1) 
+{
     var api = "./simipwa/index/register";
     var method = 'POST';
     if (type === 2) {
         api = './simipwa/index/delete';
     }
+
     ConnectionApi(api,method,subscription);
 }
 
-function unsubscribeUser() {
+function unsubscribeUser() 
+{
     swRegistration.pushManager.getSubscription()
-        .then(function(subscription) {
+        .then(
+            function (subscription) {
             if (subscription) {
                 updateSubscriptionOnServer(subscription,2);
                 return subscription.unsubscribe();
             }
-        })
-        .catch(function(error) {
+            }
+        )
+        .catch(
+            function (error) {
             console.log('Error unsubscribing', error);
-        })
-        .then(function() {
+            }
+        )
+        .then(
+            function () {
 
             console.log('User is unsubscribed.');
             isSubscribed = false;
 
             updateBtn();
-        });
+            }
+        );
 }
 
-function updateBtn() {
+function updateBtn() 
+{
     if (Notification.permission === 'denied') {
         pushButton.disabled = true;
         updateSubscriptionOnServer(null);
@@ -100,14 +121,17 @@ function updateBtn() {
     pushButton.disabled = false;
 }
 
-function ConnectionApi(api,method = 'GET',params = null){
-    var headers = new Headers({
+function ConnectionApi(api,method = 'GET',params = null)
+{
+    var headers = new Headers(
+        {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Access-Control-Allow-Origin': '*',
         // 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
         // 'Access-Control-Allow-Headers': 'X-Requested-With,content-type',
         // 'Access-Control-Allow-Credentials': true,
-    });
+        }
+    );
     var init = {cache: 'default', mode: 'cors'};
     init['method'] = method;
     if(params){
@@ -117,16 +141,23 @@ function ConnectionApi(api,method = 'GET',params = null){
 
     var _request = new Request(api, init);
     fetch(_request)
-        .then(function (response) {
+        .then(
+            function (response) {
             if (response.ok) {
                 return response.json();
             }
+
             throw new Error('Network response was not ok');
-        })
-        .then(function (data) {
-           console.log(data);
-        }).catch((error) => {
-        //alert(error.toString());
-        console.error(error);
-    });
+            }
+        )
+        .then(
+            function (data) {
+            console.log(data);
+            }
+        ).catch(
+            (error) => {
+                //alert(error.toString());
+                console.error(error);
+                }
+        );
 }

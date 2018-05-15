@@ -43,11 +43,13 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_SyncSW extends Mage_Adminh
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
+            ->setData(
+                array(
                 'id' => 'sw_button',
                 'label' => $this->helper('adminhtml')->__('Sync Service Worker PWA'),
                 'onclick' => 'javascript:sync_sw(); return false;'
-            ));
+                )
+            );
 
         return $button->toHtml();
     }

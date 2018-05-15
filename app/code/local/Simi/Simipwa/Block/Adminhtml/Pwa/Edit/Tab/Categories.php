@@ -46,12 +46,13 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Categories extends Mage_Adminhtm
 
     public function setCategoryIds($id)
     {
-        if (!$id) {
+        if (!$id){
             $ids = array();
         }
-        elseif ($id) {
+        elseif ($id){
             $ids[] = $id;
         }
+
         $this->_selectedIds = $ids;
         return $this;
     }
@@ -71,6 +72,7 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Categories extends Mage_Adminhtm
         if ($this->_withProductCount) {
              $item['text'].= ' ('.$node->getProductCount().')';
         }
+
         $item['id']  = $node->getId();
         $item['path'] = $node->getData('path');
         $item['cls'] = 'folder ' . ($node->getIsActive() ? 'active-category' : 'no-active-category');

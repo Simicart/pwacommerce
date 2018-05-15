@@ -15,18 +15,20 @@ class Simi_Simipwa_Model_Simiobserver
         if ($observerObjectData['resource'] == 'simipwas' || $observerObjectData['resource'] == 'sitemaps') {
             $observerObjectData['module'] = 'simipwa';
         }
+
         $observerObject->setData($observerObjectData);
     }
 
-    public function simiPwaChangeStoreView($observer){
-    	$observerObject = $observer->getObject();
-    	$data = $observerObject->getData();
-    	if(isset($data['params']) && isset($data['params']['pwa'])){
-    		$obj = $observer['object'];
-    		$info = $obj->storeviewInfo;
-    		$siteMap = Mage::helper('simipwa')->getSiteMaps();
+    public function simiPwaChangeStoreView($observer)
+    {
+        $observerObject = $observer->getObject();
+        $data = $observerObject->getData();
+        if(isset($data['params']) && isset($data['params']['pwa'])){
+            $obj = $observer['object'];
+            $info = $obj->storeviewInfo;
+            $siteMap = Mage::helper('simipwa')->getSiteMaps();
             if($siteMap && isset($siteMap['sitemaps']))
-    		  $info['urls'] = $siteMap['sitemaps'];
+              $info['urls'] = $siteMap['sitemaps'];
             $info['pwa_configs'] = array(
                 'pwa_enable'=> Mage::getStoreConfig('simipwa/general/pwa_enable'),
                 'pwa_url'=> Mage::getStoreConfig('simipwa/general/pwa_url'),
@@ -36,29 +38,27 @@ class Simi_Simipwa_Model_Simiobserver
             if($GATokenKey){
                 $info['ga_token_key'] =$GATokenKey;
             }
-    		$obj->storeviewInfo = $info;    		
-    	}    	
+
+            $obj->storeviewInfo = $info;            
+        }        
     }
     
-    public function controllerActionPredispatch($observer) {
-        /*
-        if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
-            return;
-        */
+    public function controllerActionPredispatch($observer) 
+    {
         if (!Mage::getStoreConfig('simipwa/general/pwa_enable'))
             return;
         $tablet_browser = 0;
         $mobile_browser = 0;
 
-        if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+        if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))){
             $tablet_browser++;
         }
 
-        if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+        if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile)/i', strtolower($_SERVER['HTTP_USER_AGENT']))){
             $mobile_browser++;
         }
 
-        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))){
             $mobile_browser++;
         }
 
@@ -74,14 +74,18 @@ class Simi_Simipwa_Model_Simiobserver
             'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
             'wapr','webc','winw','winw','xda ','xda-');
 
-        if (in_array($mobile_ua,$mobile_agents)) {
+        if (in_array($mobile_ua, $mobile_agents)) {
             $mobile_browser++;
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera mini') !== false) {
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'opera mini') !== false) {
             $mobile_browser++;
             //Check for tablets on opera mini alternative headers
-            $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?$_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:(isset($_SERVER['HTTP_DEVICE_STOCK_UA'])?$_SERVER['HTTP_DEVICE_STOCK_UA']:''));
+            $stock_ua = strtolower(
+                isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?
+                $_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:
+                (isset($_SERVER['HTTP_DEVICE_STOCK_UA'])? $_SERVER['HTTP_DEVICE_STOCK_UA']:'')
+            );
             if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
                 $tablet_browser++;
             }
@@ -111,9 +115,12 @@ class Simi_Simipwa_Model_Simiobserver
                 $isExcludedCase = true;
             }
         }
-        if((($tablet_browser > 0)||($mobile_browser > 0)) && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && !$isExcludedCase){
-            if(file_exists('./pwa/index.html')){
-                //require 'pwa/index.html';
+
+        if((($tablet_browser > 0)||($mobile_browser > 0)) &&
+            Mage::getStoreConfig('simipwa/general/pwa_main_url_site') &&
+            !$isExcludedCase) {
+            $io = new Varien_Io_File();
+            if(!$io->fileExists('./pwa/index.html')) {
                 $content = file_get_contents('./pwa/index.html');
                 $controller = $observer->getControllerAction();
                 $controller->getRequest()->setDispatched(true);
@@ -127,13 +134,10 @@ class Simi_Simipwa_Model_Simiobserver
                 $response->setBody($content);
             }
         }
-//        if (($tablet_browser > 0)||($mobile_browser > 0) && !$isExcludedCase) {
-//            $url = Mage::getStoreConfig('simipwa/general/pwa_url').$uri;
-//            header("Location: ".$url);
-//        }
     }
 
-    public function changeFileManifest(Varien_Event_Observer $observer){
+    public function changeFileManifest()
+    {
         if(!Mage::getStoreConfig('simipwa/manifest/enable')) return;
         Mage::helper('simipwa')->updateManifest();
     }

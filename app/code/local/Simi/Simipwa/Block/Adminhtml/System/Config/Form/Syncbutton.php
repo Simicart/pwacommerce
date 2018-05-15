@@ -47,23 +47,25 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
 
         if (class_exists('Simi_Simiconnector_Controller_Action')) {
             $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
+                ->setData(
+                    array(
                     'id' => 'pwa_button',
                     'label' => $this->helper('adminhtml')->__('Sync Sitemaps'),
                     'onclick' => 'javascript:check(); return false;'
-                ));
+                    )
+                );
 
             $actionHtml .=  $button->toHtml();
 
             $buildButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
-                array(
+                    array(
                     'id' => 'build_pwa',
                     'label' => __('Build PWA'),
                     'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build') . '\')',
                     'style' => 'margin-left : 10px;margin-bottom : 10px'
-                )
-            );
+                    )
+                );
             $actionHtml .= $buildButton->toHtml();
         } else
             $actionHtml.= '<script type="text/javascript">

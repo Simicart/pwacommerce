@@ -3,7 +3,8 @@
 $installer = $this;
 $installer->startSetup();
 
-$installer->run("
+$installer->run(
+    "
     DROP TABLE IF EXISTS {$installer->getTable('simipwa_agent')};
     DROP TABLE IF EXISTS {$installer->getTable('simipwa_message')};
     
@@ -34,6 +35,7 @@ $installer->run("
         `status` smallint(5) unsigned,
         PRIMARY KEY (`message_id`)
     )
-");
+"
+);
 
 $installer->endSetup();

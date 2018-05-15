@@ -5,7 +5,8 @@
  * Date: 5/10/18
  * Time: 8:24 AM
  */
-class Simi_Simipwa_Block_Adminhtml_System_Config_Form_SyncApi extends Mage_Adminhtml_Block_System_Config_Form_Field {
+class Simi_Simipwa_Block_Adminhtml_System_Config_Form_SyncApi extends Mage_Adminhtml_Block_System_Config_Form_Field
+{
     protected function _construct()
     {
         parent::_construct();
@@ -34,11 +35,13 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_SyncApi extends Mage_Admin
 
         if (class_exists('Simi_Simiconnector_Controller_Action')) {
             $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
+                ->setData(
+                    array(
                     'id' => 'api_button',
                     'label' => $this->helper('adminhtml')->__('Refresh Cache Api'),
                     'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/refreshCache') . '\')'
-                ));
+                    )
+                );
 
             $actionHtml .=  $button->toHtml();
         } else

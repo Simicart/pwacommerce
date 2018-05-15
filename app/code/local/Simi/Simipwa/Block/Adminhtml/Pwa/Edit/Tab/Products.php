@@ -32,10 +32,12 @@
  * @package    Mage_Adminhtml
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_Block_Widget_Grid {
+class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_Block_Widget_Grid
+{
     
 
-    public function __construct($arguments = array()) {
+    public function __construct($arguments = array()) 
+    {
         parent::__construct($arguments);
         if ($this->getRequest()->getParam('current_grid_id')) {
             $this->setId($this->getRequest()->getParam('current_grid_id'));
@@ -51,6 +53,7 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
         if ($this->getRequest()->getParam('collapse')) {
             $this->setIsCollapsed(true);
         }
+
         $this->setTemplate('simipwa/grid.phtml');
     }
 
@@ -58,11 +61,13 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
      * Retrieve quote store object
      * @return Mage_Core_Model_Store
      */
-    public function getStore() {
+    public function getStore() 
+    {
         return Mage::app()->getStore();
     }
 
-    protected function _addColumnFilterToCollection($column) {
+    protected function _addColumnFilterToCollection($column) 
+    {
         // Set custom filter for in product flag
 
         if ($column->getId() == 'in_products') {
@@ -70,6 +75,7 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
             if (empty($selected)) {
                 $selected = '';
             }
+
             if ($column->getFilter()->getValue()) {
                 $this->getCollection()->addFieldToFilter('sku', array('in' => $selected));
             } else {
@@ -78,6 +84,7 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
         } else {
             parent::_addColumnFilterToCollection($column);
         }
+
         return $this;
     }
 
@@ -86,7 +93,8 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
      *
      * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
         $collection = Mage::getResourceModel('catalog/product_collection')
                 ->setStoreId(0)
                 ->addAttributeToSelect('name', 'type_id', 'attribute_set_id')
@@ -103,8 +111,10 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
      *
      * @return Mage_Adminhtml_Block_Promo_Widget_Chooser_Sku
      */
-    protected function _prepareColumns() {
-        $this->addColumn('in_products', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'in_products', array(
             'header_css_class' => 'a-center',           
             'type' => 'checkbox',
             'name' => 'in_products',
@@ -114,50 +124,63 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Products extends Mage_Adminhtml_
             'use_index' => true,
             'width'     => '50px',
             'renderer' => 'simipwa/adminhtml_pwa_edit_tab_renderer_sku'
-        ));
+            )
+        );
 
-        $this->addColumn('entity_id', array(
+        $this->addColumn(
+            'entity_id', array(
             'header' => Mage::helper('sales')->__('ID'),
             'sortable' => true,
             'width' => '60px',
             'index' => 'entity_id'
-        ));
+            )
+        );
 
-        $this->addColumn('chooser_name', array(
+        $this->addColumn(
+            'chooser_name', array(
             'header' => Mage::helper('sales')->__('Product Name'),
             'name' => 'chooser_name',
             'index' => 'name',
             'width' => '400px'
-        ));
+            )
+        );
 
-        $this->addColumn('type', array(
+        $this->addColumn(
+            'type', array(
             'header' => Mage::helper('catalog')->__('Type'),
             'width' => '60px',
             'index' => 'type_id',
             'type' => 'options',
             'options' => Mage::getSingleton('catalog/product_type')->getOptionArray(),
-        ));
+            )
+        );
 
-        $this->addColumn('chooser_sku', array(
+        $this->addColumn(
+            'chooser_sku', array(
             'header' => Mage::helper('sales')->__('SKU'),
             'name' => 'chooser_sku',
             'width' => '80px',
             'index' => 'sku',
-        ));
+            )
+        );
 
 
         return parent::_prepareColumns();
     }
 
-    public function getGridUrl() {
-        return $this->getUrl('*/*/chooserMainProducts', array(
+    public function getGridUrl() 
+    {
+        return $this->getUrl(
+            '*/*/chooserMainProducts', array(
                     '_current' => true,
                     'current_grid_id' => $this->getId(),
                     'collapse'  => null
-                ));
+            )
+        );
     }
 
-    protected function _getSelectedProducts() {
+    protected function _getSelectedProducts() 
+    {
         $products = $this->getRequest()->getPost('selected', array());
         return $products;
     }

@@ -7,45 +7,25 @@
  */
 class Simi_Simipwa_Block_Adminhtml_Notification_Edit_Tab_Form extends Mage_Adminhtml_Block_Widget_Form
 {
-    protected function _prepareForm(){
+    protected function _prepareForm()
+    {
         $form = new Varien_Data_Form();
         $this->setForm($form);
 
-        if (Mage::getSingleton('adminhtml/session')->getMessageData()){
+        if (Mage::getSingleton('adminhtml/session')->getMessageData())
+        {
             $data = Mage::getSingleton('adminhtml/session')->getMessageData();
             Mage::getSingleton('adminhtml/session')->setMessageData(null);
-        }elseif(Mage::registry('message_data'))
+        }
+        elseif(Mage::registry('message_data'))
             $data = Mage::registry('message_data')->getData();
         //zend_debug::dump($data);
         $data['id'] = $this->getRequest()->getParam('id');
         $fieldset = $form->addFieldset('message_form', array('legend'=>Mage::helper('simipwa')->__('Send Notification')));
-//        $device = Mage::getModel('simipwa/agent')->getCollection();
-//        $items = array();
-//        $items[] = array(
-//            'value' => 0,
-//            'label' => 'All Device'
-//        );
-//        foreach ($device as $item){
-//            $items[] = array(
-//                'value' => $item->getId(),
-//                'label' => $item->getId(),
-//            );
-//        }
-//        if ($data['notice_type'] == 2){
-//            $data['device_id'] = 0;
-//        }
-//        $data['device_id'] = explode(',',$data['device_id']);
-//
-//        $fieldset->addField('device_id', 'multiselect', array(
-//            'label'    => Mage::helper('simipwa')->__('Device ID'),
-//            'class'    => '',
-//            'required' => true,
-//            'name'     => 'device_id',
-//            'values'   => $items,
-//        ));
         $deviceIds = Mage::getModel('simipwa/agent')->getCollection()->getAllIds();
         $data['devices_pushed'] = $data['device_id'];
-        $fieldset->addField('devices_pushed', 'textarea', array(
+        $fieldset->addField(
+            'devices_pushed', 'textarea', array(
             'name' => 'devices_pushed',
             'class' => 'required-entry',
             'required' => true,
@@ -169,31 +149,41 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit_Tab_Form extends Mage_Admin
                     }
             </script>
             '
-        ));
+            )
+        );
 
-        $fieldset->addField('id', 'hidden', array(
+        $fieldset->addField(
+            'id', 'hidden', array(
             'label'  => Mage::helper('simipwa')->__('PWA User Agent'),
             'name'   => 'id',
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_title', 'text', array(
+        $fieldset->addField(
+            'notice_title', 'text', array(
             'label' => Mage::helper('simipwa')->__('Title Message'),
             'name' => 'notice_title',
             'required' => true,
-        ));
+            )
+        );
 
-        $fieldset->addField('image_url', 'image', array(
+        $fieldset->addField(
+            'image_url', 'image', array(
             'label'        => Mage::helper('simipwa')->__('Image'),
             'name'        => 'img_url',
             //'note'  => Mage::helper('simipwa')->__('Size max: 1000 x 1000 (PX)'),
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_content', 'editor', array(
+        $fieldset->addField(
+            'notice_content', 'editor', array(
             'name' => 'notice_content',
             'label' => Mage::helper('simipwa')->__('Message'),
             'title' => Mage::helper('simipwa')->__('Message'),
-        ));
-        $fieldset->addField('type', 'select', array(
+            )
+        );
+        $fieldset->addField(
+            'type', 'select', array(
             'label' => Mage::helper('simipwa')->__('Direct viewers to'),
             'class' => 'required-entry',
             'required' => true,
@@ -201,10 +191,12 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit_Tab_Form extends Mage_Admin
             'values' => Mage::getModel('simipwa/agent')->toOptionArray(),
             'onchange' => 'onchangeNoticeType(this.value)',
             'after_element_html' => '<script> Event.observe(window, "load", function(){onchangeNoticeType(\''.$data['type'].'\');});</script>',
-        ));
+            )
+        );
 
         $productIds = implode(", ", Mage::getResourceModel('catalog/product_collection')->getAllIds());
-        $fieldset->addField('product_id', 'text', array(
+        $fieldset->addField(
+            'product_id', 'text', array(
             'name' => 'product_id',
             'class' => 'required-entry',
             'required' => true,
@@ -298,9 +290,11 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit_Tab_Form extends Mage_Admin
                     
                 }
             </script>'
-        ));
+            )
+        );
 
-        $fieldset->addField('category_id', 'text', array(
+        $fieldset->addField(
+            'category_id', 'text', array(
             'name' => 'category_id',
             'class' => 'required-entry',
             'required' => true,
@@ -340,14 +334,17 @@ class Simi_Simipwa_Block_Adminhtml_Notification_Edit_Tab_Form extends Mage_Admin
             };
     </script>
         '
-        ));
+            )
+        );
 
-        $fieldset->addField('notice_url', 'text', array(
+        $fieldset->addField(
+            'notice_url', 'text', array(
             'name' => 'notice_url',
             'class' => 'required-entry',
             'required' => true,
             'label' => Mage::helper('simipwa')->__('URL'),
-        ));
+            )
+        );
 
         $form->setValues($data);
         return parent::_prepareForm();

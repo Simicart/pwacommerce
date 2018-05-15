@@ -19,6 +19,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 file_put_contents($filePath, $sitemaps);
                 return json_decode($sitemaps, true);
             }
+
             return json_decode($sitemaps, true);
         } else {
             $file = @fopen($filePath, 'w+');
@@ -27,6 +28,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 file_put_contents($filePath, $sitemaps);
                 return json_decode($sitemaps, true);
             }
+
             return json_decode($sitemaps, true);
         }
 
@@ -53,6 +55,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 'name' => $item->getCategoryName()
             );
         }
+
         $urls['categories_url'] = $categories_url;        
 //         get products
         $collection = new Mage_Sitemap_Model_Resource_Catalog_Product();
@@ -67,6 +70,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 'url' => $item->getUrl(),
             );
         }
+
         $urls['products_url'] = $products_url;
         unset($collection);
 
@@ -80,6 +84,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 'url' => $item->getUrl(),
             );
         }
+
         $urls['cms_url'] = $cms_url;
         unset($collection);
         $result = array();
@@ -104,11 +109,13 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         return false;
     }
 
-    public function IsEnableForWebsite(){
+    public function IsEnableForWebsite()
+    {
         return Mage::getStoreConfig('simipwa/notification/enable');
     }
 
-    public function _removeFolder($folder){
+    public function _removeFolder($folder)
+    {
         if (is_dir($folder))
             $dir_handle = opendir($folder);
         if (!$dir_handle)
@@ -121,12 +128,14 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                     $this->_removeFolder($folder.'/'.$file);
             }
         }
+
         closedir($dir_handle);
         rmdir($folder);
         return true;
     }
 
-    public function updateManifest(){
+    public function updateManifest()
+    {
         $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'Progressive Web App';
         $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'PWA';
         $default_icon = Mage::getBaseDir().'/pwa/images/default_icon_512_512.png';
@@ -175,24 +184,28 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         }
     }
 
-    public function IsEnableAddToHomescreen(){
+    public function IsEnableAddToHomescreen()
+    {
         return Mage::getStoreConfig('simipwa/manifest/enable');
     }
 
-    public function isJSON($string){
+    public function isJSON($string)
+    {
         return is_string($string) && is_array(json_decode($string, true)) ? true : false;
     }
 
-    public function getApi($url){
+    public function getApi($url)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec ($ch);
-        curl_close ($ch);
+        $data = curl_exec($ch);
+        curl_close($ch);
         return $data;
     }
 
-    public function SyncApi($config,$url,$replaceStr){
+    public function SyncApi($config,$url,$replaceStr)
+    {
         if($config){
             $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
             if(file_exists($path_to_file)){
@@ -200,8 +213,8 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 $api = $this->getApi($url);
                 if($this->isJSON($api)){
                     //update index.html file
-                    $file_contents = str_replace($replaceStr,$api,$file_contents);
-                    file_put_contents($path_to_file,$file_contents);
+                    $file_contents = str_replace($replaceStr, $api, $file_contents);
+                    file_put_contents($path_to_file, $file_contents);
                 }
             }
         }

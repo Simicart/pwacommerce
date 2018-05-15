@@ -12,16 +12,19 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         return Mage::getSingleton('admin/session')->isAllowed('simipwa');
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         $this->loadLayout()->renderLayout();
     }
 
-    public function newAction() {
+    public function newAction() 
+    {
         $this->_forward('edit');
     }
 
-    public function editAction() {
-        $id	 = $this->getRequest()->getParam('id');
+    public function editAction() 
+    {
+        $id     = $this->getRequest()->getParam('id');
         $model  = Mage::getModel('simipwa/message')->load($id);
 
         if ($model->getId() || $id == 0) {
@@ -48,7 +51,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         }
     }
 
-    public function sendMessageAction(){
+    public function sendMessageAction()
+    {
         if ($data = $this->getRequest()->getPost()) {
             $id = $this->getRequest()->getParam('id');
             $message = Mage::getModel('simipwa/message');
@@ -75,30 +79,34 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                     if (file_exists($pathImg)) {
                         unlink($pathImg);
                     }
+
                     $data['image_url'] = '';
                 }
             }
 
             $data['device_id'] = $data['devices_pushed'];
 
-            $device_ids = explode(',',$data['device_id']);
+            $device_ids = explode(',', $data['device_id']);
             if(count($device_ids) > 1){
                 $data['notice_type'] = 2;
             }
             else {
                 $data['notice_type'] = 1;
             }
+
             try {
                 if (!$data['type'] && $data['product_id']){
                     $data['type'] = 1;
                 }
+
                 $message->setData($data);
                 $mess = Mage::getModel('simipwa/message')->getCollection()
-                    ->addFieldToFilter('status',1);
+                    ->addFieldToFilter('status', 1);
                 foreach ($mess as $item){
                     $item['status'] = 2;
                     $item->save();
                 }
+
                 if ($id){
                     $message->setId($id);
                 }
@@ -110,7 +118,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                         unset($device_ids[$key]);
                     }
                 }
-                $ids = implode(',',$device_ids);
+
+                $ids = implode(',', $device_ids);
                 $message->setCreatedTime(now())
                         ->setStatus(1)
                         ->setDeviceId($ids);
@@ -129,12 +138,12 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         }
     }
 
-    public function chooserMainCategoriesAction(){
+    public function chooserMainCategoriesAction()
+    {
         $request = $this->getRequest();
         $id = $request->getParam('selected', array());
-        $block = $this->getLayout()->createBlock('simipwa/adminhtml_pwa_edit_tab_categories','maincontent_category', array('js_form_object' => $request->getParam('form')))
-            ->setCategoryIds($id)
-        ;
+        $block = $this->getLayout()->createBlock('simipwa/adminhtml_pwa_edit_tab_categories', 'maincontent_category', array('js_form_object' => $request->getParam('form')))
+            ->setCategoryIds($id);
 
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
@@ -144,13 +153,15 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
     /**
      * Get tree node (Ajax version)
      */
-    public function categoriesJsonAction() {
+    public function categoriesJsonAction() 
+    {
         if ($categoryId = (int) $this->getRequest()->getPost('id')) {
             $this->getRequest()->setParam('id', $categoryId);
 
             if (!$category = $this->_initCategory()) {
                 return;
             }
+
             $this->getResponse()->setBody(
                 $this->getLayout()->createBlock('adminhtml/catalog_category_tree')
                     ->getTreeJson($category)
@@ -163,7 +174,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
      *
      * @return Mage_Catalog_Model_Category
      */
-    protected function _initCategory() {
+    protected function _initCategory() 
+    {
         $categoryId = (int) $this->getRequest()->getParam('id', false);
         $storeId = (int) $this->getRequest()->getParam('store');
 
@@ -187,7 +199,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         return $category;
     }
 
-    public function categoriesJson2Action() {
+    public function categoriesJson2Action() 
+    {
         $this->_initItem();
         $this->getResponse()->setBody(
             $this->getLayout()->createBlock('simipwa/adminhtml_pwa_edit_tab_categories')
@@ -195,11 +208,13 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         );
     }
 
-    public function chooserMainProductsAction() {
+    public function chooserMainProductsAction() 
+    {
         $request = $this->getRequest();
         $block = $this->getLayout()->createBlock(
             'simipwa/adminhtml_pwa_edit_tab_products', 'promo_widget_chooser_sku', array('js_form_object' => $request->getParam('form'),
-        ));
+            )
+        );
         if ($block) {
             $this->getResponse()->setBody($block->toHtml());
         }
@@ -213,13 +228,15 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
         $msg_Ids = $this->getRequest()->getParam('message');
         if (!is_array($msg_Ids)) {
             Mage::getSingleton('adminhtml/session')->addError(
-                Mage::helper('adminhtml')->__('Please select Notification(s)'));
+                Mage::helper('adminhtml')->__('Please select Notification(s)')
+            );
         } else {
             try {
                 foreach ($msg_Ids as $msg_id) {
                     $msg = Mage::getModel('simipwa/message')->load($msg_id);
                     $msg->delete();
                 }
+
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('adminhtml')->__(
                         'Total of %d record(s) were successfully deleted', count($msg_Ids)
@@ -229,6 +246,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
@@ -244,8 +262,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                     $msg = Mage::getSingleton('simipwa/message')
                         ->load($id);
                     $msg->setStatus($stt)->save();
-
                 }
+
                 $this->_getSession()->addSuccess(
                     $this->__('Total of %d record(s) were successfully updated', count($msg_Ids))
                 );
@@ -253,10 +271,12 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                 $this->_getSession()->addError($e->getMessage());
             }
         }
+
         $this->_redirect('*/*/index');
     }
 
-    public function deleteAction(){
+    public function deleteAction()
+    {
         if ($this->getRequest()->getParam('id') > 0) {
             try {
                 $model = Mage::getModel('simipwa/message');
@@ -265,13 +285,15 @@ class Simi_Simipwa_Adminhtml_Simipwa_NotificationController extends Mage_Adminht
                     ->delete();
 
                 Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('adminhtml')->__('Notification was successfully deleted'));
+                    Mage::helper('adminhtml')->__('Notification was successfully deleted')
+                );
                 $this->_redirect('*/*/');
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 $this->_redirect('*/*/edit', array('id' => $this->getRequest()->getParam('id')));
             }
         }
+
         $this->_redirect('*/*/');
     }
 }
