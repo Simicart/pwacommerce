@@ -36,7 +36,7 @@ class Simi_Simipwa_Model_Simiobserver
                 'pwa_url'=> Mage::getStoreConfig('simipwa/general/pwa_url'),
                 'pwa_excluded_paths'=> Mage::getStoreConfig('simipwa/general/pwa_excluded_paths'),
             );
-            $GATokenKey = Mage::getStoreConfig('simipwa/analytics/ga_token_key');
+            $GATokenKey = Mage::getStoreConfig('simipwa/general/ga_token_key');
             if($GATokenKey){
                 $info['ga_token_key'] =$GATokenKey;
             }
@@ -51,6 +51,14 @@ class Simi_Simipwa_Model_Simiobserver
         */
         if (!Mage::getStoreConfig('simipwa/general/pwa_enable'))
             return;
+        if (!Mage::getStoreConfig('simipwa/general/pwa_main_url_site'))
+            return;
+
+        $redirectIps = Mage::getStoreConfig('simipwa/general/pwa_redirect_ips');
+        if ($redirectIps && $redirectIps!='' &&
+            !in_array($_SERVER['REMOTE_ADDR'], explode(',', $redirectIps), true))
+            return;
+
         $tablet_browser = 0;
         $mobile_browser = 0;
 
@@ -115,12 +123,24 @@ class Simi_Simipwa_Model_Simiobserver
                 $isExcludedCase = true;
             }
         }
-        if((($tablet_browser > 0)||($mobile_browser > 0)) && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && !$isExcludedCase){
+        if((($tablet_browser > 0)||($mobile_browser > 0)) && !$isExcludedCase){
             if(file_exists('./pwa/index.html')){
                 $content = file_get_contents('./pwa/index.html');
                 if ($prerenderedHeader = $this->prerenderHeader()) {
                     $content = str_replace('<head>', '<head>'.$prerenderedHeader, $content);
                 }
+
+                if ($head = Mage::getStoreConfig('simipwa/general/custom_head')) {
+                    $content = str_replace('<head>', '<head>'.$head, $content);
+                }
+
+                if ($footerHtml = Mage::getStoreConfig('simipwa/general/footer_html')) {
+                    $footerHtml = Mage::helper('cms')
+                        ->getPageTemplateProcessor()
+                        ->filter($footerHtml);
+                    $content = str_replace('</body>', $footerHtml.'</body>', $content);
+                }
+
                 $controller = $observer->getControllerAction();
                 $controller->getRequest()->setDispatched(true);
                 $controller->setFlag(

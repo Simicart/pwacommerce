@@ -29,7 +29,7 @@
                         <pwa_enable translate="label">
                             <label>Enable PWA</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>1</sort_order>
+                            <sort_order>99</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -39,7 +39,7 @@
                         <pwa_main_url_site translate="label">
                             <label>Enable Redirection</label>
                             <frontend_type>select</frontend_type>
-                            <sort_order>5</sort_order>
+                            <sort_order>199</sort_order>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -64,10 +64,21 @@
                         <!--<pwa_main_url_site>0</pwa_main_url_site>-->
                         <!--</depends>-->
                         <!--</pwa_url>-->
+                        <pwa_redirect_ips translate="label">
+                            <label>PWA Redirect IP(s)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>299</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>
+                                Separated by comma, Users with IP listed above would be redirected. Leave this empty to redirect ALL users
+                            </comment>
+                        </pwa_redirect_ips>
                         <pwa_excluded_paths translate="label">
                             <label>PWA Excluded Paths</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
+                            <sort_order>399</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -81,7 +92,7 @@
                         <logo_homepage translate="label">
                             <label>PWA Logo Url (png)</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
+                            <sort_order>499</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -93,7 +104,7 @@
                         <favicon translate="label">
                             <label>PWA Favicon Url</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>60</sort_order>
+                            <sort_order>599</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -118,7 +129,7 @@
                             <label>Action</label>
                             <frontend_type>button</frontend_type>
                             <frontend_model>simipwa/adminhtml_system_config_form_syncbutton</frontend_model>
-                            <sort_order>100</sort_order>
+                            <sort_order>699</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -126,6 +137,34 @@
                                 If change config , Please click Build PWA after Save
                             </comment>
                         </sync_site_url>
+                        <ga_token_key translate="label">
+                            <label>Google Analytics Token Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>799</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </ga_token_key>
+                        <custom_head>
+                            <label>Custom Head</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>899</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                Use this to add your custom content to head tag
+                            </comment>
+                        </custom_head>
+                        <footer_html translate="label">
+                            <label>Custom Footer HTML</label>
+                            <frontend_type>editor</frontend_type>
+                            <frontend_model>simipwa/adminhtml_system_config_editor</frontend_model>
+                            <sort_order>999</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </footer_html>
                     </fields>
                 </general>
                 <notification>
@@ -240,24 +279,6 @@
                         </background_color>
                     </fields>
                 </manifest>
-                <analytics>
-                    <label>Analytics Configuration</label>
-                    <frontend_type>text</frontend_type>
-                    <sort_order>99</sort_order>
-                    <show_in_default>1</show_in_default>
-                    <show_in_website>1</show_in_website>
-                    <show_in_store>1</show_in_store>
-                    <fields>
-                        <ga_token_key translate="label">
-                            <label>Google Analytics Token Key</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </ga_token_key>
-                    </fields>
-                </analytics>
                 <!--<cache_api>-->
                     <!--<label>Api Cache Configuration</label>-->
                     <!--<frontend_type>text</frontend_type>-->
