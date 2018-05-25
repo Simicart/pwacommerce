@@ -614,12 +614,12 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             file_put_contents($path_to_file, $msConfigs);
             $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
 
-//            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
-//                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
-//                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
-//                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
-//                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
-//            }
+            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
+                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
+                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
+            }
 
             Mage::getSingleton('adminhtml/session')->addSuccess(
                 Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url)
