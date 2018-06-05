@@ -616,7 +616,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
             if(Mage::getStoreConfig('simipwa/cache_api/enable')){
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
-                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1';
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
             }
@@ -681,7 +681,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
                 $token =  Mage::getStoreConfig('simiconnector/general/token_key');
-                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token;
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1';
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
                 Mage::getSingleton('adminhtml/session')->addSuccess(
