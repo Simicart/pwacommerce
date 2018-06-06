@@ -360,7 +360,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
 
-            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token);
+            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
             if (!$config || (!$config = json_decode($config, 1)))
                 throw new Exception(
                     Mage::helper('simipwa')->__(
@@ -609,17 +609,33 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     }; 
                         ";
             }
-
+            $config = json_encode($config);
+            $msConfigs.=
+                "
+                    var Simicart_Config = $config
+                    
+                    sessionStorage.setItem('simicart_config',JSON.stringify(Simicart_Config))
+                ";
+            $api_storeview = $url . 'simiconnector/rest/v2/storeviews/default?pwa=1';
+            $storeview_config = file_get_contents($api_storeview);
+            if ($config && Mage::helper('simipwa')->isJSON($storeview_config)){
+                $msConfigs.=
+                    "
+                    var Merchant_Config = $storeview_config
+                    
+                    sessionStorage.setItem('merchant_config',JSON.stringify(Merchant_Config))
+                ";
+            }
             $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
             file_put_contents($path_to_file, $msConfigs);
             $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
 
-            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
-                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
-                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1';
-                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
-                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
-            }
+//            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
+//                $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
+//                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1';
+//                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
+//                Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
+//            }
 
             Mage::getSingleton('adminhtml/session')->addSuccess(
                 Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url)
