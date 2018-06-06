@@ -141,6 +141,8 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         $default_icon = Mage::getBaseDir().'/pwa/images/default_icon_512_512.png';
         $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : $default_icon;
         $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa/';
+        $theme_color = Mage::getStoreConfig('simipwa/manifest/theme_color') ? '#'.Mage::getStoreConfig('simipwa/manifest/theme_color') : '#3399cc';
+        $background_color = Mage::getStoreConfig('simipwa/manifest/background_color') ? '#'.Mage::getStoreConfig('simipwa/manifest/background_color') : '#ffffff';
         $content = "{
               \"short_name\": \"$short_name\",
               \"name\": \"$name\",
@@ -168,8 +170,8 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
               ],
               \"start_url\": \"$start_url\",
               \"display\": \"standalone\",
-              \"theme_color\": \"#3399cc\",
-              \"background_color\": \"#ffffff\",
+              \"theme_color\": \"$theme_color\",
+              \"background_color\": \"$background_color\",
               \"gcm_sender_id\" : \"832571969235\"
             }";
         $filePath = Mage::getBaseDir() . '/pwa/manifest.json';

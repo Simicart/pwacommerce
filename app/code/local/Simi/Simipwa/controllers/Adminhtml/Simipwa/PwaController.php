@@ -514,7 +514,23 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     window.location.reload();
                 }
             ';
-
+            $config = json_encode($config);
+            $versionContent.=
+                "
+                    var Simicart_Config = $config
+                    
+                    sessionStorage.setItem('simicart_config',JSON.stringify(Simicart_Config))
+                ";
+            $api_storeview = $url . 'simiconnector/rest/v2/storeviews/default?pwa=1';
+            $storeview_config = file_get_contents($api_storeview);
+            if ($config && Mage::helper('simipwa')->isJSON($storeview_config)){
+                $versionContent.=
+                    "
+                    var Merchant_Config = $storeview_config
+                    
+                    sessionStorage.setItem('merchant_config',JSON.stringify(Merchant_Config))
+                ";
+            }
 
             $path_to_file = './pwa/js/config/version.js';
             file_put_contents($path_to_file, $versionContent);
@@ -609,23 +625,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     }; 
                         ";
             }
-            $config = json_encode($config);
-            $msConfigs.=
-                "
-                    var Simicart_Config = $config
-                    
-                    sessionStorage.setItem('simicart_config',JSON.stringify(Simicart_Config))
-                ";
-            $api_storeview = $url . 'simiconnector/rest/v2/storeviews/default?pwa=1';
-            $storeview_config = file_get_contents($api_storeview);
-            if ($config && Mage::helper('simipwa')->isJSON($storeview_config)){
-                $msConfigs.=
-                    "
-                    var Merchant_Config = $storeview_config
-                    
-                    sessionStorage.setItem('merchant_config',JSON.stringify(Merchant_Config))
-                ";
-            }
+
             $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
             file_put_contents($path_to_file, $msConfigs);
             $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
