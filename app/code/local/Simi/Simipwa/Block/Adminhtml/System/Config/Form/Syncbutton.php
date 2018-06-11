@@ -67,6 +67,15 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
                     )
                 );
             $actionHtml .= $buildButton->toHtml();
+            if(Mage::getStoreConfig('simipwa/general/build_time')){
+                $date =  date('m/d/Y - H:i:s',Mage::getStoreConfig('simipwa/general/build_time'));
+                $html= "Date time : $date";
+                $actionHtml.= '<script type="text/javascript">
+                    document.getElementById("simipwa_general_build_time").setAttribute("readonly","readonly")
+                    document.getElementById("simipwa_general_build_time").nextElementSibling.children[0].innerText = "'.$html.'"
+                </script>';
+            }
+
         } else
             $actionHtml.= '<script type="text/javascript">
                 document.getElementById("simipwa_general-head").parentElement.parentElement.style.display = "none";
