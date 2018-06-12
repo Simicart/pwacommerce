@@ -245,7 +245,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $data['message'] = "Sync Failed!";
         }
 
-       return $this->getResponse()
+        return $this->getResponse()
             ->setHeader('Content-Type', 'application/json')
             ->setBody(json_encode($data));
     }
@@ -254,7 +254,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
      * Get Device to Push Notification
      */
 
-    public function chooseDevicesAction() 
+    public function chooseDevicesAction()
     {
         $request = $this->getRequest();
         $additionalInfo = '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simipwa')->__('Device(s) Selected').'</span></p>';
@@ -354,9 +354,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         try{
             $token =  Mage::getStoreConfig('simiconnector/general/token_key');
             $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
-            $logoUrlSetting = Mage::getStoreConfig('simipwa/general/logo_homepage');
-            $app_image_logo = ($logoUrlSetting && $logoUrlSetting!='')?
-                $logoUrlSetting : Mage::getStoreConfig('design/header/logo_src');
+
             if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
 
@@ -444,6 +442,28 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
             }
 
+            // app image
+            $app_images = $config['app-configs'][0]['app_images'];
+            $app_image_logo = Mage::getStoreConfig('simipwa/general/logo_homepage');
+            if(!$app_image_logo){
+                $app_image_logo = $app_images['logo'];
+                Mage::getConfig()->saveConfig('simipwa/general/logo_homepage', $app_image_logo);
+            }
+
+            $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img') ;
+            if(!$app_splash_img_url){
+                $app_splash_img_url = $app_images['splash_screen'];
+                Mage::getConfig()->saveConfig('simipwa/general/splash_img', $app_splash_img_url);
+            }
+            $app_splash_img = '<img src="'.$app_splash_img_url.'" alt="Splash Screen" style="width: 325px;height: auto">';
+
+            $app_icon = Mage::getStoreConfig('simipwa/manifest/logo');
+            if(!$app_icon){
+                $app_icon = $app_images['icon'];
+                Mage::getConfig()->saveConfig('simipwa/manifest/logo', $app_icon);
+            }
+
+
             //update index.html file
             $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
@@ -452,11 +472,11 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $file_contents = str_replace('IOS_SPLASH_TEXT', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"'.$excludedPaths.'"', $file_contents);
             $file_contents = str_replace('PWA_BUILD_TIME_VALUE', $buildTime, $file_contents);
+            $file_contents = str_replace('<div id="splash-img"></div>', $app_splash_img, $file_contents);
             //move favicon into pwa
             $favicon = Mage::getStoreConfig('simipwa/general/favicon');
-            if ($favicon && $favicon != ''){
-                $file_contents = str_replace('/pwa/favicon.ico', $favicon, $file_contents);
-            }
+            $favicon = $favicon ? $favicon : $app_icon;
+            $file_contents = str_replace('/pwa/favicon.ico', $favicon, $file_contents);
 
             // update smart banner
             if(isset($iosId) && $iosId && $iosId!==''){
@@ -470,8 +490,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             //update manifest.jon
             if(Mage::getStoreConfig('simipwa/manifest/enable')){
                 Mage::helper('simipwa')->updateManifest();
-                if($icon =  Mage::getStoreConfig('simipwa/manifest/logo')){
-                    $file_contents = str_replace('/pwa/images/default_icon_512_512.png', $icon, $file_contents);
+                if($app_icon){
+                    $file_contents = str_replace('/pwa/images/default_icon_512_512.png', $app_icon, $file_contents);
                 }
             }
 
@@ -505,7 +525,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 mixpanel: {
                     token_key: "'.trim($mixPanelToken).'"
                 },
-                logo_url: "'.$app_image_logo.'"
+                logo_url: "'.$app_image_logo.'",
+                splash_screen : "'.$app_splash_img_url.'"
             };
             ';
 
