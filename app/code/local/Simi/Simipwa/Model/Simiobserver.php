@@ -130,17 +130,6 @@ class Simi_Simipwa_Model_Simiobserver
                     $content = str_replace('<head>', '<head>'.$prerenderedHeader, $content);
                 }
 
-                if ($head = Mage::getStoreConfig('simipwa/general/custom_head')) {
-                    $content = str_replace('<head>', '<head>'.$head, $content);
-                }
-
-                if ($footerHtml = Mage::getStoreConfig('simipwa/general/footer_html')) {
-                    $footerHtml = Mage::helper('cms')
-                        ->getPageTemplateProcessor()
-                        ->filter($footerHtml);
-                    $content = str_replace('</body>', $footerHtml.'</body>', $content);
-                }
-
                 $controller = $observer->getControllerAction();
                 $controller->getRequest()->setDispatched(true);
                 $controller->setFlag(

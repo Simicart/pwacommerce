@@ -473,6 +473,17 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"'.$excludedPaths.'"', $file_contents);
             $file_contents = str_replace('PWA_BUILD_TIME_VALUE', $buildTime, $file_contents);
             $file_contents = str_replace('<div id="splash-img"></div>', $app_splash_img, $file_contents);
+            if ($head = Mage::getStoreConfig('simipwa/general/custom_head')) {
+                $file_contents = str_replace('<head>', '<head>'.$head, $file_contents);
+            }
+
+            if ($footerHtml = Mage::getStoreConfig('simipwa/general/footer_html')) {
+                $footerHtml = Mage::helper('cms')
+                    ->getPageTemplateProcessor()
+                    ->filter($footerHtml);
+                $file_contents = str_replace('</body>', $footerHtml.'</body>', $file_contents);
+            }
+            
             //move favicon into pwa
             $favicon = Mage::getStoreConfig('simipwa/general/favicon');
             $favicon = $favicon ? $favicon : $app_icon;
