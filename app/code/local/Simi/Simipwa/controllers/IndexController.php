@@ -180,7 +180,7 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
                 }
             }
             //update config.js file
-
+            $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img') ;
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
             $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
             $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
@@ -206,7 +206,8 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
                 mixpanel: {
                     token_key: "'.trim($mixPanelToken).'"
                 },
-                logo_url: "'.$app_image_logo.'"
+                logo_url: "'.$app_image_logo.'",
+                splash_screen : "'.$app_splash_img_url.'"
             };
             ';
 
