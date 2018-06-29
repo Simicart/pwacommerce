@@ -146,6 +146,7 @@
                 <pwa_enable>0</pwa_enable>
             </general>
             <notification>
+                <enable>1</enable>
                 <logo>https://www.simicart.com/skin/frontend/default/simicart2.0/css/2017/images/icon-logo.png</logo>
             </notification>
             <manifest>

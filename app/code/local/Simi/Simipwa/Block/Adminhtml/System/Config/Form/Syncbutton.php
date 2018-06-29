@@ -80,7 +80,38 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
             $actionHtml.= '<script type="text/javascript">
                 document.getElementById("simipwa_general-head").parentElement.parentElement.style.display = "none";
                 document.getElementById("simipwa_analytics-head").parentElement.parentElement.style.display = "none";
+                function addHomeScreenWarning() {
+                    simipwa_notification_enable = document.getElementById("simipwa_notification_enable");
+                    homescreen_enable = document.getElementById("row_simipwa_manifest_enable");
+                    if(simipwa_notification_enable.value == 0) {
+                        addToHomeWarning = document.getElementById("add_to_home_warning");
+                         homescreen_enable.parentNode.style.display = "none";
+                        if (!addToHomeWarning || typeof addToHomeWarning == "undefined") {
+                            var addToHomeWarning = document.createElement("div");
+                                addToHomeWarning.innerHTML = "Please enable Offline Mode to open Add to Home Screen feature";
+                                addToHomeWarning.className = "add_to_home_warning";
+                                addToHomeWarning.id = "add_to_home_warning";
+                            document.getElementById("simipwa_manifest").appendChild(addToHomeWarning);   
+                        } else {
+                            addToHomeWarning.style.display = "block";
+                        }
+                    } else {
+                        addToHomeWarning = document.getElementById("add_to_home_warning");
+                        if (addToHomeWarning && typeof addToHomeWarning != "undefined")
+                            addToHomeWarning.style.display = "none";
+                            homescreen_enable.parentNode.style.display = "block";
+                    }
+                }
+                
+                document.addEventListener("DOMContentLoaded", function(event) {
+                    addHomeScreenWarning();
+                    var simipwa_notification_enable = document.getElementById("simipwa_notification_enable");
+                    simipwa_notification_enable.addEventListener("change", function() {
+                        addHomeScreenWarning();
+                    });
+                });
             </script>';
+
         return $actionHtml;
     }
 }
