@@ -537,7 +537,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     token_key: "'.trim($mixPanelToken).'"
                 },
                 logo_url: "'.$app_image_logo.'",
-                splash_screen : "'.$app_splash_img_url.'"
+                splash_screen : "'.$app_splash_img_url.'",
+                magento_version : 1
             };
             ';
 
