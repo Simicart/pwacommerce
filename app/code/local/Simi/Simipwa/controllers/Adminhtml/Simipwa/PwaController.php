@@ -520,7 +520,6 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             var SMCONFIGS = {
                 merchant_url: "'.$url.'",
                 api_path: "simiconnector/rest/v2/",
-                merchant_authorization: "'.$secret_key.'",
                 simicart_url: "https://www.simicart.com/appdashboard/rest/app_configs/",
                 simicart_authorization: "'.$token.'",
                 notification_api: "simipwa/index/",
