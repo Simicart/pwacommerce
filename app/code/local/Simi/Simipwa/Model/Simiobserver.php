@@ -12,39 +12,42 @@ class Simi_Simipwa_Model_Simiobserver
     {
         $observerObject = $observer->getObject();
         $observerObjectData = $observerObject->getData();
-        if ($observerObjectData['resource'] == 'simipwas' || $observerObjectData['resource'] == 'sitemaps') {
+        if ($observerObjectData['resource'] == 'simipwas' || $observerObjectData['resource'] == 'sitemaps'
+            || $observerObjectData['resource'] == 'sociallogins') {
             $observerObjectData['module'] = 'simipwa';
         }
         $observerObject->setData($observerObjectData);
     }
 
-    public function simiPwaChangeStoreView($observer){
+    public function simiPwaChangeStoreView($observer)
+    {
         $observerObject = $observer->getObject();
         $data = $observerObject->getData();
-        if(isset($data['params']) && isset($data['params']['pwa'])){
+        if (isset($data['params']) && isset($data['params']['pwa'])) {
             $obj = $observer['object'];
             $info = $obj->storeviewInfo;
             try {
                 $siteMap = Mage::helper('simipwa')->getSiteMaps();
-                if($siteMap && isset($siteMap['sitemaps']))
+                if ($siteMap && isset($siteMap['sitemaps']))
                     $info['urls'] = $siteMap['sitemaps'];
-            }catch (Exception $e){
+            } catch (Exception $e) {
                 $info['urls'] = array();
             }
             $info['pwa_configs'] = array(
-                'pwa_enable'=> Mage::getStoreConfig('simipwa/general/pwa_enable'),
-                'pwa_url'=> Mage::getStoreConfig('simipwa/general/pwa_url'),
-                'pwa_excluded_paths'=> Mage::getStoreConfig('simipwa/general/pwa_excluded_paths'),
+                'pwa_enable' => Mage::getStoreConfig('simipwa/general/pwa_enable'),
+                'pwa_url' => Mage::getStoreConfig('simipwa/general/pwa_url'),
+                'pwa_excluded_paths' => Mage::getStoreConfig('simipwa/general/pwa_excluded_paths'),
             );
             $GATokenKey = Mage::getStoreConfig('simipwa/general/ga_token_key');
-            if($GATokenKey){
-                $info['ga_token_key'] =$GATokenKey;
+            if ($GATokenKey) {
+                $info['ga_token_key'] = $GATokenKey;
             }
             $obj->storeviewInfo = $info;
         }
     }
 
-    public function controllerActionPredispatch($observer) {
+    public function controllerActionPredispatch($observer)
+    {
         /*
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
@@ -55,7 +58,7 @@ class Simi_Simipwa_Model_Simiobserver
             return;
 
         $redirectIps = Mage::getStoreConfig('simipwa/general/pwa_redirect_ips');
-        if ($redirectIps && $redirectIps!='' &&
+        if ($redirectIps && $redirectIps != '' &&
             !in_array($_SERVER['REMOTE_ADDR'], explode(',', $redirectIps), true))
             return;
 
@@ -70,35 +73,34 @@ class Simi_Simipwa_Model_Simiobserver
             $mobile_browser++;
         }
 
-        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']), 'application/vnd.wap.xhtml+xml') !== false) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
             $mobile_browser++;
         }
 
         $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 4));
         $mobile_agents = array(
-            'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
-            'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
-            'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
-            'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
-            'newt','noki','palm','pana','pant','phil','play','port','prox',
-            'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
-            'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
-            'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
-            'wapr','webc','winw','winw','xda ','xda-');
+            'w3c ', 'acs-', 'alav', 'alca', 'amoi', 'audi', 'avan', 'benq', 'bird', 'blac',
+            'blaz', 'brew', 'cell', 'cldc', 'cmd-', 'dang', 'doco', 'eric', 'hipt', 'inno',
+            'ipaq', 'java', 'jigs', 'kddi', 'keji', 'leno', 'lg-c', 'lg-d', 'lg-g', 'lge-',
+            'maui', 'maxo', 'midp', 'mits', 'mmef', 'mobi', 'mot-', 'moto', 'mwbp', 'nec-',
+            'newt', 'noki', 'palm', 'pana', 'pant', 'phil', 'play', 'port', 'prox',
+            'qwap', 'sage', 'sams', 'sany', 'sch-', 'sec-', 'send', 'seri', 'sgh-', 'shar',
+            'sie-', 'siem', 'smal', 'smar', 'sony', 'sph-', 'symb', 't-mo', 'teli', 'tim-',
+            'tosh', 'tsm-', 'upg1', 'upsi', 'vk-v', 'voda', 'wap-', 'wapa', 'wapi', 'wapp',
+            'wapr', 'webc', 'winw', 'winw', 'xda ', 'xda-');
 
-        if (in_array($mobile_ua,$mobile_agents)) {
+        if (in_array($mobile_ua, $mobile_agents)) {
             $mobile_browser++;
         }
 
-        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera mini') !== false) {
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'opera mini') !== false) {
             $mobile_browser++;
             //Check for tablets on opera mini alternative headers
-            $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA'])?$_SERVER['HTTP_X_OPERAMINI_PHONE_UA']:(isset($_SERVER['HTTP_DEVICE_STOCK_UA'])?$_SERVER['HTTP_DEVICE_STOCK_UA']:''));
+            $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']) ? $_SERVER['HTTP_X_OPERAMINI_PHONE_UA'] : (isset($_SERVER['HTTP_DEVICE_STOCK_UA']) ? $_SERVER['HTTP_DEVICE_STOCK_UA'] : ''));
             if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
                 $tablet_browser++;
             }
         }
-
 
 
         $uri = $_SERVER['REQUEST_URI'];
@@ -106,7 +108,7 @@ class Simi_Simipwa_Model_Simiobserver
         $currentUrl = Mage::helper('core/url')->getCurrentUrl();
 
         if (strpos($currentUrl, $baseUrl) !== false) {
-            $uri = '/'.str_replace($baseUrl, '', $currentUrl);
+            $uri = '/' . str_replace($baseUrl, '', $currentUrl);
         }
 
         $excludedUrls = array('admin', 'simiconnector', 'simicustompayment', 'payfort', 'simipwa', 'rest/v2');
@@ -123,11 +125,11 @@ class Simi_Simipwa_Model_Simiobserver
                 $isExcludedCase = true;
             }
         }
-        if((($tablet_browser > 0)||($mobile_browser > 0)) && !$isExcludedCase){
-            if(file_exists('./pwa/index.html')){
+        if ((($tablet_browser > 0) || ($mobile_browser > 0)) && !$isExcludedCase) {
+            if (file_exists('./pwa/index.html')) {
                 $content = file_get_contents('./pwa/index.html');
                 if ($prerenderedHeader = $this->prerenderHeader()) {
-                    $content = str_replace('<head>', '<head>'.$prerenderedHeader, $content);
+                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
                 }
 
                 $controller = $observer->getControllerAction();
@@ -144,12 +146,14 @@ class Simi_Simipwa_Model_Simiobserver
         }
     }
 
-    public function changeFileManifest(Varien_Event_Observer $observer){
-        if(!Mage::getStoreConfig('simipwa/manifest/enable')) return;
+    public function changeFileManifest(Varien_Event_Observer $observer)
+    {
+        if (!Mage::getStoreConfig('simipwa/manifest/enable')) return;
         Mage::helper('simipwa')->updateManifest();
     }
 
-    public function prerenderHeader() {
+    public function prerenderHeader()
+    {
         try {
             $store = Mage::app()->getStore();
 
@@ -171,8 +175,8 @@ class Simi_Simipwa_Model_Simiobserver
                     $product = Mage::getModel('catalog/product')
                         ->load($match->getData('product_id'));
                     if ($product->getId()) {
-                        $preloadData['meta_title'] = $product->getMetaTitle()?$product->getMetaTitle():$product->getName();
-                        $preloadData['meta_description'] = $product->getMetaDescription()?$product->getMetaDescription():substr($product->getDescription(), 0, 255);
+                        $preloadData['meta_title'] = $product->getMetaTitle() ? $product->getMetaTitle() : $product->getName();
+                        $preloadData['meta_description'] = $product->getMetaDescription() ? $product->getMetaDescription() : substr($product->getDescription(), 0, 255);
                     }
                 } else if ($match->getData('category_id')) {
                     $category = Mage::getModel('catalog/category')->load($match->getData('category_id'));
@@ -187,28 +191,28 @@ class Simi_Simipwa_Model_Simiobserver
                             $catNamearray[$cat->getId()] = $cat->getName();
                         }
                         $metaTitle = array();
-                        foreach ($pathIds as $index=>$path) {
+                        foreach ($pathIds as $index => $path) {
                             if ($path == $group->getData('root_category_id'))
                                 break;
                             $metaTitle[] = $catNamearray[$path];
                         }
                         $metaTitle = implode(' - ', $metaTitle);
-                        $preloadData['meta_title'] = $metaTitle?$metaTitle:$category->getName();
+                        $preloadData['meta_title'] = $metaTitle ? $metaTitle : $category->getName();
                         $preloadData['meta_description'] = $preloadData['meta_title'];
                     }
                 }
             }
-        }catch (Exception $e) {
+        } catch (Exception $e) {
 
         }
 
         $headerString = '';
         if (isset($preloadData['meta_title'])) {
-            $headerString .= '<title>'.$preloadData['meta_title'].'</title>';
+            $headerString .= '<title>' . $preloadData['meta_title'] . '</title>';
         }
 
-        if (isset($preloadData['meta_description'])){
-            $headerString .= '<meta name="description" content="'.$preloadData['meta_description'].'"/>';
+        if (isset($preloadData['meta_description'])) {
+            $headerString .= '<meta name="description" content="' . $preloadData['meta_description'] . '"/>';
         }
         /*
         try {        
