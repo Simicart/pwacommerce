@@ -257,7 +257,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
     public function chooseDevicesAction()
     {
         $request = $this->getRequest();
-        $additionalInfo = '<p class="note"><span id="note_devices_pushed_number"> </span> <span> '.Mage::helper('simipwa')->__('Device(s) Selected').'</span></p>';
+        $additionalInfo = '<p class="note"><span id="note_devices_pushed_number"> </span> <span> ' . Mage::helper('simipwa')->__('Device(s) Selected') . '</span></p>';
 //        $block = $this->getLayout()->createBlock(
 //            'simipwa/adminhtml_notification_edit_tab_devices','aaaaa'
 //        );
@@ -332,14 +332,14 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
         if (file_exists($sw_path)) {
             $sw = Mage::getBaseDir() . '/service-worker.js';
-            if(copy($sw_path, $sw)){
+            if (copy($sw_path, $sw)) {
                 $data['status'] = "1";
                 $data['message'] = "Sync Successfully!";
-            }else{
+            } else {
                 $data['status'] = "1";
                 $data['message'] = "Sync Failed!";
             }
-        }else{
+        } else {
             $data['status'] = "1";
             $data['message'] = "service-worker.js file does not exits!";
         }
@@ -351,14 +351,14 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
     public function buildAction()
     {
-        try{
-            $token =  Mage::getStoreConfig('simiconnector/general/token_key');
-            $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
+        try {
+            $token = Mage::getStoreConfig('simiconnector/general/token_key');
+            $secret_key = Mage::getStoreConfig('simiconnector/general/secret_key');
 
             if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
 
-            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
+            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1');
             if (!$config || (!$config = json_decode($config, 1)))
                 throw new Exception(
                     Mage::helper('simipwa')->__(
@@ -366,9 +366,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 your server allows connections to SimiCart website'
                     ), 4
                 );
-            $buildFile = 'https://dashboard.simicart.com/pwa/package.php?app_id='.$config['app-configs'][0]['app_info_id'];
-            $fileToSave = Mage::getBaseDir() .'/pwa/simi_pwa_package.zip';
-            $directoryToSave = Mage::getBaseDir().'/pwa/';
+            $buildFile = 'https://dashboard.simicart.com/pwa/package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
+            $fileToSave = Mage::getBaseDir() . '/pwa/simi_pwa_package.zip';
+            $directoryToSave = Mage::getBaseDir() . '/pwa/';
             $url = $config['app-configs'][0]['url'];
             $buildTime = time();
             if ($config['app-configs'][0]['ios_link']) {
@@ -376,8 +376,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     $iosId = explode('id', $config['app-configs'][0]['ios_link']);
                     $iosId = $iosId[1];
                     $iosId = substr($iosId, 0, 10);
-                }
-                catch (Exception $getIosUrlException) {
+                } catch (Exception $getIosUrlException) {
                     throw new Exception(Mage::helper('simipwa')->__($getIosUrlException));
                 }
             }
@@ -388,8 +387,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     $androidId = $androidId[1];
                     $androidId = explode('?', $androidId);
                     $androidId = $androidId[0];
-                }
-                catch (Exception $getAndroidUrlException) {
+                } catch (Exception $getAndroidUrlException) {
                     throw new Exception(Mage::helper('simipwa')->__($getAndroidUrlException));
                 }
             }
@@ -427,7 +425,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
             // rename htaccess
             $htaccess = '/pwa/htaccess';
-            if(file_exists($htaccess)){
+            if (file_exists($htaccess)) {
                 rename($htaccess, '/pwa/.htaccess');
             }
 
@@ -435,138 +433,143 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
             if (file_exists($sw_path)) {
                 $sw = Mage::getBaseDir() . '/service-worker.js';
-                if(!copy($sw_path, $sw)){
+                if (!copy($sw_path, $sw)) {
                     throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
                 }
-            }else{
+            } else {
                 throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
             }
 
             // app image
             $app_images = $config['app-configs'][0]['app_images'];
             $app_image_logo = Mage::getStoreConfig('simipwa/general/logo_homepage');
-            if(!$app_image_logo){
+            if (!$app_image_logo) {
                 $app_image_logo = $app_images['logo'];
                 Mage::getConfig()->saveConfig('simipwa/general/logo_homepage', $app_image_logo);
             }
 
-            $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img') ;
-            if(!$app_splash_img_url){
+            $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img');
+            if (!$app_splash_img_url) {
                 $app_splash_img_url = $app_images['splash_screen'];
                 Mage::getConfig()->saveConfig('simipwa/general/splash_img', $app_splash_img_url);
             }
-            $app_splash_img = '<img src="'.$app_splash_img_url.'" alt="Splash Screen" style="width: 325px;height: auto">';
+            $app_splash_img = '<img src="' . $app_splash_img_url . '" alt="Splash Screen" style="width: 325px;height: auto">';
 
             $app_icon = Mage::getStoreConfig('simipwa/manifest/logo');
-            if(!$app_icon){
+            if (!$app_icon) {
                 $app_icon = $app_images['icon'];
                 Mage::getConfig()->saveConfig('simipwa/manifest/logo', $app_icon);
             }
 
 
             //update index.html file
-            $path_to_file = Mage::getBaseDir() .'/pwa/index.html';
+            $path_to_file = Mage::getBaseDir() . '/pwa/index.html';
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
             $file_contents = file_get_contents($path_to_file);
             $file_contents = str_replace('PAGE_TITLE_HERE', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('IOS_SPLASH_TEXT', $config['app-configs'][0]['app_name'], $file_contents);
-            $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"'.$excludedPaths.'"', $file_contents);
+            $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"' . $excludedPaths . '"', $file_contents);
             $file_contents = str_replace('PWA_BUILD_TIME_VALUE', $buildTime, $file_contents);
             $file_contents = str_replace('<div id="splash-img"></div>', $app_splash_img, $file_contents);
             if ($head = Mage::getStoreConfig('simipwa/general/custom_head')) {
-                $file_contents = str_replace('<head>', '<head>'.$head, $file_contents);
+                $file_contents = str_replace('<head>', '<head>' . $head, $file_contents);
             }
 
             if ($footerHtml = Mage::getStoreConfig('simipwa/general/footer_html')) {
                 $footerHtml = Mage::helper('cms')
                     ->getPageTemplateProcessor()
                     ->filter($footerHtml);
-                $file_contents = str_replace('</body>', $footerHtml.'</body>', $file_contents);
+                $file_contents = str_replace('</body>', $footerHtml . '</body>', $file_contents);
             }
-            
+
             //move favicon into pwa
             $favicon = Mage::getStoreConfig('simipwa/general/favicon');
             $favicon = $favicon ? $favicon : $app_icon;
             $file_contents = str_replace('/pwa/favicon.ico', $favicon, $file_contents);
 
             // update smart banner
-            if(isset($iosId) && $iosId && $iosId!==''){
+            if (isset($iosId) && $iosId && $iosId !== '') {
                 $file_contents = str_replace('IOS_APP_ID', $iosId, $file_contents);
             }
 
-            if(isset($androidId) && $androidId && $androidId!==''){
+            if (isset($androidId) && $androidId && $androidId !== '') {
                 $file_contents = str_replace('GOOGLE_APP_ID', $androidId, $file_contents);
             }
 
             //update manifest.jon
-            if(Mage::getStoreConfig('simipwa/manifest/enable')){
+            if (Mage::getStoreConfig('simipwa/manifest/enable')) {
                 Mage::helper('simipwa')->updateManifest();
-                if($app_icon){
+                if ($app_icon) {
                     $file_contents = str_replace('/pwa/images/default_icon_512_512.png', $app_icon, $file_contents);
                 }
             }
 
             file_put_contents($path_to_file, $file_contents);
-            copy($path_to_file, Mage::getBaseDir() .'/pwa/index_sample.html');
+            copy($path_to_file, Mage::getBaseDir() . '/pwa/index_sample.html');
 
             //update config.js file
 
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
-            $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
+            $mixPanelToken = ($mixPanelToken && $mixPanelToken !== '') ? $mixPanelToken : '5d46127799a0614259cb4c733f367541';
+
+            $gaToken = Mage::getStoreConfig('simipwa/general/ga_token_key');
+            $gaToken = $gaToken ? $gaToken : '';
             $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
             $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
             $msConfigs = '
-            var PWA_BUILD_TIME = "'.$buildTime.'";
+            var PWA_BUILD_TIME = "' . $buildTime . '";
             var SMCONFIGS = {
-                merchant_url: "'.$url.'",
+                merchant_url: "' . $url . '",
                 api_path: "simiconnector/rest/v2/",
                 simicart_url: "https://www.simicart.com/appdashboard/rest/app_configs/",
-                simicart_authorization: "'.$token.'",
+                simicart_authorization: "' . $token . '",
                 notification_api: "simipwa/index/",
-                zopim_key: "'.$zopimKey.'",
+                zopim_key: "' . $zopimKey . '",
                 zopim_language: "en",
-                base_name: "'.$base_name.'",
+                base_name: "' . $base_name . '",
                 show_social_login: {
                     facebook: 0,
                     google: 0,
                     twitter: 0
                 },
-        
-                mixpanel: {
-                    token_key: "'.trim($mixPanelToken).'"
+                google_analytics:{
+                    google_analytics_key: "' . trim($gaToken) . '"
                 },
-                logo_url: "'.$app_image_logo.'",
-                splash_screen : "'.$app_splash_img_url.'",
+                mixpanel: {
+                    token_key: "' . trim($mixPanelToken) . '"
+                },
+                logo_url: "' . $app_image_logo . '",
+                splash_screen : "' . $app_splash_img_url . '",
                 magento_version : 1
             };
             ';
 
-            foreach ($config['app-configs'] as $index=>$appconfig) {
+            foreach ($config['app-configs'] as $index => $appconfig) {
                 if ($appconfig['theme']) {
                     $theme = $appconfig['theme'];
-                    $msConfigs.= "
+                    $msConfigs .= "
                 var DEFAULT_COLORS = {
-                    key_color: '".$theme['key_color']."',
-                    top_menu_icon_color: '".$theme['top_menu_icon_color']."',
-                    button_background: '".$theme['button_background']."',
-                    button_text_color: '".$theme['button_text_color']."',
-                    menu_background: '".$theme['menu_background']."',
-                    menu_text_color: '".$theme['menu_text_color']."',
-                    menu_line_color: '".$theme['menu_line_color']."',
-                    menu_icon_color: '".$theme['menu_icon_color']."',
-                    search_box_background: '".$theme['search_box_background']."',
-                    search_text_color: '".$theme['search_text_color']."',
-                    app_background: '".$theme['app_background']."',
-                    content_color: '".$theme['content_color']."',
-                    image_border_color: '".$theme['image_border_color']."',
-                    line_color: '".$theme['line_color']."',
-                    price_color: '".$theme['price_color']."',
-                    special_price_color: '".$theme['special_price_color']."',
-                    icon_color: '".$theme['icon_color']."',
-                    section_color: '".$theme['section_color']."',
-                    status_bar_background: '".$theme['status_bar_background']."',
-                    status_bar_text: '".$theme['status_bar_text']."',
-                    loading_color: '".$theme['loading_color']."',
+                    key_color: '" . $theme['key_color'] . "',
+                    top_menu_icon_color: '" . $theme['top_menu_icon_color'] . "',
+                    button_background: '" . $theme['button_background'] . "',
+                    button_text_color: '" . $theme['button_text_color'] . "',
+                    menu_background: '" . $theme['menu_background'] . "',
+                    menu_text_color: '" . $theme['menu_text_color'] . "',
+                    menu_line_color: '" . $theme['menu_line_color'] . "',
+                    menu_icon_color: '" . $theme['menu_icon_color'] . "',
+                    search_box_background: '" . $theme['search_box_background'] . "',
+                    search_text_color: '" . $theme['search_text_color'] . "',
+                    app_background: '" . $theme['app_background'] . "',
+                    content_color: '" . $theme['content_color'] . "',
+                    image_border_color: '" . $theme['image_border_color'] . "',
+                    line_color: '" . $theme['line_color'] . "',
+                    price_color: '" . $theme['price_color'] . "',
+                    special_price_color: '" . $theme['special_price_color'] . "',
+                    icon_color: '" . $theme['icon_color'] . "',
+                    section_color: '" . $theme['section_color'] . "',
+                    status_bar_background: '" . $theme['status_bar_background'] . "',
+                    status_bar_text: '" . $theme['status_bar_text'] . "',
+                    loading_color: '" . $theme['loading_color'] . "',
                 };
                         ";
                     break;
@@ -578,14 +581,14 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     $androidId = '';
                 if (!isset($iosId))
                     $iosId = '';
-                $msConfigs.=
+                $msConfigs .=
                     "
                     var SMART_BANNER_CONFIGS = {
-                        ios_app_id: '".$iosId."',
-                        android_app_id: '".$androidId."',
+                        ios_app_id: '" . $iosId . "',
+                        android_app_id: '" . $androidId . "',
                         app_store_language: '', 
-                        title: '".$config['app-configs'][0]['app_name']."',
-                        author: '".$config['app-configs'][0]['app_name']."',
+                        title: '" . $config['app-configs'][0]['app_name'] . "',
+                        author: '" . $config['app-configs'][0]['app_name'] . "',
                         button_text: 'View',
                         store: {
                             ios: 'On the App Store',
@@ -601,20 +604,20 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                         ";
             }
             $config = json_encode($config);
-            $msConfigs.=
+            $msConfigs .=
                 "
                     var Simicart_Api = $config;
                 ";
 
-            $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
+            $path_to_file = Mage::getBaseDir() . '/pwa/js/config/config.js';
             file_put_contents($path_to_file, $msConfigs);
-            $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url.'pwa/';
+            $msg_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? $url : $url . 'pwa/';
             Mage::getConfig()->saveConfig('simipwa/general/build_time', $buildTime);
             Mage::app()->getCacheInstance()->cleanType(1);
             Mage::getSingleton('adminhtml/session')->addSuccess(
-                Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to '.$msg_url)
+                Mage::helper('adminhtml')->__('PWA Application was Built Successfully. To review it, please go to ' . $msg_url)
             );
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
 
@@ -623,27 +626,26 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
     public function RefreshCacheAction()
     {
-        try{
-            if(Mage::getStoreConfig('simipwa/cache_api/enable')){
-                $path_file = Mage::getBaseDir() .'/pwa/index_sample.html';
-                if(file_exists($path_file)){
-                    copy($path_file, Mage::getBaseDir() .'/pwa/index.html');
+        try {
+            if (Mage::getStoreConfig('simipwa/cache_api/enable')) {
+                $path_file = Mage::getBaseDir() . '/pwa/index_sample.html';
+                if (file_exists($path_file)) {
+                    copy($path_file, Mage::getBaseDir() . '/pwa/index.html');
                     $buildTime = time();
                 }
 
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
-                $token =  Mage::getStoreConfig('simiconnector/general/token_key');
-                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1';
+                $token = Mage::getStoreConfig('simiconnector/general/token_key');
+                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1';
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('adminhtml')->__('Refresh Cache Api Successfully.')
                 );
-            }else {
+            } else {
                 Mage::getSingleton('adminhtml/session')->addError(Mage::helper('adminhtml')->__('Please enable cache api'));
             }
-        }
-        catch (Exception $e){
+        } catch (Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
 
