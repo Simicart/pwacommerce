@@ -23,14 +23,14 @@
             </updates>
         </layout>
         <events>
-            <controller_action_predispatch>
+            <core_locale_set_locale>
                 <observers>
                     <simi_simipwa_controller_action_predispatch>
                         <class>simipwa/simiobserver</class>
                         <method>controllerActionPredispatch</method>
                     </simi_simipwa_controller_action_predispatch>
                 </observers>
-            </controller_action_predispatch>
+            </core_locale_set_locale>
         </events>
     </frontend>
     <admin>
