@@ -156,8 +156,20 @@ class Simi_Simipwa_Model_Simiobserver
     {
         try {
             $store = Mage::app()->getStore();
-
-            $preloadData = array();
+            $manifestContent = file_get_contents('./pwa/assets-manifest.json');
+            if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
+                if (isset($manifestJsFiles['Products.js'])) {
+                    $productsJs = $manifestJsFiles['Products.js'];
+                }
+                if (isset($manifestJsFiles['Product.js'])) {
+                    $productJs = $manifestJsFiles['Product.js'];
+                }
+                if (isset($manifestJsFiles['HomeBase.js'])) {
+                    $homeJs = $manifestJsFiles['HomeBase.js'];
+                }
+            }
+            
+            $preloadData = array('preload_js'=>array());
             $uri = $_SERVER['REQUEST_URI'];
             $uri = ltrim($uri, '/');
 
@@ -169,7 +181,7 @@ class Simi_Simipwa_Model_Simiobserver
                 $uri = $uriparts[0];
             $urlModel = Mage::getResourceModel('catalog/url');
             $match = $urlModel->getRewriteByRequestPath($uri, Mage::app()->getStore()->getId());
-
+            
             if ($match && $match->getId()) {
                 if ($match->getData('product_id')) {
                     $product = Mage::getModel('catalog/product')
@@ -177,6 +189,7 @@ class Simi_Simipwa_Model_Simiobserver
                     if ($product->getId()) {
                         $preloadData['meta_title'] = $product->getMetaTitle() ? $product->getMetaTitle() : $product->getName();
                         $preloadData['meta_description'] = $product->getMetaDescription() ? $product->getMetaDescription() : substr($product->getDescription(), 0, 255);
+                        $preloadData['preload_js'][] = $productJs;
                     }
                 } else if ($match->getData('category_id')) {
                     $category = Mage::getModel('catalog/category')->load($match->getData('category_id'));
@@ -199,6 +212,7 @@ class Simi_Simipwa_Model_Simiobserver
                         $metaTitle = implode(' - ', $metaTitle);
                         $preloadData['meta_title'] = $metaTitle ? $metaTitle : $category->getName();
                         $preloadData['meta_description'] = $preloadData['meta_title'];
+                        $preloadData['preload_js'][] = $productsJs;
                     }
                 }
             }
@@ -213,6 +227,16 @@ class Simi_Simipwa_Model_Simiobserver
 
         if (isset($preloadData['meta_description'])) {
             $headerString .= '<meta name="description" content="' . $preloadData['meta_description'] . '"/>';
+        }
+        
+        if (!count($preloadData['preload_js'])) {
+            $preloadData['preload_js'][] = $homeJs;
+        }
+        
+        if (count($preloadData['preload_js'])) {
+            foreach ($preloadData['preload_js'] as $preload_js) {
+                $headerString.= '<link rel="preload" as="script" href="/pwa/' . $preload_js . '">';   
+            }
         }
         /*
         try {        
