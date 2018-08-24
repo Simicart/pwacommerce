@@ -156,7 +156,7 @@ class Simi_Simipwa_Model_Simiobserver
     {
         try {
             $store = Mage::app()->getStore();
-            $manifestContent = file_get_contents('./pwa/asset-manifest.json');
+            $manifestContent = file_get_contents('./pwa/assets-manifest.json');
             if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
                 if (isset($manifestJsFiles['CategoryRoot.js'])) {
                     $catrootJs = $manifestJsFiles['CategoryRoot.js'];
