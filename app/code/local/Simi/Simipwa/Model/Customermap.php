@@ -18,16 +18,20 @@ class Simi_Simipwa_Model_Customermap extends Mage_Core_Model_Abstract
     {
         $customer = Mage::getModel('customer/customer')
             ->setWebsiteId(Mage::app()->getWebsite()->getId())
-            ->setFirstname($params['firstname'])
-            ->setLastname($params['lastname'])
-            ->setEmail($params['email']);
+            ->loadByEmail($params['email']);
+        if(!$customer->getId()){
+            $customer = Mage::getModel('customer/customer')
+                ->setWebsiteId(Mage::app()->getWebsite()->getId())
+                ->setFirstname($params['firstname'])
+                ->setLastname($params['lastname'])
+                ->setEmail($params['email']);
 
-        if (!$params['hash'])
-            $params['hash'] = $customer->generatePassword();
+            if (!$params['hash'])
+                $params['hash'] = $customer->generatePassword();
 
-        $customer->setPassword($params['hash']);
-        $customer->save();
-
+            $customer->setPassword($params['hash']);
+            $customer->save();
+        }
         $dataMap = array(
             'customer_id' => $customer->getId(),
             'social_user_id' => $params['uid'],
