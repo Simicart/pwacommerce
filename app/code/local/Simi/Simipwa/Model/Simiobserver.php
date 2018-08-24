@@ -156,8 +156,11 @@ class Simi_Simipwa_Model_Simiobserver
     {
         try {
             $store = Mage::app()->getStore();
-            $manifestContent = file_get_contents('./pwa/assets-manifest.json');
+            $manifestContent = file_get_contents('./pwa/asset-manifest.json');
             if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
+                if (isset($manifestJsFiles['CategoryRoot.js'])) {
+                    $catrootJs = $manifestJsFiles['CategoryRoot.js'];
+                }
                 if (isset($manifestJsFiles['Products.js'])) {
                     $productsJs = $manifestJsFiles['Products.js'];
                 }
@@ -167,9 +170,26 @@ class Simi_Simipwa_Model_Simiobserver
                 if (isset($manifestJsFiles['HomeBase.js'])) {
                     $homeJs = $manifestJsFiles['HomeBase.js'];
                 }
+                if (isset($manifestJsFiles['main.js'])) {
+                    $mainJs = $manifestJsFiles['main.js'];
+                }
+                if (isset($manifestJsFiles['vendors-main.js'])) {
+                    $vendorJs = $manifestJsFiles['vendors-main.js'];
+                }
+                if (isset($manifestJsFiles['NoMatch.js'])) {
+                    $noMatchJs = $manifestJsFiles['NoMatch.js'];
+                }
+                if (isset($manifestJsFiles['UrlMatch.js'])) {
+                    $urlMatchJs = $manifestJsFiles['UrlMatch.js'];
+                }
             }
             
             $preloadData = array('preload_js'=>array());
+            if ($mainJs)
+                $preloadData['preload_js'][] = $mainJs;
+            if ($vendorJs)
+                $preloadData['preload_js'][] = $vendorJs;
+
             $uri = $_SERVER['REQUEST_URI'];
             $uri = ltrim($uri, '/');
 
@@ -189,7 +209,14 @@ class Simi_Simipwa_Model_Simiobserver
                     if ($product->getId()) {
                         $preloadData['meta_title'] = $product->getMetaTitle() ? $product->getMetaTitle() : $product->getName();
                         $preloadData['meta_description'] = $product->getMetaDescription() ? $product->getMetaDescription() : substr($product->getDescription(), 0, 255);
-                        $preloadData['preload_js'][] = $productJs;
+
+                        //preload files
+                        if ($productJs)
+                            $preloadData['preload_js'][] = $productJs;
+                        if ($urlMatchJs)
+                            $preloadData['preload_js'][] = $urlMatchJs;
+                        if ($noMatchJs)
+                            $preloadData['preload_js'][] = $noMatchJs;
                     }
                 } else if ($match->getData('category_id')) {
                     $category = Mage::getModel('catalog/category')->load($match->getData('category_id'));
@@ -212,8 +239,20 @@ class Simi_Simipwa_Model_Simiobserver
                         $metaTitle = implode(' - ', $metaTitle);
                         $preloadData['meta_title'] = $metaTitle ? $metaTitle : $category->getName();
                         $preloadData['meta_description'] = $preloadData['meta_title'];
-                        $preloadData['preload_js'][] = $productsJs;
+
+                        //preload files
+                        if ($productJs)
+                            $preloadData['preload_js'][] = $productsJs;
+                        if ($catrootJs)
+                            $preloadData['preload_js'][] = $catrootJs;
+                        if ($urlMatchJs)
+                            $preloadData['preload_js'][] = $urlMatchJs;
+                        if ($noMatchJs)
+                            $preloadData['preload_js'][] = $noMatchJs;
                     }
+                } else {
+                    if ($homeJs)
+                        $preloadData['preload_js'][] = $homeJs;
                 }
             }
         } catch (Exception $e) {
@@ -229,13 +268,9 @@ class Simi_Simipwa_Model_Simiobserver
             $headerString .= '<meta name="description" content="' . $preloadData['meta_description'] . '"/>';
         }
         
-        if (!count($preloadData['preload_js'])) {
-            $preloadData['preload_js'][] = $homeJs;
-        }
-        
         if (count($preloadData['preload_js'])) {
             foreach ($preloadData['preload_js'] as $preload_js) {
-                $headerString.= '<link rel="preload" as="script" href="/pwa/' . $preload_js . '">';   
+                $headerString.= '<link rel="preload" as="script" href="' . $preload_js . '">';   
             }
         }
         /*
