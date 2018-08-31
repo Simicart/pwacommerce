@@ -201,7 +201,6 @@ class Simi_Simipwa_Model_Simiobserver
                 $uri = $uriparts[0];
             $urlModel = Mage::getResourceModel('catalog/url');
             $match = $urlModel->getRewriteByRequestPath($uri, Mage::app()->getStore()->getId());
-            
             if ($match && $match->getId()) {
                 if ($match->getData('product_id')) {
                     $product = Mage::getModel('catalog/product')
@@ -254,6 +253,17 @@ class Simi_Simipwa_Model_Simiobserver
                     if ($homeJs)
                         $preloadData['preload_js'][] = $homeJs;
                 }
+            } else {
+                //preload cms or home
+                $cmsMatch = Mage::getModel('simiconnector/cms')
+                    ->getCollection()->addFieldToFilter('cms_url', $uri)
+                    ->getFirstItem();
+                if ($cmsMatch->getId()) {
+                    if ($cmsMatch->getData('cms_meta_title'))
+                        $preloadData['meta_title'] = $cmsMatch->getData('cms_meta_title');
+                    $preloadData['meta_description'] = $cmsMatch->getData('cms_meta_desc');
+                } else if ($homeJs)
+                    $preloadData['preload_js'][] = $homeJs;
             }
         } catch (Exception $e) {
 
