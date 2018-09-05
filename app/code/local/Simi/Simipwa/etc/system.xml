@@ -302,6 +302,78 @@
                         </background_color>
                     </fields>
                 </manifest>
+                <preload_config>
+                    <label>Preload Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <main_js translate="label">
+                            <label>Main JS</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>simipwa/system_main</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </main_js>
+                        <homepage translate="label">
+                            <label>Home Page</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>simipwa/system_homepage</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </homepage>
+                        <product_list translate="label">
+                            <label>Product List Page</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>simipwa/system_list</source_model>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </product_list>
+                        <product_detail translate="label">
+                            <label>Product Detail Page</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>simipwa/system_product</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </product_detail>
+                    </fields>
+                </preload_config>
                 <!--<cache_api>-->
                     <!--<label>Api Cache Configuration</label>-->
                     <!--<frontend_type>text</frontend_type>-->

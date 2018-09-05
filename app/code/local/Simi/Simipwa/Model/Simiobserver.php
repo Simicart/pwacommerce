@@ -152,21 +152,34 @@ class Simi_Simipwa_Model_Simiobserver
         Mage::helper('simipwa')->updateManifest();
     }
 
+    function getPreloadConfig($page){
+        if (Mage::getStoreConfig('simipwa/preload_config/enable')){
+            $data = explode(',',$page);
+            return $data;
+        }
+    }
+
     public function prerenderHeader()
     {
         try {
             $store = Mage::app()->getStore();
             $manifestContent = file_get_contents('./pwa/assets-manifest.json');
-            if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
-                if (isset($manifestJsFiles['Products.js'])) {
-                    $productsJs = $manifestJsFiles['Products.js'];
-                }
-                if (isset($manifestJsFiles['Product.js'])) {
-                    $productJs = $manifestJsFiles['Product.js'];
-                }
-                if (isset($manifestJsFiles['HomeBase.js'])) {
-                    $homeJs = $manifestJsFiles['HomeBase.js'];
-                }
+//            if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
+//                if (isset($manifestJsFiles['Products.js'])) {
+//                    $productsJs = $manifestJsFiles['Products.js'];
+//                }
+//                if (isset($manifestJsFiles['Product.js'])) {
+//                    $productJs = $manifestJsFiles['Product.js'];
+//                }
+//                if (isset($manifestJsFiles['HomeBase.js'])) {
+//                    $homeJs = $manifestJsFiles['HomeBase.js'];
+//                }
+//            }
+            // preload homepage
+            $homeJs = array();
+            $preloadJs = $this->getPreloadConfig(Mage::getStoreConfig('simipwa/preload_config/homepage'));
+            foreach ($preloadJs as $js){
+                $homeJs[] = $js;
             }
             
             $preloadData = array('preload_js'=>array());
@@ -189,7 +202,11 @@ class Simi_Simipwa_Model_Simiobserver
                     if ($product->getId()) {
                         $preloadData['meta_title'] = $product->getMetaTitle() ? $product->getMetaTitle() : $product->getName();
                         $preloadData['meta_description'] = $product->getMetaDescription() ? $product->getMetaDescription() : substr($product->getDescription(), 0, 255);
-                        $preloadData['preload_js'][] = $productJs;
+//                        $preloadData['preload_js'][] = $productJs;
+                        $preloadJs = $this->getPreloadConfig(Mage::getStoreConfig('simipwa/preload_config/product_detail'));
+                        foreach ($preloadJs as $js){
+                            $preloadData['preload_js'][] = $js;
+                        }
                     }
                 } else if ($match->getData('category_id')) {
                     $category = Mage::getModel('catalog/category')->load($match->getData('category_id'));
@@ -212,7 +229,11 @@ class Simi_Simipwa_Model_Simiobserver
                         $metaTitle = implode(' - ', $metaTitle);
                         $preloadData['meta_title'] = $metaTitle ? $metaTitle : $category->getName();
                         $preloadData['meta_description'] = $preloadData['meta_title'];
-                        $preloadData['preload_js'][] = $productsJs;
+//                        $preloadData['preload_js'][] = $productsJs;
+                        $preloadJs = $this->getPreloadConfig(Mage::getStoreConfig('simipwa/preload_config/product_list'));
+                        foreach ($preloadJs as $js){
+                            $preloadData['preload_js'][] = $js;
+                        }
                     }
                 }
             }
@@ -230,12 +251,22 @@ class Simi_Simipwa_Model_Simiobserver
         }
         
         if (!count($preloadData['preload_js'])) {
-            $preloadData['preload_js'][] = $homeJs;
+            $preloadData['preload_js'] = $homeJs;
         }
-        
+        $mainJS = $this->getPreloadConfig(Mage::getStoreConfig('simipwa/preload_config/main_js'));
+        foreach ($mainJS as $js){
+            array_unshift($preloadData['preload_js'],$js);
+        }
+        $url_config = '/pwa/js/config/config.js?v='.Mage::getStoreConfig('simipwa/general/build_time');
+        array_unshift($preloadData['preload_js'],$url_config);
         if (count($preloadData['preload_js'])) {
             foreach ($preloadData['preload_js'] as $preload_js) {
-                $headerString.= '<link rel="preload" as="script" href="/pwa/' . $preload_js . '">';   
+                $as = 'script';
+                $checkCss = explode('.',$preload_js);
+                if($checkCss[count($checkCss)-1] == 'css'){
+                    $as = 'style';
+                }
+                $headerString.= '<link rel="preload" as="'.$as.'" href="' . $preload_js . '">';
             }
         }
         /*
