@@ -119,6 +119,6 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Grid extends Mage_Adminhtml_Block_Widget_
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
+        return $this->getUrl('*/simipwa_notification/index');
     }
 }

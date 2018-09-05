@@ -1,11 +1,11 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: admin
- * Date: 5/11/18
- * Time: 9:06 AM
+ * User: macos
+ * Date: 8/28/18
+ * Time: 4:24 PM
  */
-class Simi_Simipwa_Model_System_Homepage
+class Simi_Simipwa_Model_System_Product
 {
     public function toOptionArray()
     {
@@ -14,19 +14,14 @@ class Simi_Simipwa_Model_System_Homepage
             $data = array();
             foreach ($manifestJsFiles as $key => $val){
 //                $key = explode('.',$key);
-                if(strpos($key,'static') !== 0 || strpos($key,'.css')){
-                    if(strpos($key,'Home') !== false
-                        ||strpos($key,'Zara') !== false
-                        ||strpos($key,'Matrix') !== false
-                        ||strpos($key,'Default') !== false
-                        ||strpos($key,'Banner') !== false)
-                    {
+                if(strpos($key,'static') !== 0 || strpos($key,'.css') !== 0){
+                    if(strpos($key,'Product.') !== false
+                    || strpos($key,'Match') !== false){
                         $data[] = array(
                             'value' => $val,
                             'label' => $key,
                         );
                     }
-
                 }
 
             }
