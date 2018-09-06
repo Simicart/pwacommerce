@@ -116,13 +116,13 @@ class Simi_Simipwa_Block_Adminhtml_Pwa_Edit_Tab_Form extends Mage_Adminhtml_Bloc
         )
     );
 
-    $send_message->addField(
-        'image_url', 'image', array(
-        'label'        => Mage::helper('simipwa')->__('Image'),
-        'name'        => 'img_url',
-        //'note'  => Mage::helper('simipwa')->__('Size max: 1000 x 1000 (PX)'),
-        )
-    );
+//    $send_message->addField(
+//        'image_url', 'image', array(
+//        'label'        => Mage::helper('simipwa')->__('Image'),
+//        'name'        => 'img_url',
+//        //'note'  => Mage::helper('simipwa')->__('Size max: 1000 x 1000 (PX)'),
+//        )
+//    );
 
     $send_message->addField(
         'notice_content', 'editor', array(
