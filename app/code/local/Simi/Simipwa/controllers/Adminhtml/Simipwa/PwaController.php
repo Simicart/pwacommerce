@@ -547,6 +547,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             foreach ($config['app-configs'] as $index => $appconfig) {
                 if ($appconfig['theme']) {
                     $theme = $appconfig['theme'];
+                    $splash = $appconfig['splash'];
                     $msConfigs .= "
                 var DEFAULT_COLORS = {
                     key_color: '" . $theme['key_color'] . "',
@@ -570,6 +571,8 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     status_bar_background: '" . $theme['status_bar_background'] . "',
                     status_bar_text: '" . $theme['status_bar_text'] . "',
                     loading_color: '" . $theme['loading_color'] . "',
+                    splash_screen_color : '".$splash['color']."',
+                    loading_splash_screen_color : '".$splash['loading_color']."',
                 };
                         ";
                     break;
