@@ -150,7 +150,7 @@
                             </comment>
                         </sync_site_url>
                         <ga_token_key translate="label">
-                            <label>Google Analytics Token Key</label>
+                            <label>Google Analytics Tracking ID</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>799</sort_order>
                             <show_in_default>1</show_in_default>
