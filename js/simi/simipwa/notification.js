@@ -74,10 +74,10 @@ function subscribeUser()
 
 function updateSubscriptionOnServer(subscription,type = 1) 
 {
-    var api = "./simipwa/index/register";
+    var api = window.location.origin+"/simipwa/index/register";
     var method = 'POST';
     if (type === 2) {
-        api = './simipwa/index/delete';
+        api = window.location.origin+'/simipwa/index/delete';
     }
 
     ConnectionApi(api,method,subscription);
