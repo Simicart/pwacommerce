@@ -180,6 +180,8 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
                 }
             }
             //update config.js file
+            $gaToken = Mage::getStoreConfig('simipwa/general/ga_token_key');
+            $gaToken = $gaToken ? $gaToken : '';
             $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img') ;
             $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
             $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
@@ -202,7 +204,9 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
                     google: 0,
                     twitter: 0
                 },
-        
+                google_analytics:{
+                    google_analytics_key: "' . trim($gaToken) . '"
+                },
                 mixpanel: {
                     token_key: "'.trim($mixPanelToken).'"
                 },
@@ -293,7 +297,7 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
             Mage::getConfig()->saveConfig('simipwa/general/build_time', $buildTime);
             Mage::app()->getCacheInstance()->cleanType(1);
             $result = array(
-                "pwa" => array('success' => true)
+                "pwa" => array('success' => true,'buildtime'=>$buildTime)
             );
             $this->getResponse()->clearHeaders()->setHeader('Content-type', 'application/json', true);
             $this->getResponse()->setBody(json_encode($result));
