@@ -120,7 +120,12 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 
     public function configAction()
     {
-        $filePath = Mage::getBaseDir().'/pwa/';
+        if(!Mage::getSingleton('core/session')->getData('simiconnector_platform')||
+            Mage::getSingleton('core/session')->getData('simiconnector_platform') != 'pwa'
+        ) {
+            Mage::getSingleton('core/session')->setData('simiconnector_platform', 'pwa');
+        }
+
         $enable = (!Mage::getStoreConfig('simipwa/general/pwa_enable') || !Mage::getStoreConfig('simipwa/general/pwa_main_url_site'))?0:1;
         $build_time = Mage::getStoreConfig('simipwa/general/build_time') ? Mage::getStoreConfig('simipwa/general/build_time') : 0;
         $result = array(
