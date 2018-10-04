@@ -180,8 +180,8 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
 //        $filePath = Mage::getBaseDir() . '/pwa/manifest.json'; // for pwa
 //        $filePath1 = Mage::getBaseDir() . '/manifest.json'; // for free version
         //zend_debug::dump($icon);die;
-        $this->updateFile('/pwa/manifest.json',$content); // for pwa
-        $this->updateFile('/manifest.json',$content); // for free version
+        $this->updateFile('/pwa/simi-manifest.json',$content); // for pwa
+        $this->updateFile('/simi-manifest.json',$content); // for free version
     }
 
     public function updateFile($url,$content){
