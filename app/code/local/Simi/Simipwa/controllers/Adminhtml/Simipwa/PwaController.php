@@ -430,9 +430,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             }
 
             // move service worker
-            $sw_path = Mage::getBaseDir() . '/pwa/service-worker.js';
+            $sw_path = Mage::getBaseDir() . '/pwa/simi-sw.js';
             if (file_exists($sw_path)) {
-                $sw = Mage::getBaseDir() . '/service-worker.js';
+                $sw = Mage::getBaseDir() . '/simi-sw.js';
                 if (!copy($sw_path, $sw)) {
                     throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
                 }
