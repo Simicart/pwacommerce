@@ -423,6 +423,11 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
             }
 
+            /*
+            Use this when downloading or extracting does not work
+            $this->moveDir();
+            */
+
             // rename htaccess
             $htaccess = '/pwa/htaccess';
             if (file_exists($htaccess)) {
@@ -625,6 +630,27 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         }
 
         return $this->_redirect('*/system_config/edit/section/simipwa');
+    }
+
+    /* 
+    Use this when downloading or extracting does not work
+    */
+    public function moveDir(){
+        $source = Mage::getBaseDir() . '/pwa_package/';
+        $dest= Mage::getBaseDir() . '/pwa/';
+
+        mkdir($dest, 0755);
+        foreach (
+         $iterator = new \RecursiveIteratorIterator(
+          new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+          \RecursiveIteratorIterator::SELF_FIRST) as $item
+        ) {
+          if ($item->isDir()) {
+            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+          } else {
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+          }
+        }
     }
 
     public function RefreshCacheAction()
