@@ -12,7 +12,7 @@
                     swRegistration.update();
                 }
                 swRegistration.onupdatefound = function () {
-                    const installingWorker = swRegistration.installing;
+                    var installingWorker = swRegistration.installing;
                     installingWorker.onstatechange = function (){
                         if (installingWorker.state === 'installed') {
                             if (navigator.serviceWorker.controller) {

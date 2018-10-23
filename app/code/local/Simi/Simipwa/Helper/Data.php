@@ -134,13 +134,14 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         return true;
     }
 
-    public function updateManifest()
+    public function updateManifest($type='sandbox')
     {
+        $isSandbox = $type == 'sandbox';
         $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'Progressive Web App';
         $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'PWA';
-        $default_icon = '/pwa/images/default_icon_512_512.png';
+        $default_icon = $isSandbox ? '/pwa-sandbox/images/default_icon_512_512.png' : '/pwa/images/default_icon_512_512.png';
         $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : $default_icon;
-        $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa/';
+        $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa-sandbox/';
         if (!class_exists('Simi_Simiconnector_Controller_Action')) {
             $start_url = '/';
         }
@@ -181,6 +182,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
 //        $filePath1 = Mage::getBaseDir() . '/manifest.json'; // for free version
         //zend_debug::dump($icon);die;
         $this->updateFile('/pwa/simi-manifest.json',$content); // for pwa
+        $this->updateFile('/pwa-sandbox/simi-manifest.json',$content); // for pwa sandbox
         $this->updateFile('/simi-manifest.json',$content); // for free version
     }
 
@@ -229,5 +231,163 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 }
             }
         }
+    }
+
+    public function updateConfigJs($config,$buildTime,$type='sandbox'){
+        $token =  Mage::getStoreConfig('simiconnector/general/token_key');
+        $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
+        $logoUrlSetting = Mage::getStoreConfig('simipwa/general/logo_homepage');
+        $app_image_logo = ($logoUrlSetting && $logoUrlSetting!='')?
+            $logoUrlSetting : Mage::getStoreConfig('design/header/logo_src');
+        if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
+            throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
+        //update config.js file
+        $url = $config['app-configs'][0]['url'];
+        if ($config['app-configs'][0]['ios_link']) {
+            try {
+                $iosId = explode('id', $config['app-configs'][0]['ios_link']);
+                $iosId = $iosId[1];
+                $iosId = substr($iosId, 0, 10);
+            }
+            catch (Exception $getIosUrlException) {
+                throw new Exception(Mage::helper('simipwa')->__($getIosUrlException));
+            }
+        }
+
+        if ($config['app-configs'][0]['android_link']) {
+            try {
+                $androidId = explode('id=', $config['app-configs'][0]['android_link']);
+                $androidId = $androidId[1];
+                $androidId = explode('?', $androidId);
+                $androidId = $androidId[0];
+            }
+            catch (Exception $getAndroidUrlException) {
+                throw new Exception(Mage::helper('simipwa')->__($getAndroidUrlException));
+            }
+        }
+        $gaToken = Mage::getStoreConfig('simipwa/general/ga_token_key');
+        $gaToken = $gaToken ? $gaToken : '';
+        $app_splash_img_url = Mage::getStoreConfig('simipwa/general/splash_img') ;
+        $mixPanelToken = Mage::getStoreConfig('simiconnector/mixpanel/token');
+        $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
+        $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
+        $base_name = 'pwa-sandbox';
+        if($type !== 'sandbox')
+            $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
+        $msConfigs = '
+            var PWA_BUILD_TIME = "'.$buildTime.'";
+            var SMCONFIGS = {
+                merchant_url: "'.$url.'",
+                api_path: "simiconnector/rest/v2/",
+                merchant_authorization: "'.$secret_key.'",
+                simicart_url: "https://www.simicart.com/appdashboard/rest/app_configs/",
+                simicart_authorization: "'.$token.'",
+                notification_api: "simipwa/index/",
+                zopim_key: "'.$zopimKey.'",
+                zopim_language: "en",
+                base_name: "'.$base_name.'",
+                show_social_login: {
+                    facebook: 0,
+                    google: 0,
+                    twitter: 0
+                },
+                google_analytics:{
+                    google_analytics_key: "' . trim($gaToken) . '"
+                },
+                mixpanel: {
+                    token_key: "'.trim($mixPanelToken).'"
+                },
+                logo_url: "'.$app_image_logo.'",
+                splash_screen : "'.$app_splash_img_url.'",
+                magento_version : 1
+            };
+            ';
+
+        foreach ($config['app-configs'] as $index=>$appconfig) {
+            if ($appconfig['theme']) {
+                $theme = $appconfig['theme'];
+                $splash = $appconfig['splash'];
+                $msConfigs.= "
+                var DEFAULT_COLORS = {
+                    key_color: '".$theme['key_color']."',
+                    top_menu_icon_color: '".$theme['top_menu_icon_color']."',
+                    button_background: '".$theme['button_background']."',
+                    button_text_color: '".$theme['button_text_color']."',
+                    menu_background: '".$theme['menu_background']."',
+                    menu_text_color: '".$theme['menu_text_color']."',
+                    menu_line_color: '".$theme['menu_line_color']."',
+                    menu_icon_color: '".$theme['menu_icon_color']."',
+                    search_box_background: '".$theme['search_box_background']."',
+                    search_text_color: '".$theme['search_text_color']."',
+                    app_background: '".$theme['app_background']."',
+                    content_color: '".$theme['content_color']."',
+                    image_border_color: '".$theme['image_border_color']."',
+                    line_color: '".$theme['line_color']."',
+                    price_color: '".$theme['price_color']."',
+                    special_price_color: '".$theme['special_price_color']."',
+                    icon_color: '".$theme['icon_color']."',
+                    section_color: '".$theme['section_color']."',
+                    status_bar_background: '".$theme['status_bar_background']."',
+                    status_bar_text: '".$theme['status_bar_text']."',
+                    loading_color: '".$theme['loading_color']."',
+                    splash_screen_color : '".$splash['color']."',
+                    loading_splash_screen_color : '".$splash['loading_color']."',
+                };
+                        ";
+                break;
+            }
+        }
+
+        if (isset($androidId) || isset($iosId)) {
+            if (!isset($androidId))
+                $androidId = '';
+            if (!isset($iosId))
+                $iosId = '';
+            $msConfigs.=
+                "
+                    var SMART_BANNER_CONFIGS = {
+                        ios_app_id: '".$iosId."',
+                        android_app_id: '".$androidId."',
+                        app_store_language: '', 
+                        title: '".$config['app-configs'][0]['app_name']."',
+                        author: '".$config['app-configs'][0]['app_name']."',
+                        button_text: 'View',
+                        store: {
+                            ios: 'On the App Store',
+                            android: 'In Google Play',
+                            windows: 'In Windows store'
+                        },
+                        price: {
+                            ios: 'FREE',
+                            android: 'FREE',
+                            windows: 'FREE'
+                        },
+                    }; 
+                        ";
+        }
+        $config = json_encode($config);
+        $msConfigs.=
+            "
+                    var Simicart_Api = $config;
+                ";
+
+        $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
+        if($type == 'sandbox')
+            $path_to_file = Mage::getBaseDir() . '/pwa-sandbox/js/config/config.js';
+        file_put_contents($path_to_file, $msConfigs);
+
+        //update index.html file
+        $prev_time = $type == 'sandbox' ? Mage::getStoreConfig('simipwa/general/build_time_sandbox') : Mage::getStoreConfig('simipwa/general/build_time');
+        $path_to_file = $type == 'sandbox' ?  Mage::getBaseDir() .'/pwa-sandbox/index.html' : Mage::getBaseDir() .'/pwa/index.html';
+        $file_contents = file_get_contents($path_to_file);
+        $file_contents = str_replace("?v=$prev_time", "?v=$buildTime", $file_contents);
+        file_put_contents($path_to_file, $file_contents);
+
+        if($type == 'sandbox'){
+            Mage::getConfig()->saveConfig('simipwa/general/build_time_sandbox', $buildTime);
+        }else{
+            Mage::getConfig()->saveConfig('simipwa/general/build_time', $buildTime);
+        }
+        Mage::app()->getCacheInstance()->cleanType(1);
     }
 }

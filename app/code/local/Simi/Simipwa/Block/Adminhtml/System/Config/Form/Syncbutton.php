@@ -46,38 +46,53 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
         $actionHtml = "";
 
         if (class_exists('Simi_Simiconnector_Controller_Action')) {
+
+            $buildtype = Mage::getStoreConfig('simipwa/general/pwa_main_url_site');
+
             $button = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
                     array(
-                    'id' => 'pwa_button',
-                    'label' => $this->helper('adminhtml')->__('Sync Sitemaps'),
-                    'onclick' => 'javascript:check(); return false;'
+                        'id' => 'pwa_button_sandbox',
+                        'label' => $this->helper('adminhtml')->__('Build Sandbox PWA'),
+                        'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build',array("build_type"=>"sandbox")) . '\')',
+
                     )
                 );
 
-            $actionHtml .=  $button->toHtml();
+            $actionHtml .= $button->toHtml();
 
             $buildButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
                     array(
-                    'id' => 'build_pwa',
-                    'label' => __('Build PWA'),
-                    'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build') . '\')',
-                    'style' => 'margin-left : 10px;margin-bottom : 10px'
+                        'id' => 'build_pwa',
+                        'label' => __('Build Live PWA'),
+                        'onclick' => '
+                            var r = confirm(\'Are you sure to Build and go Live? This will change your public Website PWA\');
+                            if(r){setLocation(\''.Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build',array("build_type"=>"live")).'\')}
+                            ',
+                        'style' => 'margin-left : 10px;margin-bottom : 10px;'
                     )
                 );
             $actionHtml .= $buildButton->toHtml();
-            if(Mage::getStoreConfig('simipwa/general/build_time')){
-                $date =  date('m/d/Y - H:i:s',Mage::getStoreConfig('simipwa/general/build_time'));
-                $html= "Date time : $date";
-                $actionHtml.= '<script type="text/javascript">
+            if (Mage::getStoreConfig('simipwa/general/build_time')) {
+                $date = date('m/d/Y - H:i:s', Mage::getStoreConfig('simipwa/general/build_time'));
+                $html = "Date time : $date";
+                $actionHtml .= '<script type="text/javascript">
                     document.getElementById("simipwa_general_build_time").setAttribute("readonly","readonly")
-                    document.getElementById("simipwa_general_build_time").nextElementSibling.children[0].innerText = "'.$html.'"
+                    document.getElementById("simipwa_general_build_time").nextElementSibling.children[0].innerText = "' . $html . '"
+                </script>';
+            }
+            if(Mage::getStoreConfig('simipwa/general/build_time_sandbox')){
+                $date = date('m/d/Y - H:i:s', Mage::getStoreConfig('simipwa/general/build_time_sandbox'));
+                $html = "Date time : $date";
+                $actionHtml .= '<script type="text/javascript">
+                    document.getElementById("simipwa_general_build_time_sandbox").setAttribute("readonly","readonly")
+                    document.getElementById("simipwa_general_build_time_sandbox").nextElementSibling.children[0].innerText = "' . $html . '"
                 </script>';
             }
 
         } else
-            $actionHtml.= '<script type="text/javascript">
+            $actionHtml .= '<script type="text/javascript">
                 document.getElementById("simipwa_general-head").parentElement.parentElement.style.display = "none";
                 document.getElementById("simipwa_analytics-head").parentElement.parentElement.style.display = "none";
                 function addHomeScreenWarning() {

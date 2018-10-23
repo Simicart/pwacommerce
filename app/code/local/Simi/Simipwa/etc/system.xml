@@ -45,25 +45,13 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment>
+                                Yes : enable Build Live PWA. No : enable Build Sandbox PWA.
                                 Redirect mobile users to your PWA. (Please click Build PWA after Save)
                             </comment>
                             <depends>
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </pwa_main_url_site>
-                        <!--<pwa_url translate="label">-->
-                        <!--<label>PWA Page URL</label>-->
-                        <!--<frontend_type>text</frontend_type>-->
-                        <!--<sort_order>20</sort_order>-->
-                        <!--<show_in_default>1</show_in_default>-->
-                        <!--<show_in_website>1</show_in_website>-->
-                        <!--<show_in_store>1</show_in_store>-->
-                        <!--<comment></comment>-->
-                        <!--<depends>-->
-                        <!--<pwa_enable>1</pwa_enable>-->
-                        <!--<pwa_main_url_site>0</pwa_main_url_site>-->
-                        <!--</depends>-->
-                        <!--</pwa_url>-->
                         <pwa_redirect_ips translate="label">
                             <label>PWA Redirect IP(s)</label>
                             <frontend_type>text</frontend_type>
@@ -124,19 +112,6 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </favicon>
-                        <!--<sync_sw translate="label">-->
-                        <!--<label>Sync Service Worker</label>-->
-                        <!--<frontend_type>button</frontend_type>-->
-                        <!--<frontend_model>simipwa/adminhtml_system_config_form_syncSW</frontend_model>-->
-                        <!--<sort_order>200</sort_order>-->
-                        <!--<show_in_default>1</show_in_default>-->
-                        <!--<show_in_website>1</show_in_website>-->
-                        <!--<show_in_store>1</show_in_store>-->
-                        <!--<comment></comment>-->
-                        <!--<depends>-->
-                        <!--<pwa_enable>1</pwa_enable>-->
-                        <!--</depends>-->
-                        <!--</sync_sw>-->
                         <sync_site_url translate="label">
                             <label>Action</label>
                             <frontend_type>button</frontend_type>
@@ -178,7 +153,7 @@
                             <show_in_store>1</show_in_store>
                         </footer_html>
                         <build_time>
-                            <label>Last Build Time</label>
+                            <label>Last Build Live Time</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>680</sort_order>
                             <show_in_default>1</show_in_default>
@@ -188,6 +163,17 @@
                                 Date time
                             </comment>
                         </build_time>
+                        <build_time_sandbox>
+                            <label>Last Build Sandbox Time</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>670</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment>
+                                Date time
+                            </comment>
+                        </build_time_sandbox>
                     </fields>
                 </general>
                 <notification>
