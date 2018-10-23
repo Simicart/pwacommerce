@@ -376,7 +376,6 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 $fileToSave =  Mage::getBaseDir().'/pwa_sandbox/simi_pwa_package.zip';
                 $directoryToSave =  Mage::getBaseDir().'/pwa_sandbox/';
             }
-            $url = $config['app-configs'][0]['url'];
             $buildTime = time();
             if ($config['app-configs'][0]['ios_link']) {
                 try {
@@ -436,10 +435,20 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             */
 
             // move service worker
-            if($type !== 'sandbox'){
+            if($type == 'live'){
                 $sw_path = Mage::getBaseDir() . '/pwa/simi-sw.js';
                 if (file_exists($sw_path)) {
                     $sw = Mage::getBaseDir() . '/simi-sw.js';
+                    if (!copy($sw_path, $sw)) {
+                        throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
+                    }
+                } else {
+                    throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
+                }
+            }else{
+                $sw_path = Mage::getBaseDir() . '/pwa_sandbox/simi-sw.js';
+                if (file_exists($sw_path)) {
+                    $sw = Mage::getBaseDir() . '/simi-sw-sandbox.js';
                     if (!copy($sw_path, $sw)) {
                         throw new Exception(Mage::helper('simipwa')->__('Sorry, service-worker.js file does not exits!'), 4);
                     }
@@ -473,7 +482,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             //update index.html file
             $path_to_file = Mage::getBaseDir() . '/pwa/index.html';
             if($type == 'sandbox'){
-                $path_to_file = Mage::getBaseDir().'/pwa-sandbox/index.html';
+                $path_to_file = Mage::getBaseDir().'/pwa_sandbox/index.html';
             }
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
             $file_contents = file_get_contents($path_to_file);
@@ -496,7 +505,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             //move favicon into pwa
             $favicon = Mage::getStoreConfig('simipwa/general/favicon');
             $favicon = $favicon ? $favicon : $app_icon;
-            $file_contents = str_replace($type == 'sandbox' ? '/pwa-sandbox/favicon.ico':'/pwa/favicon.ico', $favicon, $file_contents);
+            $file_contents = str_replace($type == 'sandbox' ? '/pwa_sandbox/favicon.ico':'/pwa/favicon.ico', $favicon, $file_contents);
 
             // update smart banner
             if (isset($iosId) && $iosId && $iosId !== '') {
@@ -511,7 +520,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             if (Mage::getStoreConfig('simipwa/manifest/enable')) {
                 Mage::helper('simipwa')->updateManifest($type);
                 if ($app_icon) {
-                    $file_contents = str_replace($type=='sandbox'?'/pwa-sandbox/images/default_icon_512_512.png':'/pwa/images/default_icon_512_512.png', $app_icon, $file_contents);
+                    $file_contents = str_replace($type=='sandbox'?'/pwa_sandbox/images/default_icon_512_512.png':'/pwa/images/default_icon_512_512.png', $app_icon, $file_contents);
                 }
             }
 
@@ -522,7 +531,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             Mage::helper('simipwa')->updateConfigJS($config,$buildTime,$type);
 
             if($type == 'sandbox'){
-                $msg_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/pwa_sandbox";
+                $msg_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/pwa-sandbox";
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('adminhtml')->__('Sandbox PWA  was Built Successfully.'.'<br/>Please go to '.$msg_url.' to review.')
                 );

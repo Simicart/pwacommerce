@@ -139,9 +139,10 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         $isSandbox = $type == 'sandbox';
         $name = Mage::getStoreConfig('simipwa/manifest/name') ? Mage::getStoreConfig('simipwa/manifest/name') : 'Progressive Web App';
         $short_name = Mage::getStoreConfig('simipwa/manifest/short_name') ? Mage::getStoreConfig('simipwa/manifest/short_name') : 'PWA';
-        $default_icon = $isSandbox ? '/pwa-sandbox/images/default_icon_512_512.png' : '/pwa/images/default_icon_512_512.png';
+        $default_icon = $isSandbox ? '/pwa_sandbox/images/default_icon_512_512.png' : '/pwa/images/default_icon_512_512.png';
         $icon =  Mage::getStoreConfig('simipwa/manifest/logo') ? Mage::getStoreConfig('simipwa/manifest/logo') : $default_icon;
-        $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa-sandbox/';
+        $start_url = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '/' : '/pwa/';
+        if($type == 'sandbox') $start_url = '/pwa-sandbox/';
         if (!class_exists('Simi_Simiconnector_Controller_Action')) {
             $start_url = '/';
         }
@@ -182,7 +183,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
 //        $filePath1 = Mage::getBaseDir() . '/manifest.json'; // for free version
         //zend_debug::dump($icon);die;
         $this->updateFile('/pwa/simi-manifest.json',$content); // for pwa
-        $this->updateFile('/pwa-sandbox/simi-manifest.json',$content); // for pwa sandbox
+        $this->updateFile('/pwa_sandbox/simi-manifest.json',$content); // for pwa sandbox
         $this->updateFile('/simi-manifest.json',$content); // for free version
     }
 
@@ -373,12 +374,12 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
 
         $path_to_file = Mage::getBaseDir() .'/pwa/js/config/config.js';
         if($type == 'sandbox')
-            $path_to_file = Mage::getBaseDir() . '/pwa-sandbox/js/config/config.js';
+            $path_to_file = Mage::getBaseDir() . '/pwa_sandbox/js/config/config.js';
         file_put_contents($path_to_file, $msConfigs);
 
         //update index.html file
         $prev_time = $type == 'sandbox' ? Mage::getStoreConfig('simipwa/general/build_time_sandbox') : Mage::getStoreConfig('simipwa/general/build_time');
-        $path_to_file = $type == 'sandbox' ?  Mage::getBaseDir() .'/pwa-sandbox/index.html' : Mage::getBaseDir() .'/pwa/index.html';
+        $path_to_file = $type == 'sandbox' ?  Mage::getBaseDir() .'/pwa_sandbox/index.html' : Mage::getBaseDir() .'/pwa/index.html';
         $file_contents = file_get_contents($path_to_file);
         $file_contents = str_replace("?v=$prev_time", "?v=$buildTime", $file_contents);
         file_put_contents($path_to_file, $file_contents);

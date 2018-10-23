@@ -128,13 +128,16 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 
         $enable = (!Mage::getStoreConfig('simipwa/general/pwa_enable') || !Mage::getStoreConfig('simipwa/general/pwa_main_url_site'))?0:1;
         $build_time = Mage::getStoreConfig('simipwa/general/build_time') ? Mage::getStoreConfig('simipwa/general/build_time') : 0;
+        $build_time_sandbox = Mage::getStoreConfig('simipwa/general/build_time_sandbox') ? Mage::getStoreConfig('simipwa/general/build_time_sandbox') : 0;
         $result = array(
             'pwa' => array(
                 //notification and offline
                 'enable_noti' => (int)Mage::getStoreConfig('simipwa/notification/enable'),
                 // enable pwa
                 'enable' => $enable,
-                'build_time' => (int)$build_time
+                'pwa_type' => Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? 'live' : 'sandbox',
+                'build_time' => (int)$build_time,
+                'build_time_sandbox' => (int)$build_time_sandbox
             )
         );
         $this->getResponse()->clearHeaders()->setHeader('Content-type', 'application/json', true);
@@ -164,8 +167,13 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
             Mage::helper('simipwa')->updateConfigJS($config,$buildTime,$type);
 
             $result = array(
-                "pwa" => array('success' => true,'buildtime'=>$buildTime)
+                "pwa" => array('success' => true)
             );
+            if($type == 'sandbox'){
+                $result['pwa']['build_time_sandbox'] = $buildTime;
+            }else{
+                $result['pwa']['build_time'] = $buildTime;
+            }
             $this->getResponse()->clearHeaders()->setHeader('Content-type', 'application/json', true);
             $this->getResponse()->setBody(json_encode($result));
         }catch (Exception $e){

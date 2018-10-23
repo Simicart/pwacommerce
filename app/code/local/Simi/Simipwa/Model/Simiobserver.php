@@ -52,8 +52,18 @@ class Simi_Simipwa_Model_Simiobserver
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
         */
+        $controller = $observer->getControllerAction();
+        $request_path = $controller->getRequest()->getRequestString();
+        $pwa_type = strpos($request_path, 'pwa-sandbox') !== false ? 'sandbox':'live';
+
         if (!Mage::getStoreConfig('simipwa/general/pwa_enable'))
             return;
+
+        if($pwa_type == 'sandbox'){
+            $this->renderPWA('sandbox',$observer);
+            return;
+        }
+
         if (!Mage::getStoreConfig('simipwa/general/pwa_main_url_site'))
             return;
 
@@ -126,23 +136,7 @@ class Simi_Simipwa_Model_Simiobserver
             }
         }
         if ((($tablet_browser > 0) || ($mobile_browser > 0)) && !$isExcludedCase) {
-            if (file_exists('./pwa/index.html')) {
-                $content = file_get_contents('./pwa/index.html');
-                if ($prerenderedHeader = $this->prerenderHeader()) {
-                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
-                }
-
-                $controller = $observer->getControllerAction();
-                $controller->getRequest()->setDispatched(true);
-                $controller->setFlag(
-                    '',
-                    Mage_Core_Controller_Front_Action::FLAG_NO_DISPATCH,
-                    true
-                );
-                $response = $controller->getResponse();
-                $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
-                $response->setBody($content);
-            }
+            $this->renderPWA('live',$observer);
         }
     }
 
@@ -262,10 +256,6 @@ class Simi_Simipwa_Model_Simiobserver
         if (count($preloadData['preload_js'])) {
             foreach ($preloadData['preload_js'] as $preload_js) {
                 $as = 'script';
-                $checkCss = explode('.',$preload_js);
-                if($checkCss[count($checkCss)-1] == 'css'){
-                    $as = 'style';
-                }
                 $headerString.= '<link rel="preload" as="'.$as.'" href="' . $preload_js . '">';
             }
         }
@@ -283,4 +273,59 @@ class Simi_Simipwa_Model_Simiobserver
         */
         return $headerString;
     }
+
+    public function prerenderHeaderSandbox()
+    {
+        try{
+            $manifestContent = file_get_contents('./pwa_sandbox/assets-manifest.json');
+            $manifestContent = (array)json_decode($manifestContent);
+            $urlConfig = '/pwa_sandbox/js/config/config.js?v='.Mage::getStoreConfig('simipwa/general/build_time_sandbox');
+            $preload_js = array($urlConfig,$manifestContent['main.js'],$manifestContent['vendors-main.js']);
+            $uri = $_SERVER['REQUEST_URI'];
+            $uri = trim($uri, '/');
+            if($uri == 'pwa-sandbox'){
+                $preload_js[] = $manifestContent['Home.js'];
+                $preload_js[] = $manifestContent['Banner.js'];
+            }
+            $headerString = '';
+            if(count($preload_js)){
+                foreach ($preload_js as $js) {
+                    $headerString.= '<link rel="preload" as="script" href="' . $js . '">';
+                }
+            }
+
+            return $headerString;
+        }
+        catch (Exception $e){}
+    }
+
+    public function renderPWA($type,$observer){
+        $pwa_html = $type == 'sandbox' ? './pwa_sandbox/index.html' : './pwa/index.html';
+        if (file_exists($pwa_html)) {
+            $content = file_get_contents($pwa_html);
+            if($type == 'sandbox'){
+                if ($prerenderedHeader = $this->prerenderHeaderSandbox()) {
+                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
+                }
+            }else{
+                if ($prerenderedHeader = $this->prerenderHeader()) {
+                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
+                }
+            }
+
+
+            $controller = $observer->getControllerAction();
+            $controller->getRequest()->setDispatched(true);
+            $controller->setFlag(
+                '',
+                Mage_Core_Controller_Front_Action::FLAG_NO_DISPATCH,
+                true
+            );
+            // zend_debug::dump($controller);die;
+            $response = $controller->getResponse();
+            $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
+            $response->setBody($content);
+        }
+    }
+
 }
