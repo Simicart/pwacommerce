@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: macos
@@ -12,12 +13,12 @@ class Simi_Simipwa_Model_System_Main
         $manifestContent = file_get_contents('./pwa/assets-manifest.json');
         if ($manifestContent && $manifestJsFiles = json_decode($manifestContent, true)) {
             $data = array();
-            foreach ($manifestJsFiles as $key => $val){
+            foreach ($manifestJsFiles as $key => $val) {
 //                $key = explode('.',$key);
-                if(strpos($key,'static') !== 0){
-                    if(strpos($key,'main') !== false
-                        ||strpos($key,'vendors-main') !== false
-                        ||strpos($key,'vendor.') !== false){
+                if (strpos($key, 'static') !== 0 && strpos($key, '.js') !== false) {
+                    if (strpos($key, 'main') !== false
+                        || strpos($key, 'vendors-main') !== false
+                        || strpos($key, 'vendor.') !== false) {
                         $data[] = array(
                             'value' => $val,
                             'label' => $key,
@@ -30,7 +31,7 @@ class Simi_Simipwa_Model_System_Main
             return $data;
         }
         return array(
-            array('value' => 0, 'label'=>Mage::helper('simipwa')->__('None')),
+            array('value' => 0, 'label' => Mage::helper('simipwa')->__('None')),
         );
     }
 }

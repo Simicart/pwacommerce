@@ -14,7 +14,7 @@ class Simi_Simipwa_Model_System_Product
             $data = array();
             foreach ($manifestJsFiles as $key => $val){
 //                $key = explode('.',$key);
-                if(strpos($key,'static') !== 0 || strpos($key,'.css') !== 0){
+                if(strpos($key,'static') !== 0 && strpos($key,'.js') !== false){
                     if(strpos($key,'Product.') !== false
                     || strpos($key,'Match') !== false){
                         $data[] = array(
