@@ -72,7 +72,7 @@ class Simi_Simipwa_Model_Simiobserver
             !in_array($_SERVER['REMOTE_ADDR'], explode(',', $redirectIps), true))
             return;
 
-        $tablet_browser = 0;
+        $tablet_browser = 1;
         $mobile_browser = 0;
 
         if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
@@ -153,13 +153,14 @@ class Simi_Simipwa_Model_Simiobserver
         }
     }
 
-    public function prerenderHeader()
+    public function prerenderHeader($controller)
     {
         try {
             $store = Mage::app()->getStore();
             $manifestContent = file_get_contents('./pwa/assets-manifest.json');
             // preload homepage
             $homeJs = array();
+            $preloadedHomejs = false;
             $preloadJs = $this->getPreloadConfig(Mage::getStoreConfig('simipwa/preload_config/homepage'));
             foreach ($preloadJs as $js){
                 $homeJs[] = $js;
@@ -218,19 +219,14 @@ class Simi_Simipwa_Model_Simiobserver
                         }
                     }
                 } else {
-                    if ($homeJs)
+                    if ($homeJs) {
+                        $preloadedHomejs = true;
                         $preloadData['preload_js'][] = $homeJs;
+                    }
                 }
             } else {
-                //preload cms or home
-                $cmsMatch = Mage::getModel('simiconnector/cms')
-                    ->getCollection()->addFieldToFilter('cms_url', $uri)
-                    ->getFirstItem();
-                if ($cmsMatch->getId()) {
-                    if ($cmsMatch->getData('cms_meta_title'))
-                        $preloadData['meta_title'] = $cmsMatch->getData('cms_meta_title');
-                    $preloadData['meta_description'] = $cmsMatch->getData('cms_meta_desc');
-                }
+                $preloadedHomejs = true;
+                $preloadData['preload_js'][] = $homeJs;
             }
         } catch (Exception $e) {
 
@@ -259,22 +255,59 @@ class Simi_Simipwa_Model_Simiobserver
                 $headerString.= '<link rel="preload" as="'.$as.'" href="' . $preload_js . '">';
             }
         }
-        /*
-        try {        
+
+        try {
+            //Add Storeview API
             $storeviewModel = Mage::getModel('simiconnector/api_storeviews');
-            $data = array('resouceid'=>'default');
-            $storeviewModel->setSingularKey('storeviews');
+            $data = [
+                'resource'       => 'storeviews',
+                'resourceid'     => 'default',
+                'params'         => ['email'=>null, 'password'=>null],
+                'contents_array' => [],
+                'is_method'      => 1, //GET
+                'module'         => 'simiconnector',
+                'controller'     => $controller,
+            ];
             $storeviewModel->setData($data);
             $storeviewModel->setBuilderQuery();
-            $headerString .= '<script type="text/javascript"> var MERCHANT_CONFIGS = '.json_encode($storeviewModel->show()).'</script>';
-        } catch (Exception $e) {
+            $storeviewModel->setSingularKey('storeviews');
+            $storeviewModel->setPluralKey('storeviews');
+            $storeviewApi = json_encode($storeviewModel->show());
+            $headerString .= '
+            <script type="text/javascript">
+                var SIMICONNECTOR_STOREVIEW_API = '.$storeviewApi.';
+            </script>';
+
+            //Add HOME API
+            if ($preloadedHomejs) {
+                $homeModel = Mage::getModel('simiconnector/api_homes');
+                $data = [
+                    'resource'       => 'homes',
+                    'resourceid'     => '',
+                    'params'         => ['email'=>null, 'password'=>null, 'get_child_cat'=>true],
+                    'contents_array' => [],
+                    'is_method'      => 1, //GET
+                    'module'         => 'simiconnector',
+                    'controller'     => $controller,
+                ];
+                $homeModel->setData($data);
+                $homeModel->setBuilderQuery();
+                $homeModel->setSingularKey('homes');
+                $homeModel->setPluralKey('homes');
+                $homeAPI = json_encode($homeModel->show());
+                $headerString .= '
+            <script type="text/javascript">
+                var SIMICONNECTOR_HOME_API = '.$homeAPI.';
+            </script>';
+            }
+        }catch (\Exception $e) {
 
         }
-        */
+
         return $headerString;
     }
 
-    public function prerenderHeaderSandbox()
+    public function prerenderHeaderSandbox($controller)
     {
         try{
             $manifestContent = file_get_contents('./pwa_sandbox/assets-manifest.json');
@@ -302,18 +335,6 @@ class Simi_Simipwa_Model_Simiobserver
     public function renderPWA($type,$observer){
         $pwa_html = $type == 'sandbox' ? './pwa_sandbox/index.html' : './pwa/index.html';
         if (file_exists($pwa_html)) {
-            $content = file_get_contents($pwa_html);
-            if($type == 'sandbox'){
-                if ($prerenderedHeader = $this->prerenderHeaderSandbox()) {
-                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
-                }
-            }else{
-                if ($prerenderedHeader = $this->prerenderHeader()) {
-                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
-                }
-            }
-
-
             $controller = $observer->getControllerAction();
             $controller->getRequest()->setDispatched(true);
             $controller->setFlag(
@@ -321,6 +342,17 @@ class Simi_Simipwa_Model_Simiobserver
                 Mage_Core_Controller_Front_Action::FLAG_NO_DISPATCH,
                 true
             );
+
+            $content = file_get_contents($pwa_html);
+            if($type == 'sandbox'){
+                if ($prerenderedHeader = $this->prerenderHeaderSandbox($controller)) {
+                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
+                }
+            }else{
+                if ($prerenderedHeader = $this->prerenderHeader($controller)) {
+                    $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
+                }
+            }
             // zend_debug::dump($controller);die;
             $response = $controller->getResponse();
             $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
