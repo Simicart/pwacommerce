@@ -279,12 +279,19 @@ class Simi_Simipwa_Model_Simiobserver
             </script>';
 
             //Add HOME API
-            if ($preloadedHomejs) {
+            if (false) {
+            //if ($preloadedHomejs) {
                 $homeModel = Mage::getModel('simiconnector/api_homes');
                 $data = [
                     'resource'       => 'homes',
                     'resourceid'     => '',
-                    'params'         => ['email'=>null, 'password'=>null, 'get_child_cat'=>true],
+                    'params'         => [
+                        'email'=>null,
+                        'password'=>null,
+                        'get_child_cat'=>true,
+                        'image_width'=>300,
+                        'image_height'=>300,
+                    ],
                     'contents_array' => [],
                     'is_method'      => 1, //GET
                     'module'         => 'simiconnector',
@@ -303,7 +310,6 @@ class Simi_Simipwa_Model_Simiobserver
         }catch (\Exception $e) {
 
         }
-
         return $headerString;
     }
 
