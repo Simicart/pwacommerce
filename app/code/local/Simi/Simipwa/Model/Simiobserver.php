@@ -72,7 +72,7 @@ class Simi_Simipwa_Model_Simiobserver
             !in_array($_SERVER['REMOTE_ADDR'], explode(',', $redirectIps), true))
             return;
 
-        $tablet_browser = 1;
+        $tablet_browser = 0;
         $mobile_browser = 0;
 
         if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
