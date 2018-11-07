@@ -61,15 +61,17 @@ class Simi_Simipwa_Block_Adminhtml_System_Config_Form_Syncbutton extends Mage_Ad
 
             $actionHtml .= $button->toHtml();
 
+            $actionJs = 'var r = confirm(\'Are you sure to Build and go Live? This will change your public Website PWA\');
+                            if(r){setLocation(\''.Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build',array("build_type"=>"live")).'\')}';
+            if(!$buildtype){
+                $actionJs = "alert('Before Build Live PWA , please change config: Enable Redirection');";
+            }
             $buildButton = $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
                     array(
                         'id' => 'build_pwa',
                         'label' => __('Build Live PWA'),
-                        'onclick' => '
-                            var r = confirm(\'Are you sure to Build and go Live? This will change your public Website PWA\');
-                            if(r){setLocation(\''.Mage::helper('adminhtml')->getUrl('adminhtml/simipwa_pwa/build',array("build_type"=>"live")).'\')}
-                            ',
+                        'onclick' => $actionJs,
                         'style' => 'margin-left : 10px;margin-bottom : 10px;'
                     )
                 );

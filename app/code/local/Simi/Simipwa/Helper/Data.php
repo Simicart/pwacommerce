@@ -391,4 +391,128 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         }
         Mage::app()->getCacheInstance()->cleanType(1);
     }
+
+    public function getBrowser() {
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+        $bname = 'Unknown';
+        $platform = 'Unknown';
+        $version= "";
+        // First get the platform?
+        if (preg_match('/linux/i', $u_agent)) {
+            $platform = 'linux';
+        } elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
+            $platform = 'mac';
+        } elseif (preg_match('/windows|win32/i', $u_agent)) {
+            $platform = 'windows';
+        }
+        // Next get the name of the useragent yes seperately and for good reason
+        if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) {
+            $bname = 'Internet Explorer';
+            $ub = "MSIE";
+        } elseif(preg_match('/Firefox/i',$u_agent)) {
+            $bname = 'Mozilla Firefox';
+            $ub = "Firefox";
+        } elseif(preg_match('/Chrome/i',$u_agent)) {
+            $bname = 'Google Chrome';
+            $ub = "Chrome";
+        } elseif(preg_match('/Safari/i',$u_agent)) {
+            $bname = 'Apple Safari';
+            $ub = "Safari";
+        } elseif(preg_match('/Opera/i',$u_agent)) {
+            $bname = 'Opera';
+            $ub = "Opera";
+        } elseif(preg_match('/Netscape/i',$u_agent)) {
+            $bname = 'Netscape';
+            $ub = "Netscape";
+        }
+        // finally get the correct version number
+        $known = array('Version', $ub, 'other');
+        $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+        if (!preg_match_all($pattern, $u_agent, $matches)) {
+            // we have no matching number just continue
+        }
+        // see how many we have
+        // zend_debug::dump($matches);die;
+        $i = count($matches['browser']);
+        if ($i != 1) {
+            //we will have two since we are not using 'other' argument yet
+            //see if version is before or after the name
+            if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
+                $version= $matches['version'][0];
+            } else {
+                $version= $matches['version'][1];
+            }
+        } else {
+            $version= $matches['version'][0];
+        }
+        // check if we have a number
+        if ($version==null || $version=="") {$version="?";}
+        return array(
+            'userAgent' => $u_agent,
+            'name'      => $bname,
+            'browser' => $matches['browser'],
+            'version'   => $matches['version'],
+            'platform'  => $platform,
+            'pattern'    => $pattern
+        );
+    }
+
+    public function addStoreviewPwa(){
+        $headerString = '';
+        try {
+            //Add Storeview API
+            $storeviewModel = Mage::getModel('simiconnector/api_storeviews');
+            $data = [
+                'resource'       => 'storeviews',
+                'resourceid'     => 'default',
+                'params'         => ['email'=>null, 'password'=>null],
+                'contents_array' => [],
+                'is_method'      => 1, //GET
+                'module'         => 'simiconnector',
+                'controller'     => $controller,
+            ];
+            $storeviewModel->setData($data);
+            $storeviewModel->setBuilderQuery();
+            $storeviewModel->setSingularKey('storeviews');
+            $storeviewModel->setPluralKey('storeviews');
+            $storeviewApi = json_encode($storeviewModel->show());
+            $headerString .= '
+            <script type="text/javascript">
+                var SIMICONNECTOR_STOREVIEW_API = '.$storeviewApi.';
+            </script>';
+
+            //Add HOME API
+            if (false) {
+                //if ($preloadedHomejs) {
+                $homeModel = Mage::getModel('simiconnector/api_homes');
+                $data = [
+                    'resource'       => 'homes',
+                    'resourceid'     => '',
+                    'params'         => [
+                        'email'=>null,
+                        'password'=>null,
+                        'get_child_cat'=>true,
+                        'image_width'=>300,
+                        'image_height'=>300,
+                    ],
+                    'contents_array' => [],
+                    'is_method'      => 1, //GET
+                    'module'         => 'simiconnector',
+                    'controller'     => $controller,
+                ];
+                $homeModel->setData($data);
+                $homeModel->setBuilderQuery();
+                $homeModel->setSingularKey('homes');
+                $homeModel->setPluralKey('homes');
+                $homeAPI = json_encode($homeModel->show());
+                $headerString .= '
+            <script type="text/javascript">
+                var SIMICONNECTOR_HOME_API = '.$homeAPI.';
+            </script>';
+            }
+        }catch (Exception $e) {
+
+        }
+        return $headerString;
+    }
 }

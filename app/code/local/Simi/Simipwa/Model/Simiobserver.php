@@ -52,6 +52,26 @@ class Simi_Simipwa_Model_Simiobserver
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
         */
+        $agent = Mage::helper('simipwa')->getBrowser();
+
+        $excludedBrowser = array('Opera');
+        if(in_array($agent['name'], $excludedBrowser)) return;
+
+        // check version Chrome
+        $checkVersion = true;
+        foreach ($agent['browser'] as $key => $value) {
+            if($value == 'Chrome'){
+                $version = $agent['version'][$key];
+                $version = explode('.', $version);
+                $version = (int)$version[0];
+                if($version < 40){
+                    $checkVersion = false;
+                    break;
+                }
+            }
+        }
+        if(!$checkVersion) return;
+
         $controller = $observer->getControllerAction();
         $request_path = $controller->getRequest()->getRequestString();
         $pwa_type = strpos($request_path, 'pwa-sandbox') !== false ? 'sandbox':'live';
@@ -256,60 +276,7 @@ class Simi_Simipwa_Model_Simiobserver
             }
         }
 
-        try {
-            //Add Storeview API
-            $storeviewModel = Mage::getModel('simiconnector/api_storeviews');
-            $data = [
-                'resource'       => 'storeviews',
-                'resourceid'     => 'default',
-                'params'         => ['email'=>null, 'password'=>null],
-                'contents_array' => [],
-                'is_method'      => 1, //GET
-                'module'         => 'simiconnector',
-                'controller'     => $controller,
-            ];
-            $storeviewModel->setData($data);
-            $storeviewModel->setBuilderQuery();
-            $storeviewModel->setSingularKey('storeviews');
-            $storeviewModel->setPluralKey('storeviews');
-            $storeviewApi = json_encode($storeviewModel->show());
-            $headerString .= '
-            <script type="text/javascript">
-                var SIMICONNECTOR_STOREVIEW_API = '.$storeviewApi.';
-            </script>';
-
-            //Add HOME API
-            if (false) {
-            //if ($preloadedHomejs) {
-                $homeModel = Mage::getModel('simiconnector/api_homes');
-                $data = [
-                    'resource'       => 'homes',
-                    'resourceid'     => '',
-                    'params'         => [
-                        'email'=>null,
-                        'password'=>null,
-                        'get_child_cat'=>true,
-                        'image_width'=>300,
-                        'image_height'=>300,
-                    ],
-                    'contents_array' => [],
-                    'is_method'      => 1, //GET
-                    'module'         => 'simiconnector',
-                    'controller'     => $controller,
-                ];
-                $homeModel->setData($data);
-                $homeModel->setBuilderQuery();
-                $homeModel->setSingularKey('homes');
-                $homeModel->setPluralKey('homes');
-                $homeAPI = json_encode($homeModel->show());
-                $headerString .= '
-            <script type="text/javascript">
-                var SIMICONNECTOR_HOME_API = '.$homeAPI.';
-            </script>';
-            }
-        }catch (\Exception $e) {
-
-        }
+        $headerString .= Mage::helper('simipwa')->addStoreviewPwa();
         return $headerString;
     }
 
@@ -332,7 +299,7 @@ class Simi_Simipwa_Model_Simiobserver
                     $headerString.= '<link rel="preload" as="script" href="' . $js . '">';
                 }
             }
-
+            $headerString .= Mage::helper('simipwa')->addStoreviewPwa();
             return $headerString;
         }
         catch (Exception $e){}
