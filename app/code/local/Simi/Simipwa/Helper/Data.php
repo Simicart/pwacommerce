@@ -457,7 +457,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         );
     }
 
-    public function addStoreviewPwa($controller){
+    public function addStoreviewPwa($controller, $getHomeAPI = false){
         $headerString = '';
         try {
             //Add Storeview API
@@ -482,12 +482,11 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             </script>';
 
             //Add HOME API
-            if (false) {
-                //if ($preloadedHomejs) {
+            if ($getHomeAPI) {
                 $homeModel = Mage::getModel('simiconnector/api_homes');
                 $data = [
                     'resource'       => 'homes',
-                    'resourceid'     => '',
+                    'resourceid'     => 'lite',
                     'params'         => [
                         'email'=>null,
                         'password'=>null,

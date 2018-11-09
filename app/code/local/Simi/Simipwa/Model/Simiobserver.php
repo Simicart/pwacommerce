@@ -277,37 +277,8 @@ class Simi_Simipwa_Model_Simiobserver
         }
         try {
             //Add Storeview API
+            //$headerString .= Mage::helper('simipwa')->addStoreviewPwa($controller, $preloadedHomejs);
             $headerString .= Mage::helper('simipwa')->addStoreviewPwa($controller);
-
-            //Add HOME API
-            if (false) {
-            //if ($preloadedHomejs) {
-                $homeModel = Mage::getModel('simiconnector/api_homes');
-                $data = [
-                    'resource'       => 'homes',
-                    'resourceid'     => 'lite',
-                    'params'         => [
-                        'email'=>null,
-                        'password'=>null,
-                        'get_child_cat'=>true,
-                        'image_width'=>300,
-                        'image_height'=>300,
-                    ],
-                    'contents_array' => [],
-                    'is_method'      => 1, //GET
-                    'module'         => 'simiconnector',
-                    'controller'     => $controller,
-                ];
-                $homeModel->setData($data);
-                $homeModel->setBuilderQuery();
-                $homeModel->setSingularKey('homes');
-                $homeModel->setPluralKey('homes');
-                $homeAPI = json_encode($homeModel->show());
-                $headerString .= '
-            <script type="text/javascript">
-                var SIMICONNECTOR_HOME_API = '.$homeAPI.';
-            </script>';
-            }
         }catch (\Exception $e) {
 
         }
