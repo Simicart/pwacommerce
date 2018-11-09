@@ -457,7 +457,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         );
     }
 
-    public function addStoreviewPwa(){
+    public function addStoreviewPwa($controller){
         $headerString = '';
         try {
             //Add Storeview API

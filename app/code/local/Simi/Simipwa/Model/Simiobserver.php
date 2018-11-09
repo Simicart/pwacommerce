@@ -241,12 +241,12 @@ class Simi_Simipwa_Model_Simiobserver
                 } else {
                     if ($homeJs) {
                         $preloadedHomejs = true;
-                        $preloadData['preload_js'][] = $homeJs;
+                        $preloadData['preload_js'] = $homeJs;
                     }
                 }
             } else {
                 $preloadedHomejs = true;
-                $preloadData['preload_js'][] = $homeJs;
+                $preloadData['preload_js'] = $homeJs;
             }
         } catch (Exception $e) {
 
@@ -275,8 +275,42 @@ class Simi_Simipwa_Model_Simiobserver
                 $headerString.= '<link rel="preload" as="'.$as.'" href="' . $preload_js . '">';
             }
         }
+        try {
+            //Add Storeview API
+            $headerString .= Mage::helper('simipwa')->addStoreviewPwa($controller);
 
-        $headerString .= Mage::helper('simipwa')->addStoreviewPwa();
+            //Add HOME API
+            if (false) {
+            //if ($preloadedHomejs) {
+                $homeModel = Mage::getModel('simiconnector/api_homes');
+                $data = [
+                    'resource'       => 'homes',
+                    'resourceid'     => 'lite',
+                    'params'         => [
+                        'email'=>null,
+                        'password'=>null,
+                        'get_child_cat'=>true,
+                        'image_width'=>300,
+                        'image_height'=>300,
+                    ],
+                    'contents_array' => [],
+                    'is_method'      => 1, //GET
+                    'module'         => 'simiconnector',
+                    'controller'     => $controller,
+                ];
+                $homeModel->setData($data);
+                $homeModel->setBuilderQuery();
+                $homeModel->setSingularKey('homes');
+                $homeModel->setPluralKey('homes');
+                $homeAPI = json_encode($homeModel->show());
+                $headerString .= '
+            <script type="text/javascript">
+                var SIMICONNECTOR_HOME_API = '.$homeAPI.';
+            </script>';
+            }
+        }catch (\Exception $e) {
+
+        }
         return $headerString;
     }
 
@@ -299,7 +333,7 @@ class Simi_Simipwa_Model_Simiobserver
                     $headerString.= '<link rel="preload" as="script" href="' . $js . '">';
                 }
             }
-            $headerString .= Mage::helper('simipwa')->addStoreviewPwa();
+            $headerString .= Mage::helper('simipwa')->addStoreviewPwa($controller);
             return $headerString;
         }
         catch (Exception $e){}
@@ -326,7 +360,6 @@ class Simi_Simipwa_Model_Simiobserver
                     $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
                 }
             }
-            // zend_debug::dump($controller);die;
             $response = $controller->getResponse();
             $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
             $response->setBody($content);
