@@ -221,12 +221,12 @@ class Simi_Simipwa_Model_Simiobserver
                 } else {
                     if ($homeJs) {
                         $preloadedHomejs = true;
-                        $preloadData['preload_js'][] = $homeJs;
+                        $preloadData['preload_js'] = $homeJs;
                     }
                 }
             } else {
                 $preloadedHomejs = true;
-                $preloadData['preload_js'][] = $homeJs;
+                $preloadData['preload_js'] = $homeJs;
             }
         } catch (Exception $e) {
 
@@ -284,7 +284,7 @@ class Simi_Simipwa_Model_Simiobserver
                 $homeModel = Mage::getModel('simiconnector/api_homes');
                 $data = [
                     'resource'       => 'homes',
-                    'resourceid'     => '',
+                    'resourceid'     => 'lite',
                     'params'         => [
                         'email'=>null,
                         'password'=>null,
@@ -359,7 +359,6 @@ class Simi_Simipwa_Model_Simiobserver
                     $content = str_replace('<head>', '<head>' . $prerenderedHeader, $content);
                 }
             }
-            // zend_debug::dump($controller);die;
             $response = $controller->getResponse();
             $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
             $response->setBody($content);
