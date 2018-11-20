@@ -76,6 +76,15 @@ class Simi_Simipwa_Model_Simiobserver
         $request_path = $controller->getRequest()->getRequestString();
         $pwa_type = strpos($request_path, 'pwa-sandbox') !== false ? 'sandbox':'live';
 
+        $params = $controller->getRequest()->getParams();
+        $session = Mage::getSingleton('core/session');
+        if(isset($params['version']) && $params['version']){
+            $session->setPwaVersion($params['version']);
+        }
+        if($session->getPwaVersion() == 'web'){
+            return;
+        }
+
         if (!Mage::getStoreConfig('simipwa/general/pwa_enable'))
             return;
 
@@ -241,12 +250,12 @@ class Simi_Simipwa_Model_Simiobserver
                 } else {
                     if ($homeJs) {
                         $preloadedHomejs = true;
-                        $preloadData['preload_js'][] = $homeJs;
+                        $preloadData['preload_js'] = $homeJs;
                     }
                 }
             } else {
                 $preloadedHomejs = true;
-                $preloadData['preload_js'][] = $homeJs;
+                $preloadData['preload_js'] = $homeJs;
             }
         } catch (Exception $e) {
 
