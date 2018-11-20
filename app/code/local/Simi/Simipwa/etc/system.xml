@@ -360,77 +360,75 @@
                         </product_detail>
                     </fields>
                 </preload_config>
-                <!--<cache_api>-->
-                    <!--<label>Api Cache Configuration</label>-->
-                    <!--<frontend_type>text</frontend_type>-->
-                    <!--<sort_order>200</sort_order>-->
-                    <!--<show_in_default>1</show_in_default>-->
-                    <!--<show_in_website>1</show_in_website>-->
-                    <!--<show_in_store>1</show_in_store>-->
-                    <!--<fields>-->
-                        <!--<enable translate="label">-->
-                            <!--<label>Enable</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>1</sort_order>-->
-                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<comment></comment>-->
-                        <!--</enable>-->
-                        <!--<storeview_api>-->
-                            <!--<label>Merchant Api</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>10</sort_order>-->
-                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<depends>-->
-                                <!--<enable>1</enable>-->
-                            <!--</depends>-->
-                            <!--<comment></comment>-->
-                        <!--</storeview_api>-->
-                        <!--<simicart_api>-->
-                            <!--<label>Simicart Config Api</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>20</sort_order>-->
-                            <!--<source_model>adminhtml/system_config_source_yesno</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<depends>-->
-                                <!--<enable>1</enable>-->
-                            <!--</depends>-->
-                            <!--<comment></comment>-->
-                        <!--</simicart_api>-->
-                        <!--&lt;!&ndash;<home_api>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<label>Homepage Api</label>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<frontend_type>select</frontend_type>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<sort_order>5</sort_order>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<source_model>simipwa/system_homepage</source_model>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<show_in_default>1</show_in_default>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<show_in_website>1</show_in_website>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<show_in_store>1</show_in_store>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<depends>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<enable>1</enable>&ndash;&gt;-->
-                            <!--&lt;!&ndash;</depends>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<comment></comment>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</home_api>&ndash;&gt;-->
-                        <!--<action>-->
-                            <!--<label>Action</label>-->
-                            <!--<frontend_type>button</frontend_type>-->
-                            <!--<frontend_model>simipwa/adminhtml_system_config_form_syncApi</frontend_model>-->
-                            <!--<sort_order>100</sort_order>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                            <!--<comment>-->
-                                <!--If change config , Please click Refresh Cache Api after Save-->
-                            <!--</comment>-->
-                        <!--</action>-->
-                    <!--</fields>-->
-                <!--</cache_api>-->
+                <switch_version>
+                    <label>Switch Website Version Configuration</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable translate="label">
+                            <label>Enable</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable>
+                        <btn_text>
+                            <label>Button Text</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                            <comment>
+                                Button show in website version to switch pwa version
+                            </comment>
+                        </btn_text>
+                        <btn_text_color>
+                            <label>Button Text Color</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>color</validate> <!-- This is important -->
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </btn_text_color>
+                        <btn_background_color>
+                            <label>Button Background Color</label>
+                            <frontend_type>text</frontend_type>
+                            <validate>color</validate> <!-- This is important -->
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </btn_background_color>
+                        <btn_css>
+                            <label>Button Custom Css</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <depends>
+                                <enable>1</enable>
+                            </depends>
+                        </btn_css>
+                    </fields>
+                </switch_version>
             </groups>
         </simipwa>
     </sections>

@@ -273,8 +273,12 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         $mixPanelToken = ($mixPanelToken && $mixPanelToken!=='')?$mixPanelToken:'5d46127799a0614259cb4c733f367541';
         $zopimKey = Mage::getStoreConfig('simiconnector/zopim/account_key');
         $base_name = 'pwa-sandbox';
+        $switch_version = 0;
         if($type !== 'sandbox')
+        {
             $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
+            $switch_version = 1;
+        }
         $msConfigs = '
             var PWA_BUILD_TIME = "'.$buildTime.'";
             var SMCONFIGS = {
@@ -300,7 +304,8 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                 },
                 logo_url: "'.$app_image_logo.'",
                 splash_screen : "'.$app_splash_img_url.'",
-                magento_version : 1
+                magento_version : 1,
+                switch_version : '.$switch_version.'
             };
             ';
 
@@ -514,4 +519,15 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         }
         return $headerString;
     }
+
+    public function getConfigSwitchVersion($config){
+        return Mage::getStoreConfig('simipwa/switch_version/'.$config);
+    }
+
+    public function isShowBtnWebsite(){
+        $session = Mage::getSingleton('core/session');
+//        zend_debug::dump($session->getData());die;
+        return $this->getConfigSwitchVersion('enable') && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && $session->getPwaVersion() == 'web';
+    }
+
 }
