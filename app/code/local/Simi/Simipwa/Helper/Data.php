@@ -467,15 +467,15 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         try {
             //Add Storeview API
             $storeviewModel = Mage::getModel('simiconnector/api_storeviews');
-            $data = [
+            $data = array(
                 'resource'       => 'storeviews',
                 'resourceid'     => 'default',
-                'params'         => ['email'=>null, 'password'=>null],
-                'contents_array' => [],
+                'params'         => array('email'=>null, 'password'=>null),
+                'contents_array' => array(),
                 'is_method'      => 1, //GET
                 'module'         => 'simiconnector',
                 'controller'     => $controller,
-            ];
+            );
             $storeviewModel->setData($data);
             $storeviewModel->setBuilderQuery();
             $storeviewModel->setSingularKey('storeviews');
@@ -489,21 +489,21 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             //Add HOME API
             if ($getHomeAPI) {
                 $homeModel = Mage::getModel('simiconnector/api_homes');
-                $data = [
+                $data = array(
                     'resource'       => 'homes',
                     'resourceid'     => 'lite',
-                    'params'         => [
+                    'params'         => array(
                         'email'=>null,
                         'password'=>null,
                         'get_child_cat'=>true,
                         'image_width'=>300,
                         'image_height'=>300,
-                    ],
-                    'contents_array' => [],
+                    ),
+                    'contents_array' => array(),
                     'is_method'      => 1, //GET
                     'module'         => 'simiconnector',
                     'controller'     => $controller,
-                ];
+                );
                 $homeModel->setData($data);
                 $homeModel->setBuilderQuery();
                 $homeModel->setSingularKey('homes');
