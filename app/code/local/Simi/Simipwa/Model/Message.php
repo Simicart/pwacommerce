@@ -13,17 +13,11 @@ class Simi_Simipwa_Model_Message extends Mage_Core_Model_Abstract
         $this->_init('simipwa/message');
     }
 
-    public function getMessage($endpoint)
+    public function getMessage()
     {
-        $device = Mage::getModel('simipwa/agent')->load($endpoint, 'endpoint');
         $message = Mage::getModel('simipwa/message')->getCollection()
-            ->addFieldToFilter('device_id', $device->getId())
+            ->addFieldToFilter('status', 1)
             ->getLastItem();
-        if(!$message->getId() || $message->getStatus() == 2){
-            $message = Mage::getModel('simipwa/message')->getCollection()
-                ->addFieldToFilter('status', 1)
-                ->getLastItem();
-        }
 
         return $message;
     }
