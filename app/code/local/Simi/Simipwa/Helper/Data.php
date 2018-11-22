@@ -402,6 +402,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         $bname = 'Unknown';
         $platform = 'Unknown';
         $version= "";
+        $ub = 'Unknown';
         // First get the platform?
         if (preg_match('/linux/i', $u_agent)) {
             $platform = 'linux';
@@ -437,7 +438,6 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             // we have no matching number just continue
         }
         // see how many we have
-        // zend_debug::dump($matches);die;
         $i = count($matches['browser']);
         if ($i != 1) {
             //we will have two since we are not using 'other' argument yet

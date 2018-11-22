@@ -9,9 +9,9 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 {
     public function messageAction()
     {
-        $data = $this->getRequest()->getParams();
-        $endpoint = $data['endpoint'];
-        $message = Mage::getModel('simipwa/message')->getMessage($endpoint);
+//        $data = $this->getRequest()->getParams();
+//        $endpoint = $data['endpoint'];
+        $message = Mage::getModel('simipwa/message')->getMessage();
         $message_info = $message->getData();
         $img  = null;
         if ($message_info['type'] == 1){
