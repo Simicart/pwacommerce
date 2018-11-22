@@ -445,7 +445,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             if (strripos($u_agent,"Version") < strripos($u_agent,$ub)){
                 $version= $matches['version'][0];
             } else {
-                $version= $matches['version'][1];
+                $version= isset($matches['version'][1])?$matches['version'][1]:'';
             }
         } else {
             $version= $matches['version'][0];
