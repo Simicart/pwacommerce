@@ -52,6 +52,20 @@ class Simi_Simipwa_Model_Simiobserver
         if ($_SERVER['REMOTE_ADDR'] !== '27.72.100.84')
             return;
         */
+        $allowedControllers = array(
+            'Mage_Cms_IndexController',
+            'Mage_Catalog_ProductController',
+            'Mage_Catalog_CategoryController',
+            'Mage_Customer_AccountController',
+            'Mage_Checkout_CartController',
+            'Mage_Checkout_OnepageController',
+            'Mage_CatalogSearch_ResultController',
+            'Mage_Wishlist_IndexController',
+            'Mage_Wishlist_SharedController',
+        );
+        $controller = $observer->getData('controller_action');
+        if (!in_array(get_class($controller), $allowedControllers))
+            return;
         $agent = Mage::helper('simipwa')->getBrowser();
 
         $excludedBrowser = array('Opera');
