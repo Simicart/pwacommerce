@@ -9,8 +9,6 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 {
     public function messageAction()
     {
-//        $data = $this->getRequest()->getParams();
-//        $endpoint = $data['endpoint'];
         $message = Mage::getModel('simipwa/message')->getMessage();
         $message_info = $message->getData();
         $img  = null;
@@ -61,7 +59,10 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
 
                 $ip = $_SERVER['REMOTE_ADDR'];
                 $details = json_decode(file_get_contents("http://ipinfo.io/{$ip}/json"));
-
+                if($_SERVER['SERVER_NAME'] == 'localhost'){
+                    $details->city = 'Simi';
+                    $details->country = 'Ha Noi';
+                }
                 $endpoint = $data['endpoint'];
                 $number = strrpos($data['endpoint'], '/');
                 $endpoint_key = substr($data['endpoint'], $number+1);

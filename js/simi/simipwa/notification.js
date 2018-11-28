@@ -74,10 +74,10 @@ function subscribeUser()
 
 function updateSubscriptionOnServer(subscription,type = 1) 
 {
-    var api = window.location.origin+"/simipwa/index/register";
+    var api = base_url+"/simipwa/index/register";
     var method = 'POST';
     if (type === 2) {
-        api = window.location.origin+'/simipwa/index/delete';
+        api = base_url+'/simipwa/index/delete';
     }
 
     ConnectionApi(api,method,subscription);
@@ -132,7 +132,7 @@ function ConnectionApi(api,method = 'GET',params = null)
         // 'Access-Control-Allow-Credentials': true,
         }
     );
-    var init = {cache: 'default', mode: 'cors'};
+    var init = {cache: 'default', mode: 'cors',headers:headers};
     init['method'] = method;
     if(params){
         params = JSON.stringify(params);
@@ -160,4 +160,12 @@ function ConnectionApi(api,method = 'GET',params = null)
                 console.error(error);
                 }
         );
+}
+
+function trackBacktoPwa() {
+    var api = base_url+'simipwa/tracking';
+    var params = {
+        tracking_pwa : 1
+    }
+    ConnectionApi(api,'POST',params)
 }

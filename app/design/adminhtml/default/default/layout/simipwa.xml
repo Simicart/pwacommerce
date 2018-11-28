@@ -23,18 +23,35 @@
 <layout version="0.1.0">
     <adminhtml_simipwa_pwa_index>
         <reference name="content">
-            <block type="simipwa/adminhtml_pwa" name="simipwa_agent" />
+            <block type="simipwa/adminhtml_pwa" name="simipwa_agent"/>
         </reference>
     </adminhtml_simipwa_pwa_index>
     <adminhtml_simipwa_notification_index>
         <reference name="content">
-            <block type="simipwa/adminhtml_notification" name="simipwa_notification" />
+            <block type="simipwa/adminhtml_notification" name="simipwa_notification"/>
         </reference>
     </adminhtml_simipwa_notification_index>
     <adminhtml_system_config_edit>
         <update handle="editor"/>
         <reference name="head">
-            <action method="setCanLoadTinyMce"><load>1</load></action>
+            <action method="setCanLoadTinyMce">
+                <load>1</load>
+            </action>
         </reference>
     </adminhtml_system_config_edit>
+    <adminhtml_simipwa_tracking_index>
+        <reference name="head">
+            <action method="addJs">
+                <script>simi/simipwa/google-chart.js</script>
+            </action>
+            <action method="addCss">
+                <name>css/tracking_pwa.css</name>
+            </action>
+        </reference>
+
+
+        <reference name="content">
+            <block type="simipwa/adminhtml_tracking" name="simipwa_tracking" template="simipwa/tracking_pwa.phtml"/>
+        </reference>
+    </adminhtml_simipwa_tracking_index>
 </layout>

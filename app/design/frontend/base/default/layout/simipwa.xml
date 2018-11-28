@@ -2,6 +2,7 @@
 <layout version="0.1.0">
     <default>
         <reference name="head">
+            <action method="addCss"><stylesheet>css/simipwa.css</stylesheet></action>
             <action method="addJs">
                 <script>simi/simipwa/notification.js</script>
             </action>
