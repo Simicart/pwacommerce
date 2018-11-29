@@ -165,7 +165,7 @@ function ConnectionApi(api,method = 'GET',params = null)
 function trackBacktoPwa() {
     var api = base_url+'simipwa/tracking';
     var params = {
-        tracking_pwa : 1
+        tracking_pwa : 3
     }
     ConnectionApi(api,'POST',params)
 }
