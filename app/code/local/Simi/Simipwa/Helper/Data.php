@@ -405,11 +405,15 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         $ub = 'Unknown';
         // First get the platform?
         if (preg_match('/linux/i', $u_agent)) {
-            $platform = 'linux';
-        } elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
-            $platform = 'mac';
+            $platform = 'Linux';
+        } elseif (preg_match('/iphone/i', $u_agent)) {
+            $platform = 'Iphone';
+        } elseif (preg_match('/android/i', $u_agent)) {
+            $platform = 'Android';
+        }elseif (preg_match('/macintosh|mac os x/i', $u_agent)) {
+            $platform = 'Mac';
         } elseif (preg_match('/windows|win32/i', $u_agent)) {
-            $platform = 'windows';
+            $platform = 'Windows';
         }
         // Next get the name of the useragent yes seperately and for good reason
         if(preg_match('/MSIE/i',$u_agent) && !preg_match('/Opera/i',$u_agent)) {
@@ -524,10 +528,13 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         return Mage::getStoreConfig('simipwa/switch_version/'.$config);
     }
 
-    public function isShowBtnWebsite(){
+    public function getVersionWeb(){
         $session = Mage::getSingleton('core/session');
-//        zend_debug::dump($session->getData());die;
-        return $this->getConfigSwitchVersion('enable') && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && $session->getPwaVersion() == 'web';
+        return $session->getPwaVersion();
+    }
+
+    public function isShowBtnWebsite(){
+        return $this->getConfigSwitchVersion('enable') && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') && $this->getVersionWeb() == 'web';
     }
 
 }

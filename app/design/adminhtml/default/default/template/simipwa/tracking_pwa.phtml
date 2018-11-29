@@ -1,0 +1,63 @@
+<?php
+    $collection = $this->getCollection();
+?>
+
+<div class="wrapper-tracking-pwa">
+    <div class="container">
+        <h1 class="tracking-page-title">PWA Analytics Dashboard</h1>
+        <!--        <div class="section-tracking-pwa">-->
+        <!--            <div class="tracking-pwa-item">-->
+        <!--                <div class="tracking-panel">-->
+        <!--                    <div class="tracking-panel-header">-->
+        <!--                        <div class="panel-header-content">PWA Visited</div>-->
+        <!--                    </div>-->
+        <!--                    <div class="tracking-panel-body"></div>-->
+        <!--                </div>-->
+        <!---->
+        <!--            </div>-->
+        <!--            <div class="tracking-pwa-item">-->
+        <!--                <div class="tracking-panel">-->
+        <!--                    <div class="tracking-panel-header">-->
+        <!--                        <div class="panel-header-content">Switch to Website Version</div>-->
+        <!--                    </div>-->
+        <!--                    <div class="tracking-panel-body"></div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="tracking-pwa-item">-->
+        <!--                <div class="tracking-panel">-->
+        <!--                    <div class="tracking-panel-header">-->
+        <!--                        <div class="panel-header-content">Back to Pwa Version</div>-->
+        <!--                    </div>-->
+        <!--                    <div class="tracking-panel-body"></div>-->
+        <!--                </div>-->
+        <!---->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="section-analytics-chart">
+            <div id="chart_div" style="width: 90%; height: 400px; margin: 0 auto"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    google.charts.load('current', {'packages': ['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Day', 'PWA visited', 'Switch to website', 'Back to pwa'],
+            ['1', 10, 5, 4],
+            ['2', 12, 5, 3],
+            ['3', 15, 10, 8],
+            ['4', 0, 0,0]
+        ]);
+
+        var options = {
+            title: 'Company Performance',
+            hAxis: {title: '30 day Overview', titleTextStyle: {color: '#333'}},
+            vAxis: {minValue: 0}
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script

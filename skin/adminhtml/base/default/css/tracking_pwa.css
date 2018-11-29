@@ -1,0 +1,23 @@
+/**
+ * Created by PhpStorm.
+ * User: Peter
+ * Date: 11/23/18
+ * Time: 2:58 PM
+ */
+.section-tracking-pwa {
+    display: flex;
+    flex-wrap: wrap;
+}
+.tracking-pwa-item{
+    width: 25%;
+    margin-right: 20px;
+}
+.tracking-pwa-item:last-child{
+    margin-right: 0;
+}
+.tracking-panel-header {
+    text-align: center;
+    background: #5F767F;
+    color: #fff;
+    padding: 5px 0;
+}

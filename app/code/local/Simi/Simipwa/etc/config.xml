@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Simi_Simipwa>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
         </Simi_Simipwa>
     </modules>
     <frontend>
@@ -80,6 +80,9 @@
                     <customermap>
                         <table>simipwa_social_customer_mapping</table>
                     </customermap>
+                    <tracking>
+                        <table>simipwa_tracking</table>
+                    </tracking>
                 </entities>
             </simipwa_mysql4>
         </models>
@@ -166,7 +169,7 @@
             </cache_api>
             <switch_version>
                 <enable>1</enable>
-                <btn_text>PWA Version</btn_text>
+                <btn_text>Switch to PWA version >></btn_text>
                 <btn_background_color>FDA343</btn_background_color>
             </switch_version>
         </simipwa>

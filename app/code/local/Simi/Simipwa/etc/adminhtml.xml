@@ -39,6 +39,11 @@
                     <sort_order>1</sort_order>
                     <action>adminhtml/simipwa_notification</action>
                 </simipwa_notification>
+                <!--<simipwa_tracking module="simipwa">-->
+                    <!--<title>PWA Analytics</title>-->
+                    <!--<sort_order>30</sort_order>-->
+                    <!--<action>adminhtml/simipwa_tracking</action>-->
+                <!--</simipwa_tracking>-->
                 <settings module="simipwa">
                     <title>Settings</title>
                     <sort_order>100</sort_order>

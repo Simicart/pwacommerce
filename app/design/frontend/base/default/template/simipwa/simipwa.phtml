@@ -1,8 +1,9 @@
 <?php if ($this->helper('simipwa')->IsEnableForWebsite()) : ?>
     <script>
+        var base_url = "<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true ); ?>"
         if ('serviceWorker' in navigator && 'PushManager' in window) {
             console.log('Service Worker and Push is supported');
-            var sw = "<?php echo $this->getUrl('', array('_secure' => true)); ?>" + "simipwa-sw.js";
+            var sw = base_url + "simipwa-sw.js";
             navigator.serviceWorker.register(sw)
                 .then(function (swReg) {
                     console.log('Service Worker is registered', '');
@@ -116,21 +117,14 @@
     $btn_css = "
         background : #$bg_color;
         color : #$text_color;
-        display : inline-block;
-        padding : 5px 10px;
-        cursor : pointer;
-        position : fixed;
-        bottom : 50px;
-        right : 50px;
-        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-        z-index : 99999999;
+        
     ";
     $btn_css .= $this->helper('simipwa')->getConfigSwitchVersion('btn_css');
     ?>
-    <div style="<?php echo $btn_css; ?>" onclick="window.location.replace('?version=pwa')">
+    <div class="btn-switch" style="<?php echo $btn_css; ?>" onclick="trackBacktoPwa()">
         <?php echo $btn_text; ?>
     </div>
-
+    <script type="text/javascript">
+        document.getElementsByTagName('body')[0].classList.add('simi-pwa')
+    </script>
 <?php endif; ?>
