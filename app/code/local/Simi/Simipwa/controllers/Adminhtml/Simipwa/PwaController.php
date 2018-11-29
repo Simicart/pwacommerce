@@ -484,12 +484,14 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             if($type == 'sandbox'){
                 $path_to_file = Mage::getBaseDir().'/pwa_sandbox/index.html';
             }
+            $theme_color = Mage::getStoreConfig('simipwa/manifest/theme_color') ? '#'.Mage::getStoreConfig('simipwa/manifest/theme_color') : '#3399cc';
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
             $file_contents = file_get_contents($path_to_file);
             $file_contents = str_replace('PAGE_TITLE_HERE', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('IOS_SPLASH_TEXT', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"' . $excludedPaths . '"', $file_contents);
             $file_contents = str_replace('PWA_BUILD_TIME_VALUE', $buildTime, $file_contents);
+            $file_contents = str_replace('content="#FDA343"', $buildTime, $file_contents);
             $file_contents = str_replace('<div id="splash-img"></div>', $app_splash_img, $file_contents);
             if ($head = Mage::getStoreConfig('simipwa/general/custom_head')) {
                 $file_contents = str_replace('<head>', '<head>' . $head, $file_contents);

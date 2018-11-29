@@ -167,5 +167,7 @@ function trackBacktoPwa() {
     var params = {
         tracking_pwa : 3
     }
+    sessionStorage.setItem('tracking_vesion','pwa');
     ConnectionApi(api,'POST',params)
+    window.location.replace('?version=pwa')
 }

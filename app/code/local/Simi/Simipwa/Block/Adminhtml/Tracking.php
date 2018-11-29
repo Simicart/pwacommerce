@@ -46,7 +46,7 @@ class Simi_Simipwa_Block_Adminhtml_Tracking extends Mage_Core_Block_Template {
         $result = array();
         foreach ($range_date as $date){
             $total_tracking = 0;
-            $tracking_data = array('day'=>$date);
+            $tracking_data = array('day'=>date('m/d',strtotime($date)));
             foreach ($data as $item){
                 if(strpos($item['created_at'],$date) !== false){
                     $total_tracking += $item['total'];

@@ -277,7 +277,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
         if($type !== 'sandbox')
         {
             $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
-            $switch_version = 1;
+            $switch_version = $this->getConfigSwitchVersion('enable') && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? 1 : 0;
         }
         $msConfigs = '
             var PWA_BUILD_TIME = "'.$buildTime.'";

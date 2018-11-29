@@ -1,6 +1,8 @@
+<script>
+    var base_url = "<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true ); ?>"
+</script>
 <?php if ($this->helper('simipwa')->IsEnableForWebsite()) : ?>
     <script>
-        var base_url = "<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true ); ?>"
         if ('serviceWorker' in navigator && 'PushManager' in window) {
             console.log('Service Worker and Push is supported');
             var sw = base_url + "simipwa-sw.js";
