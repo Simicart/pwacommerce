@@ -1,5 +1,5 @@
 <?php
-    $collection = $this->getCollection();
+    $collection = $this->convertTotalTracking();
 ?>
 
 <div class="wrapper-tracking-pwa">
@@ -41,18 +41,18 @@
 <script type="text/javascript">
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
-
+    var collection = { tracking :<?php echo json_encode($collection); ?>}
     function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Day', 'PWA visited', 'Switch to website', 'Back to pwa'],
-            ['1', 10, 5, 4],
-            ['2', 12, 5, 3],
-            ['3', 15, 10, 8],
-            ['4', 0, 0,0]
-        ]);
+
+        var data = [['Day', 'PWA visited', 'Switch to Website', 'Back to PWA']];
+        collection.tracking.forEach(function (item) {
+            data.push([item.day,item.pwa_visited,item.switch_to_website,item.back_to_pwa]);
+        })
+        // console.log(data);
+        var data = google.visualization.arrayToDataTable(data);
 
         var options = {
-            title: 'Company Performance',
+            title: 'PWA Analytics',
             hAxis: {title: '30 day Overview', titleTextStyle: {color: '#333'}},
             vAxis: {minValue: 0}
         };

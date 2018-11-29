@@ -92,10 +92,12 @@ class Simi_Simipwa_Model_Simiobserver
 
         $params = $controller->getRequest()->getParams();
         $session = Mage::getSingleton('core/session');
+        $cookie = Mage::getModel('core/cookie');
         if(isset($params['version']) && $params['version']){
             $session->setPwaVersion($params['version']);
+            $cookie->set('pwa_version',$params['version']);
         }
-        if($session->getPwaVersion() == 'web'){
+        if($session->getPwaVersion() == 'web' || $cookie->get('pwa_version') == 'web'){
             return;
         }
 
