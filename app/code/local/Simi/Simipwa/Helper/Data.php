@@ -474,7 +474,7 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             $data = array(
                 'resource'       => 'storeviews',
                 'resourceid'     => 'default',
-                'params'         => array('email'=>null, 'password'=>null),
+                'params'         => array('email'=>null, 'password'=>null, 'pwa' => 1),
                 'contents_array' => array(),
                 'is_method'      => 1, //GET
                 'module'         => 'simiconnector',
