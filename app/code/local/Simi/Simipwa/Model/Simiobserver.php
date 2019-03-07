@@ -26,6 +26,8 @@ class Simi_Simipwa_Model_Simiobserver
         if (isset($data['params']) && isset($data['params']['pwa'])) {
             $obj = $observer['object'];
             $info = $obj->storeviewInfo;
+            $info['urls'] = array();
+            /*
             try {
                 $siteMap = Mage::helper('simipwa')->getSiteMaps();
                 if ($siteMap && isset($siteMap['sitemaps']))
@@ -33,6 +35,7 @@ class Simi_Simipwa_Model_Simiobserver
             } catch (Exception $e) {
                 $info['urls'] = array();
             }
+            */
             $info['pwa_configs'] = array(
                 'pwa_enable' => Mage::getStoreConfig('simipwa/general/pwa_enable'),
                 'pwa_url' => Mage::getStoreConfig('simipwa/general/pwa_url'),
