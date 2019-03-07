@@ -333,7 +333,6 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
                     special_price_color: '".$theme['special_price_color']."',
                     icon_color: '".$theme['icon_color']."',
                     section_color: '".$theme['section_color']."',
-                    status_bar_background: '".$theme['status_bar_background']."',
                     status_bar_text: '".$theme['status_bar_text']."',
                     loading_color: '".$theme['loading_color']."',
                     splash_screen_color : '".$splash['color']."',
