@@ -168,7 +168,7 @@
                 <storeview_api>1</storeview_api>
             </cache_api>
             <switch_version>
-                <enable>1</enable>
+                <enable>0</enable>
                 <btn_text>Switch to PWA version >></btn_text>
                 <btn_background_color>FDA343</btn_background_color>
             </switch_version>

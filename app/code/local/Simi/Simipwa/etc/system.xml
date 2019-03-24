@@ -360,7 +360,80 @@
                         </product_detail>
                     </fields>
                 </preload_config>
-                <switch_version>
+                <upload_package>
+                    <label>Upload PWA Package</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1000</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enable_live_package translate="label">
+                            <label>Use Uploaded package file for Live App</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>1</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable_live_package>
+                        <live_package translate="label tooltip comment">
+                            <label>Upload PWA Packge file </label>
+                            <comment></comment>
+                            <frontend_type>file</frontend_type>
+                            <sort_order>10</sort_order>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/pwa/package/live</upload_dir>
+                            <base_url type="media" scope_info="1">admin-config-uploads</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </live_package>
+                        <enable_sandbox_package translate="label">
+                            <label>Use Uploaded package file for Sandbox App</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>20</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </enable_sandbox_package>
+                        <sandbox_package translate="label tooltip comment">
+                            <label>Upload PWA Packge file sandbox</label>
+                            <comment></comment>
+                            <frontend_type>file</frontend_type>
+                            <sort_order>30</sort_order>
+                            <backend_model>adminhtml/system_config_backend_file</backend_model>
+                            <upload_dir config="system/filesystem/media" scope_info="1">simi/pwa/package/sandbox</upload_dir>
+                            <base_url type="media" scope_info="1">admin-config-uploads</base_url>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </sandbox_package>
+                        <use_json_config translate="label">
+                            <label>Use JSON Config</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>40</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </use_json_config>
+                        <json_config_data translate="label">
+                            <label>JSON Config Data</label>
+                            <frontend_type>textarea</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment></comment>
+                        </json_config_data>
+                    </fields>
+                </upload_package>
+                <!-- <switch_version>
                     <label>Switch Website Version Configuration</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>1000</sort_order>
@@ -395,7 +468,7 @@
                         <btn_text_color>
                             <label>Button Text Color</label>
                             <frontend_type>text</frontend_type>
-                            <validate>color</validate> <!-- This is important -->
+                            <validate>color</validate> 
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -407,7 +480,7 @@
                         <btn_background_color>
                             <label>Button Background Color</label>
                             <frontend_type>text</frontend_type>
-                            <validate>color</validate> <!-- This is important -->
+                            <validate>color</validate> 
                             <sort_order>20</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -428,7 +501,7 @@
                             </depends>
                         </btn_css>
                     </fields>
-                </switch_version>
+                </switch_version> -->
             </groups>
         </simipwa>
     </sections>

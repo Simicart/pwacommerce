@@ -349,6 +349,73 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             ->setBody(json_encode($data));
     }
 
+    public function createPackage($type,$config){
+        $getFileFromLocal = false;
+        if(
+            Mage::getStoreConfig('simipwa/upload_package/enable_live_package') && 
+            $path = Mage::getStoreConfig('simipwa/upload_package/live_package')
+        ){
+            $buildfile = Mage::getBaseDir() . '/media/simi/pwa/package/live/'.$path;
+            $getFileFromLocal = true;
+        } else{
+            $buildfile = 'https://dashboard.simicart.com/pwa/package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
+        }
+        $fileToSave = Mage::getBaseDir() . '/pwa/simi_pwa_package.zip';
+        $directoryToSave = Mage::getBaseDir() . '/pwa/';
+        if($type == 'sandbox'){
+            if(
+                Mage::getStoreConfig('simipwa/upload_package/enable_sandbox_package') && 
+                $path = Mage::getStoreConfig('simipwa/upload_package/sandbox_package')
+            ){
+                $buildfile = Mage::getBaseDir() . '/media/simi/pwa/package/sandbox/'.$path;
+                $getFileFromLocal = true;
+            } else{
+                $buildfile = 'https://dashboard.simicart.com/pwa/package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
+            }
+            $fileToSave = Mage::getBaseDir() . '/pwa_sandbox/simi_pwa_package.zip';
+            $directoryToSave = Mage::getBaseDir() . '/pwa_sandbox/';
+        }
+        // create directory pwa
+        Mage::helper('simipwa')->_removeFolder($directoryToSave);
+        mkdir($directoryToSave, 0777, true);
+
+        if($getFileFromLocal){
+            // echo $buildfile;
+            // die($fileToSave);
+            chmod($buildfile, 0777);
+            copy($buildfile, $fileToSave);
+            // die('xx');
+        }else{
+            //download file
+            file_get_contents($buildfile);
+            if (!isset($http_response_header[0]) || !is_string($http_response_header[0]) ||
+                (strpos($http_response_header[0], '200') === false)) {
+                throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot get PWA package from SimiCart.'), 4);
+            }
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $buildFile);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $data = curl_exec($ch);
+            curl_close($ch);
+            $file = fopen($fileToSave, "w+");
+            fputs($file, $data);
+            fclose($file);
+        }
+
+        //unzip file
+
+        $zip = new ZipArchive();
+        $res = $zip->open($fileToSave);
+        //zend_debug::dump($res);die;
+        if ($res === TRUE) {
+            $zip->extractTo($directoryToSave);
+            $zip->close();
+        } else {
+            throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
+        }
+    }
+
     public function buildAction()
     {
         try {
@@ -359,23 +426,26 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 
             if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
-
-            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1');
-            if (!$config || (!$config = json_decode($config, 1)))
+            if(
+                Mage::getStoreConfig('simipwa/upload_package/use_json_config') && 
+                $config = Mage::getStoreConfig('simipwa/upload_package/json_config_data')
+            ){
+                if (!$config || (!$config = json_decode($config, 1)))
                 throw new Exception(
-                    Mage::helper('simipwa')->__(
-                        'We cannot connect To SimiCart, please check your filled token, or check if 
-                your server allows connections to SimiCart website'
-                    ), 4
+                    Mage::helper('simipwa')->__('Your local json config is not valid'), 4
                 );
-            $buildFile = 'https://dashboard.simicart.com/pwa/package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
-            $fileToSave = Mage::getBaseDir() . '/pwa/simi_pwa_package.zip';
-            $directoryToSave = Mage::getBaseDir() . '/pwa/';
-            if($type == 'sandbox'){
-                $buildFile = 'https://dashboard.simicart.com/pwa/sandbox_package.php?app_id='.$config['app-configs'][0]['app_info_id'];
-                $fileToSave =  Mage::getBaseDir().'/pwa_sandbox/simi_pwa_package.zip';
-                $directoryToSave =  Mage::getBaseDir().'/pwa_sandbox/';
+            }else{
+                $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1');
+                if (!$config || (!$config = json_decode($config, 1)))
+                    throw new Exception(
+                        Mage::helper('simipwa')->__(
+                            'We cannot connect To SimiCart, please check your filled token, or check if 
+                    your server allows connections to SimiCart website'
+                        ), 4
+                    );
             }
+            
+            $this->createPackage($type,$config);
             $buildTime = time();
             if ($config['app-configs'][0]['ios_link']) {
                 try {
@@ -399,35 +469,35 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             }
 
             // create directory pwa
-            Mage::helper('simipwa')->_removeFolder($directoryToSave);
-            mkdir($directoryToSave, 0777, true);
-            //download file
-            file_get_contents($buildFile);
-            if (!isset($http_response_header[0]) || !is_string($http_response_header[0]) ||
-                (strpos($http_response_header[0], '200') === false)) {
-                throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot get PWA package from SimiCart.'), 4);
-            }
+            // Mage::helper('simipwa')->_removeFolder($directoryToSave);
+            // mkdir($directoryToSave, 0777, true);
+            // //download file
+            // file_get_contents($buildFile);
+            // if (!isset($http_response_header[0]) || !is_string($http_response_header[0]) ||
+            //     (strpos($http_response_header[0], '200') === false)) {
+            //     throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot get PWA package from SimiCart.'), 4);
+            // }
 
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $buildFile);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $data = curl_exec($ch);
-            curl_close($ch);
-            $file = fopen($fileToSave, "w+");
-            fputs($file, $data);
-            fclose($file);
+            // $ch = curl_init();
+            // curl_setopt($ch, CURLOPT_URL, $buildFile);
+            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // $data = curl_exec($ch);
+            // curl_close($ch);
+            // $file = fopen($fileToSave, "w+");
+            // fputs($file, $data);
+            // fclose($file);
 
             //unzip file
 
-            $zip = new ZipArchive();
-            $res = $zip->open($fileToSave);
-            //zend_debug::dump($res);die;
-            if ($res === TRUE) {
-                $zip->extractTo($directoryToSave);
-                $zip->close();
-            } else {
-                throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
-            }
+            // $zip = new ZipArchive();
+            // $res = $zip->open($fileToSave);
+            // //zend_debug::dump($res);die;
+            // if ($res === TRUE) {
+            //     $zip->extractTo($directoryToSave);
+            //     $zip->close();
+            // } else {
+            //     throw new Exception(Mage::helper('simipwa')->__('Sorry, we cannot extract PWA package.'), 4);
+            // }
 
             /*
             Use this when downloading or extracting does not work
