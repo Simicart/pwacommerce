@@ -370,7 +370,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 $buildfile = Mage::getBaseDir() . '/media/simi/pwa/package/sandbox/'.$path;
                 $getFileFromLocal = true;
             } else{
-                $buildfile = 'https://dashboard.simicart.com/pwa/package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
+                $buildfile = 'https://dashboard.simicart.com/pwa/sandbox_package.php?app_id=' . $config['app-configs'][0]['app_info_id'];
             }
             $fileToSave = Mage::getBaseDir() . '/pwa_sandbox/simi_pwa_package.zip';
             $directoryToSave = Mage::getBaseDir() . '/pwa_sandbox/';
@@ -398,6 +398,9 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $data = curl_exec($ch);
             curl_close($ch);
+            if(!$data){
+                $data = file_get_contents($buildfile);
+            }
             $file = fopen($fileToSave, "w+");
             fputs($file, $data);
             fclose($file);
