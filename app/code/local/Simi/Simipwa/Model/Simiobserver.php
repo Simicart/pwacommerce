@@ -12,8 +12,11 @@ class Simi_Simipwa_Model_Simiobserver
     {
         $observerObject = $observer->getObject();
         $observerObjectData = $observerObject->getData();
-        if ($observerObjectData['resource'] == 'simipwas' || $observerObjectData['resource'] == 'sitemaps'
-            || $observerObjectData['resource'] == 'sociallogins') {
+        if (
+            $observerObjectData['resource'] == 'simipwas'
+            || $observerObjectData['resource'] == 'sitemaps'
+            //|| $observerObjectData['resource'] == 'sociallogins'
+        ) {
             $observerObjectData['module'] = 'simipwa';
         }
         $observerObject->setData($observerObjectData);

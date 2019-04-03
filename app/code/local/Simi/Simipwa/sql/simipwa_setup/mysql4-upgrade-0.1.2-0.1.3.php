@@ -7,7 +7,7 @@
  */
 $installer = $this;
 $installer->startSetup();
-
+/*
 $installer->run("
 
     DROP TABLE IF EXISTS {$installer->getTable('simipwa_social_customer_mapping')};
@@ -20,4 +20,5 @@ $installer->run("
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 "
 );
+*/
 $installer->endSetup();
