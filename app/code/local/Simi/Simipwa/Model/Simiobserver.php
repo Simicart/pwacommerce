@@ -12,11 +12,8 @@ class Simi_Simipwa_Model_Simiobserver
     {
         $observerObject = $observer->getObject();
         $observerObjectData = $observerObject->getData();
-        if (
-            $observerObjectData['resource'] == 'simipwas'
-            || $observerObjectData['resource'] == 'sitemaps'
-            //|| $observerObjectData['resource'] == 'sociallogins'
-        ) {
+        if ($observerObjectData['resource'] == 'simipwas' || $observerObjectData['resource'] == 'sitemaps'
+            || $observerObjectData['resource'] == 'sociallogins') {
             $observerObjectData['module'] = 'simipwa';
         }
         $observerObject->setData($observerObjectData);
@@ -29,8 +26,6 @@ class Simi_Simipwa_Model_Simiobserver
         if (isset($data['params']) && isset($data['params']['pwa'])) {
             $obj = $observer['object'];
             $info = $obj->storeviewInfo;
-            $info['urls'] = array();
-            /*
             try {
                 $siteMap = Mage::helper('simipwa')->getSiteMaps();
                 if ($siteMap && isset($siteMap['sitemaps']))
@@ -38,7 +33,6 @@ class Simi_Simipwa_Model_Simiobserver
             } catch (Exception $e) {
                 $info['urls'] = array();
             }
-            */
             $info['pwa_configs'] = array(
                 'pwa_enable' => Mage::getStoreConfig('simipwa/general/pwa_enable'),
                 'pwa_url' => Mage::getStoreConfig('simipwa/general/pwa_url'),
@@ -50,6 +44,29 @@ class Simi_Simipwa_Model_Simiobserver
             }
             $obj->storeviewInfo = $info;
         }
+    }
+
+    protected function _bot_detected() {
+      return (
+        isset($_SERVER['HTTP_USER_AGENT'])
+        && preg_match('/bot|crawl|slurp|spider|mediapartners/i', $_SERVER['HTTP_USER_AGENT'])
+      );
+    }
+
+    public function rendertron($controller) {
+        $actualLink = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";  
+        $rendertronLink = 'https://render-tron.appspot.com/render/' . $actualLink; 
+        //$rendertronLink = 'https://render-tron.appspot.com/render/https://google.com';
+
+        $ch = curl_init();
+        $optArray = array(
+            CURLOPT_URL => $rendertronLink,
+            CURLOPT_RETURNTRANSFER => true
+        );
+        curl_setopt_array($ch, $optArray);
+        $result = curl_exec($ch);
+        echo $result;
+        exit();
     }
 
     public function controllerActionPredispatch($observer)
@@ -76,6 +93,10 @@ class Simi_Simipwa_Model_Simiobserver
 
         $excludedBrowser = array('Opera');
         if(in_array($agent['name'], $excludedBrowser)) return;
+        if ($this->_bot_detected()) {
+            $this->rendertron($controller);
+            return;
+        }
 
         // check version Chrome
         $checkVersion = true;
@@ -121,7 +142,7 @@ class Simi_Simipwa_Model_Simiobserver
             !in_array($_SERVER['REMOTE_ADDR'], explode(',', $redirectIps), true))
             return;
 
-        $tablet_browser = 0;
+        $tablet_browser = 1;
         $mobile_browser = 0;
 
         if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
