@@ -149,12 +149,15 @@ class Simi_Simipwa_IndexController extends Mage_Core_Controller_Front_Action
         try{
             $type = $this->getRequest()->getParam('build_type');
             if (!$type) $type = 'sandbox';
-            $token =  Mage::getStoreConfig('simiconnector/general/token_key');
-            $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
-            if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
+            $token = Mage::getStoreConfig('simipwa/general/dashboard_token_key');
+            $token = $token?$token:Mage::getStoreConfig('simiconnector/general/token_key');
+            if (!$token || ($token == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
 
-            $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
+            $dashboard_url = Mage::getStoreConfig('simipwa/general/dashboard_url');
+            $dashboard_url = $dashboard_url?$dashboard_url:'https://www.simicart.com';
+            $config = file_get_contents($dashboard_url . "/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
+
             if (!$config || (!$config = json_decode($config, 1)))
                 throw new Exception(
                     Mage::helper('simipwa')->__(

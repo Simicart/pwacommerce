@@ -52,6 +52,32 @@
                                 <pwa_enable>1</pwa_enable>
                             </depends>
                         </pwa_main_url_site>
+                        <pwa_mobile_only translate="label">
+                            <label>Mobile Filter</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>210</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Only show PWA for mobile user</comment>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </pwa_mobile_only>
+                        <dynamic_rendering translate="label">
+                            <label>Enable Dynamic Rendering</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>220</sort_order>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Return Rendertron result for Search Engine bots</comment>
+                            <depends>
+                                <pwa_enable>1</pwa_enable>
+                            </depends>
+                        </dynamic_rendering>
                         <pwa_redirect_ips translate="label">
                             <label>PWA Redirect IP(s)</label>
                             <frontend_type>text</frontend_type>
@@ -152,6 +178,24 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </footer_html>
+                        <dashboard_url translate="label">
+                            <label>Dashboard URL</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1199</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>Use for dashboard configuration getting on Building and PWA opening. By default, it's https://www.simicart.com</comment>
+                        </dashboard_url>
+                        <dashboard_token_key translate="label">
+                            <label>Dashboard Token Key</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1299</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <comment>If it's empty, we are going to use token key from Simicart Connector</comment>
+                        </dashboard_token_key>
                         <build_time>
                             <label>Last Build Live Time</label>
                             <frontend_type>text</frontend_type>

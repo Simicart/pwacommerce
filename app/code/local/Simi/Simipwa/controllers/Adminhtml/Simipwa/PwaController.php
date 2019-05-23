@@ -424,10 +424,10 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
         try {
             $type = $this->getRequest()->getParam('build_type');
             if (!$type) $type = 'sandbox';
-            $token = Mage::getStoreConfig('simiconnector/general/token_key');
-            $secret_key = Mage::getStoreConfig('simiconnector/general/secret_key');
+            $token = Mage::getStoreConfig('simipwa/general/dashboard_token_key');
+            $token = $token?$token:Mage::getStoreConfig('simiconnector/general/token_key');
 
-            if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
+            if (!$token || ($token == ''))
                 throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
             if(
                 Mage::getStoreConfig('simipwa/upload_package/use_json_config') && 
@@ -438,7 +438,10 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                     Mage::helper('simipwa')->__('Your local json config is not valid'), 4
                 );
             }else{
-                $config = file_get_contents("https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1');
+                $dashboard_url = Mage::getStoreConfig('simipwa/general/dashboard_url');
+                $dashboard_url = $dashboard_url?$dashboard_url:'https://www.simicart.com';
+                $config = file_get_contents($dashboard_url . "/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
+
                 if (!$config || (!$config = json_decode($config, 1)))
                     throw new Exception(
                         Mage::helper('simipwa')->__(
@@ -654,8 +657,13 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
                 }
 
                 $api_storeview = Mage::getUrl('simiconnector/rest/v2/storeviews/default?pwa=1');
-                $token = Mage::getStoreConfig('simiconnector/general/token_key');
-                $api_simicart = "https://www.simicart.com/appdashboard/rest/app_configs/bear_token/" . $token . '/pwa/1';
+                $token = Mage::getStoreConfig('simipwa/general/dashboard_token_key');
+                $token = $token?$token:Mage::getStoreConfig('simiconnector/general/token_key');
+
+                $dashboard_url = Mage::getStoreConfig('simipwa/general/dashboard_url');
+                $dashboard_url = $dashboard_url?$dashboard_url:'https://www.simicart.com';
+                $api_simicart = file_get_contents($dashboard_url . "/appdashboard/rest/app_configs/bear_token/".$token.'/pwa/1');
+
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/storeview_api'), $api_storeview, "'sync_api_storeview'");
                 Mage::helper('simipwa')->SyncApi(Mage::getStoreConfig('simipwa/cache_api/simicart_api'), $api_simicart, "'sync_api_simicart'");
                 Mage::getSingleton('adminhtml/session')->addSuccess(

@@ -235,12 +235,13 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
     }
 
     public function updateConfigJs($config,$buildTime,$type='sandbox'){
-        $token =  Mage::getStoreConfig('simiconnector/general/token_key');
+        $token = Mage::getStoreConfig('simipwa/general/dashboard_token_key');
+        $token = $token?$token:Mage::getStoreConfig('simiconnector/general/token_key');
         $secret_key =  Mage::getStoreConfig('simiconnector/general/secret_key');
         $logoUrlSetting = Mage::getStoreConfig('simipwa/general/logo_homepage');
         $app_image_logo = ($logoUrlSetting && $logoUrlSetting!='')?
             $logoUrlSetting : Mage::getStoreConfig('design/header/logo_src');
-        if (!$token || !$secret_key || ($token == '') || ($secret_key == ''))
+        if (!$token || ($token == ''))
             throw new Exception(Mage::helper('simipwa')->__('Please fill your Token and Secret key on SimiCart connector settings'), 4);
         //update config.js file
         $url = $config['app-configs'][0]['url'];
@@ -279,13 +280,15 @@ class Simi_Simipwa_Helper_Data extends Mage_Core_Helper_Data
             $base_name = Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? '' : 'pwa';
             $switch_version = $this->getConfigSwitchVersion('enable') && Mage::getStoreConfig('simipwa/general/pwa_main_url_site') ? 1 : 0;
         }
+        $dashboard_url = Mage::getStoreConfig('simipwa/general/dashboard_url');
+        $dashboard_url = $dashboard_url?$dashboard_url:'https://www.simicart.com';
         $msConfigs = '
             var PWA_BUILD_TIME = "'.$buildTime.'";
             var SMCONFIGS = {
                 merchant_url: "'.$url.'",
                 api_path: "simiconnector/rest/v2/",
                 merchant_authorization: "'.$secret_key.'",
-                simicart_url: "https://www.simicart.com/appdashboard/rest/app_configs/",
+                simicart_url: "' . $dashboard_url . '/appdashboard/rest/app_configs/",
                 simicart_authorization: "'.$token.'",
                 notification_api: "simipwa/index/",
                 zopim_key: "'.$zopimKey.'",
