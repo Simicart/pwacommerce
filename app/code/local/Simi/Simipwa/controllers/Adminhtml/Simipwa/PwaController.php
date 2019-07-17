@@ -563,6 +563,15 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
             $theme_color = Mage::getStoreConfig('simipwa/manifest/theme_color') ? '#'.Mage::getStoreConfig('simipwa/manifest/theme_color') : '#3399cc';
             $excludedPaths = Mage::getStoreConfig('simipwa/general/pwa_excluded_paths');
             $file_contents = file_get_contents($path_to_file);
+
+	        if ($meta_title = Mage::getStoreConfig('simipwa/general/meta_title')) {
+		        $config['app-configs'][0]['app_name'] = $meta_title;
+	        }
+
+	        if ($meta_description = Mage::getStoreConfig('simipwa/general/meta_description')) {
+		        $config['app-configs'][0]['app_meta_description'] = $meta_description;
+	        }
+
             $file_contents = str_replace('PAGE_TITLE_HERE', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('IOS_SPLASH_TEXT', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('"PWA_EXCLUDED_PATHS"', '"' . $excludedPaths . '"', $file_contents);

@@ -158,6 +158,28 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </ga_token_key>
+                        <meta_title>
+							<label>Meta title</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>819</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>
+								Use this to add app meta title.
+							</comment>
+						</meta_title>
+						<meta_description>
+							<label>Meta description</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>829</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+							<comment>
+								Use this to add app meta description.
+							</comment>
+						</meta_description>
                         <custom_head>
                             <label>Custom Head</label>
                             <frontend_type>textarea</frontend_type>
