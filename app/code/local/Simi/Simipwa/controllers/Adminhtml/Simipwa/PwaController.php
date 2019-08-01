@@ -571,6 +571,7 @@ class Simi_Simipwa_Adminhtml_Simipwa_PwaController extends Mage_Adminhtml_Contro
 	        if ($meta_description = Mage::getStoreConfig('simipwa/general/meta_description')) {
 		        $config['app-configs'][0]['app_meta_description'] = $meta_description;
 	        }
+	        $config['app-configs'][0]['add_home_screen'] = Mage::getStoreConfig('simipwa/manifest/enable');
 
             $file_contents = str_replace('PAGE_TITLE_HERE', $config['app-configs'][0]['app_name'], $file_contents);
             $file_contents = str_replace('IOS_SPLASH_TEXT', $config['app-configs'][0]['app_name'], $file_contents);
