@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Simi_Simipwa>
-            <version>0.1.4</version>
+            <version>0.1.8</version>
         </Simi_Simipwa>
     </modules>
     <frontend>
