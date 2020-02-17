@@ -65,8 +65,9 @@ class Simi_Simipwa_Model_Simiobserver
         );
         curl_setopt_array($ch, $optArray);
         $result = curl_exec($ch);
-        echo $result;
-        exit();
+        $response = $controller->getResponse();
+        $response->setHeader('Content-type', 'text/html; charset=utf-8', true);
+        $response->setBody($content);
     }
 
     public function controllerActionPredispatch($observer)
